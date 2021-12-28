@@ -15,7 +15,7 @@ class StatisticsController extends BaseCurlController
 
     public function index()
     {
-        $channels = DB::table('channels')->where('status',1)->pluck('name','id')->all();
+        $channels = DB::connection('origin_mysql')->table('channels')->where('status',1)->pluck('name','id')->all();
         $channels = [ ''=>'全部',0 => '官方'] + $channels;
         return $this->display(['channels' => $channels]);
     }
@@ -43,7 +43,7 @@ class StatisticsController extends BaseCurlController
                 AVG(keep_day_rate) as avg_keep_day_rate,
                 AVG(keep_week_rate) as avg_keep_week_rate,
                 AVG(keep_month_rate) as avg_keep_month_rate';
-                $queryBuild = DB::table('statistic_day')->select(DB::raw($fields));
+                $queryBuild = DB::connection('origin_mysql')->table('statistic_day')->select(DB::raw($fields));
                 if($channelId!==null){
                     $queryBuild = $queryBuild->where('channel_id',$channelId);
                 }
@@ -86,7 +86,7 @@ class StatisticsController extends BaseCurlController
                 SUM(keep_day_rate) as total_keep_day_rate,
                 SUM(keep_week_rate) as total_keep_week_rate,
                 SUM(keep_month_rate) as total_keep_month_rate';
-                $queryBuild = DB::table('statistic_day')->select('at_time',DB::raw($fields));
+                $queryBuild = DB::connection('origin_mysql')->table('statistic_day')->select('at_time',DB::raw($fields));
                 if($channelId!==null){
                     $queryBuild = $queryBuild->where('channel_id',$channelId);
                 }
@@ -115,7 +115,7 @@ class StatisticsController extends BaseCurlController
                 }
                 break;
             case 'activeUsers':
-                $queryBuild = DB::table('users_day')->select('at_time',DB::raw('count(uid) as users'));
+                $queryBuild = DB::connection('origin_mysql')->table('users_day')->select('at_time',DB::raw('count(uid) as users'));
                 if($channelId!==null){
                     $queryBuild = $queryBuild->where('channel_id',$channelId);
                 }
@@ -135,7 +135,7 @@ class StatisticsController extends BaseCurlController
                 }
                 break;
             case 'recharge':
-                $queryBuild = DB::table('recharge')->select(DB::raw('DATE_FORMAT(recharge.created_at,"%Y-%m-%d") days'),DB::raw('SUM(amount)/100 as money'));
+                $queryBuild = DB::connection('origin_mysql')->table('recharge')->select(DB::raw('DATE_FORMAT(recharge.created_at,"%Y-%m-%d") days'),DB::raw('SUM(amount)/100 as money'));
                 if($channelId!==null){
                     $queryBuild = $queryBuild
                         ->join('users','recharge.uid','=','users.id')
@@ -171,7 +171,7 @@ class StatisticsController extends BaseCurlController
                 }
                 break;
             case 'IPDistribution':
-                $queryBuild = DB::table('login_log');
+                $queryBuild = DB::connection('origin_mysql')->table('login_log');
                 if($channelId!==null){
                     $queryBuild = $queryBuild
                         ->select('area','ip','users.channel_id','login_log.device_system',DB::raw('count(distinct ip) as ips'),DB::raw('json_extract(area,"$[1]") as province'))
