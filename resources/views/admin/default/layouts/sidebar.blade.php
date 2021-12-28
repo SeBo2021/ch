@@ -2,7 +2,7 @@
 <div class="layui-side layui-side-menu">
     <div class="layui-side-scroll">
         <div class="layui-logo" >
-            <span>{{ lang('管理后台') }} 1.0</span>
+            <span>{{ lang('渠道管理后台') }} 1.0</span>
         </div>
 
         <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
