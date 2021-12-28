@@ -1,0 +1,106 @@
+MIT License
+
+Copyright (c) 2021
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+#git 自动部署参考===============================================================
+https://jelly.jd.com/article/6006b1045b6c6a01506c87e1
+https://www.huaweicloud.com/articles/89de59d2fcc3682a89095f2d6b8fd205.html
+#sftp同步设置
+参考 config/filesystems.php中的sftp相关配置
+#生成key
+php artisan key:generate --show
+#安装认证
+php artisan passport:install
+
+queue start
+#开启队列兼听服务
+nohup php artisan queue:work >/dev/null 2>&1 &
+#查看进程中的任务
+supervisorctl -c /etc/supervisord.conf
+#修改任务兼听进程配置
+vi /etc/supervisord.d/laravel-woker.ini
+#重启进程监视器
+systemctl restart supervisord
+#生成资源软连接
+php artisan storage:link
+
+see the process
+ps -fe | grep 'artisan queue' |grep -v 'grep' | wc -l
+ps -fe | grep 'artisan queue' |grep -v 'grep' | wc
+
+ps aux | head -1;ps aux |grep -v PID |sort -rn -k +4 | head -20
+
+#清除上传无效临时文件
+php artisan aetherupload:clean 0
+
+#elasticsearch 安装教程
+https://computingforgeeks.com/how-to-install-elasticsearch-on-centos/
+systemctl restart elasticsearch
+#############
+composer require matchish/laravel-scout-elasticsearch
+#es配置及应用
+#https://blog.csdn.net/qq_38701718/article/details/115939756
+https://blog.csdn.net/qq_38120760/article/details/112232152
+#ik分词插件安装问题解决
+https://blog.csdn.net/qq_36364955/article/details/117843259
+#查看所有索引
+curl http://127.0.0.1:9200/_alias
+#清除所有索引
+curl --location --request DELETE 'http://127.0.0.1:9200/_all'
+#查看所有索引别名
+curl http://127.0.0.1:9200/_alias
+#删除指定索引
+curl --location --request DELETE 'http://127.0.0.1:9200/video_index_*'
+#删除多个索引
+DELETE /index_one,index_two
+DELETE /index_*
+
+#端口在线检测
+https://coding.tools/cn/port-checker
+#导入指定模型
+php artisan scout:import "App\Models\Video"
+#查看索引详情
+curl http://127.0.0.1:9200/_cat/indices?v
+#热搜词排名-计划执行
+php /www/wwwroot/yyadmin/artisan scout:import "App\Models\KeyWords"
+#生成队列任务文件
+php artisan make:job ProcessPodcast
+#安装地理位置工具包
+composer require "zhuzhichao/ip-location-zh"
+#nginx 前后分离-伪静态及跨域设置
+if (!-e $request_filename){
+    rewrite  ^(.*)$  /index.php?s=$1  last;   break;
+}
+location /storage {
+    add_header Access-Control-Allow-Origin '*';
+}
+
+#服务器带宽测试
+iftop -n
+批量删除进程
+kill -9 `ps -ef |grep vmtoolsdd|awk '{print $2}' `
+#laravel的官方速查表
+https://learnku.com/docs/laravel-cheatsheet/8.x
+#是否开启加密
+设置.env文件的MIDDLEWARE_SECRET值就可以了
+#测试播放地址
+https://developer-tools.jwplayer.com/stream-tester/
+http://stream-tester.jwplayer.com/
