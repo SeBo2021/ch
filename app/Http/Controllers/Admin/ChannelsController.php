@@ -6,12 +6,13 @@ use App\Models\Channel;
 use App\Services\UiService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use JetBrains\PhpStorm\ArrayShape;
 
 class ChannelsController extends BaseCurlController
 {
     public $pageName = '渠道';
 
-    public $channelType = [
+    public array $channelType = [
         0 => [
             'id' => 0,
             'name' => 'CPA'
@@ -26,14 +27,14 @@ class ChannelsController extends BaseCurlController
         ],
     ];
 
-    public function setModel()
+    public function setModel(): Channel
     {
         return $this->model = new Channel();
     }
 
-    public function indexCols()
+    public function indexCols(): array
     {
-        $cols = [
+        return [
             [
                 'type' => 'checkbox'
             ],
@@ -115,8 +116,6 @@ class ChannelsController extends BaseCurlController
                 'align' => 'center'
             ]
         ];
-
-        return $cols;
     }
 
     public function setOutputUiCreateEditForm($show = '')
@@ -211,7 +210,7 @@ class ChannelsController extends BaseCurlController
     }
 
     //表单验证
-    public function checkRule($id = '')
+    #[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRule($id = ''): array
     {
         $data = [
             'name'=>'required|unique:channels,name',
@@ -225,7 +224,7 @@ class ChannelsController extends BaseCurlController
         return $data;
     }
 
-    public function checkRuleFieldName($id = '')
+    #[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRuleFieldName($id = ''): array
     {
         return [
             'name'=>'渠道名称',
