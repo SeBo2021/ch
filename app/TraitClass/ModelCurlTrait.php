@@ -20,7 +20,7 @@ trait ModelCurlTrait
 {
 
     use GetListTrait;
-    public mixed $model;//当前数据库操作的模型
+    public $model;//当前数据库操作的模型
     public $rq;//创建，更新，搜索页面的request
     protected $modelSaveMsg;//模型验证错误输出数据
     protected $createEditLastId;//创建或更新入库的最后ID值
@@ -80,8 +80,7 @@ trait ModelCurlTrait
 
         return $this->display($indexShareData ?: []);
     }
-    public function getIndexFooterAddJavascript(): string
-    {
+    public function getIndexFooterAddJavascript(){
         return $this->indexfootAddJavascript?$this->getOriginBladePath().$this->indexfootAddJavascript:'';
     }
 
@@ -189,7 +188,7 @@ trait ModelCurlTrait
      * 首页cols数据
      * @return array
      */
-    public function indexCols(): array
+    public function indexCols()
     {
         return [];
     }
