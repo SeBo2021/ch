@@ -1,6 +1,6 @@
 <?php
 return [
-    'site_name' => '后台管理',
+    'site_name' => '渠道后台',
     'system_name' => 'LV',
     'system_version' => '1.0.1',
     'author' => 'root',
