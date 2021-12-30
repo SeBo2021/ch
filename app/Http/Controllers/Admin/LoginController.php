@@ -82,16 +82,16 @@ class LoginController extends BaseController
 
     public function login(Request $request)
     {
-        if($request->input('account')!=='root'){
+        /*if($request->input('account')!=='root'){
             if(!$this->whitelistPolice()){
                 return (['code' => 1, 'msg' => lang('不在白名单')]);
             }
-        }
+        }*/
         //
         $error = $this->validatorForm($request);
         if (count($error) > 0) {
             return $this->checkFormErrorFormat($error);
-        };
+        }
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
