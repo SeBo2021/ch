@@ -48,8 +48,8 @@ class ChannelsController extends BaseCurlController
      */
     public function store(Request $request)
     {
-        $this->setModel();
         $model = $this->getModel();
+        dump($model);
         return $this->saveData($request, $model);
     }
 
