@@ -77,12 +77,12 @@ class ChannelsController extends BaseCurlController
                 'title' => '渠道推广链接',
                 'align' => 'center',
             ],
-            [
+            /*[
                 'field' => 'statistic_url',
                 'minWidth' => 80,
                 'title' => '统计链接地址',
                 'align' => 'center',
-            ],
+            ],*/
             [
                 'field' => 'status',
                 'minWidth' => 80,
@@ -148,8 +148,6 @@ class ChannelsController extends BaseCurlController
         if($id == ''){ //添加
             $parentChannelNumber = admin('account');
             $parentChannelInfo = $this->model->where('number',$parentChannelNumber)->first();
-            Log::info('===parentChannelInfo===',$parentChannelInfo->toArray());
-            Log::info('===promotion_code===',[$parentChannelInfo->promotion_code]);
             $promotion_code = $this->rq->input('promotion_code') ?? $parentChannelInfo->promotion_code;
             $model->name = $this->rq->input('name');
             $model->promotion_code = $promotion_code;
