@@ -114,12 +114,12 @@ class ChannelsController extends BaseCurlController
                 'hide' => true,
                 'align' => 'center'
             ],
-            [
+            /*[
                 'field' => 'handle',
                 'minWidth' => 150,
                 'title' => '操作',
                 'align' => 'center'
-            ]
+            ]*/
         ];
     }
 
