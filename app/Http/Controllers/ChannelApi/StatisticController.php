@@ -48,7 +48,6 @@ class StatisticController extends \App\Http\Controllers\Controller
                 }
                 $queryBuild = $queryBuild->groupBy(['channel_id','device_system']);
                 $totalData = $queryBuild->orderByDesc('at_time')->limit(200)->get()->toArray();
-
                 $totalArr = [];
                 foreach ($totalData as $item){
                     $totalArr[$item->device_system] = [

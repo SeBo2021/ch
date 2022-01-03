@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 $useSecret = \Illuminate\Support\Env::get("MIDDLEWARE_SECRET");
 
-Route::group([
+/*Route::group([
     'namespace'=>'Api',
     'middleware' => $useSecret ? ['secret'] : []
 ],function (){
@@ -84,4 +84,4 @@ Route::group([
     Route::post('oderCreate', 'OrderController@create');  //订单创建接口
     Route::get('orderQuery', 'OrderController@query');  //订单查询接口
     Route::post('orderPay', 'OrderController@orderPay');  //订单支付接口
-});
+});*/
