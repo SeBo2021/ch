@@ -241,7 +241,8 @@ class ChannelsController extends BaseCurlController
         $order_by_type = $this->orderByType();
         if($parentChannelNumber!='root'){
             $parentChannelInfo = $this->model->where('number',$parentChannelNumber)->first();
-            $model = $this->model->where('id',$parentChannelInfo->id)->orWhere('pid',$parentChannelInfo->id)->orderBy($model, $order_by_name, $order_by_type);
+            //$model = $this->model->where('id',$parentChannelInfo->id)->orWhere('pid',$parentChannelInfo->id)->get();
+            $model = $this->orderBy($this->model->where('id',$parentChannelInfo->id)->orWhere('pid',$parentChannelInfo->id)->get(), $order_by_name, $order_by_type);
         }else{
             $model = $this->orderBy($model, $order_by_name, $order_by_type);
         }
