@@ -38,21 +38,6 @@ class ChannelsController extends BaseCurlController
         return $this->model = new Channel();
     }
 
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    /**
-     * 创建提交操作
-     */
-    public function store(Request $request)
-    {
-        $model = $this->getModel();
-        //dump($model);
-        return $this->saveData($request, $model);
-    }
-
     public function indexCols(): array
     {
         return [
@@ -163,9 +148,12 @@ class ChannelsController extends BaseCurlController
         if($id == ''){ //添加
             $parentChannelNumber = admin('account');
             $parentChannelInfo = $this->model->where('number',$parentChannelNumber)->first();
+            $model->name = $this->rq->input('name');
+            $model->promotion_code = $this->rq->input('promotion_code');
             $model->pid = $parentChannelInfo->id;
             $model->number = 'S'.Str::random(6) . $model->id;
             $model->type = $parentChannelInfo->type;
+            $model->status = $parentChannelInfo->status;
             $model->deduction = $parentChannelInfo->deduction;
             $model->is_deduction = $parentChannelInfo->is_deduction;
             $model->unit_price = $parentChannelInfo->unit_price;
@@ -194,7 +182,7 @@ class ChannelsController extends BaseCurlController
     }
 
     //表单验证
-    public function checkRule($id = '')
+    /*public function checkRule($id = '')
     {
         $data = [
             'name'=>'required|unique:channels,name',
@@ -207,7 +195,7 @@ class ChannelsController extends BaseCurlController
         return [
             'name'=>'代理商名称',
         ];
-    }
+    }*/
     //弹窗大小
     /*public function layuiOpenWidth(): string
     {
