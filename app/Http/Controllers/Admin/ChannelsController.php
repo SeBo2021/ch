@@ -38,9 +38,9 @@ class ChannelsController extends BaseCurlController
         return $this->model = new Channel();
     }
 
-    public function getModel(): Channel
+    public function getModel()
     {
-        return new Channel();
+        return $this->model;
     }
 
     /**
