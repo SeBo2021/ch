@@ -206,16 +206,17 @@ class ChannelsController extends BaseCurlController
     public function defaultHandleBtnAddTpl($shareData)
     {
         $data = [];
-        if ($this->isCanCreate()) {
+        if(admin()!='root'){
+            if ($this->isCanCreate()) {
 
-            $data[] = [
-                'name' => '添加下级代理商',
-                'data' => [
-                    'data-type' => "add"
-                ]
-            ];
+                $data[] = [
+                    'name' => '添加下级代理商',
+                    'data' => [
+                        'data-type' => "add"
+                    ]
+                ];
+            }
         }
-
         return $data;
     }
 
