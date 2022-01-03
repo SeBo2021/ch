@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Channel;
 use App\Services\UiService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -35,6 +36,20 @@ class ChannelsController extends BaseCurlController
     public function setModel(): Channel
     {
         return $this->model = new Channel();
+    }
+
+    public function getModel(): Channel
+    {
+        return new Channel();
+    }
+
+    /**
+     * 创建提交操作
+     */
+    public function store(Request $request)
+    {
+        $model = $this->getModel();
+        return $this->saveData($request, $model);
     }
 
     public function indexCols(): array
