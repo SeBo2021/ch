@@ -51,7 +51,7 @@ trait QueryWhereTrait
         $this->addWhere($data);
     }
 
-    public function whereByQueryLikeCnName($value)
+    public function whereByQueryLikeNumber($value)
     {
         $data = [
             'cn_name' => [
@@ -116,72 +116,6 @@ trait QueryWhereTrait
 
     }
 
-    public function whereByQueryLikeAuthor($value)
-    {
-        $data = [
-            'author' => [
-                'type' => 'like',
-                'value' => $value
-            ]
-        ];
-        $this->addWhere($data);
-    }
-
-    public function whereByQueryLikeAdminName($value)
-    {
-        $data = [
-            'admin_name' => [
-                'type' => 'like',
-                'value' => $value
-            ]
-        ];
-        $this->addWhere($data);
-    }
-
-    public function whereByQueryLikeUrl($value)
-    {
-        $data = [
-            'url' => [
-                'type' => 'like',
-                'value' => $value
-            ]
-        ];
-        $this->addWhere($data);
-    }
-
-    public function whereByIp($value)
-    {
-        $data = [
-            'ip' => [
-                'type' => '=',
-                'value' => $value
-            ]
-        ];
-        $this->addWhere($data);
-    }
-
-    public function whereByIpInt($value)
-    {
-        $data = [
-            'ip' => [
-                'type' => '=',
-                'value' => ip2long($value)
-            ]
-        ];
-        $this->addWhere($data);
-    }
-
-    public function whereByQueryIsInstall($value)
-    {
-        $data = [
-            'is_install' => [
-                'type' => '=',
-                'value' => $value
-            ]
-        ];
-        $this->addWhere($data);
-    }
-
     public function whereByQueryIsChecked($value)
     {
         $data = [
@@ -205,17 +139,6 @@ trait QueryWhereTrait
         $this->addWhere($data);
     }
 
-    /*public function whereByCid($value)
-    {
-        $data = [
-            'cid' => [
-                'type' => '=',
-                'value' => $value
-            ]
-        ];
-        $this->addWhere($data);
-    }*/
-
     public function whereByID($value)
     {
         $data = [
@@ -227,17 +150,5 @@ trait QueryWhereTrait
         $this->unsetAllWhere();
         $this->addWhere($data);
     }
-
-    /*public function whereByTag($value)
-    {
-        $value = (string)$value;
-        $data = [
-            'tag' => [
-                'type' => 'like_sql',
-                'value' => ' JSON_CONTAINS(tag,'.$value.')'
-            ]
-        ];
-        $this->addWhere($data);
-    }*/
 
 }

@@ -44,18 +44,18 @@ class ChannelsController extends BaseCurlController
                 'type' => 'checkbox'
             ],
             [
-                'field' => 'id',
-                'width' => 80,
-                'title' => '编号',
-                'sort' => 1,
-                'align' => 'center'
+                'field' => 'number',
+                'minWidth' => 80,
+                'title' => '账号',
+//                'hide' => true,
+                'align' => 'center',
             ],
-            [
+            /*[
                 'field' => 'type',
                 'minWidth' => 100,
                 'title' => '渠道类型',
                 'align' => 'center'
-            ],
+            ],*/
             [
                 'field' => 'name',
                 'minWidth' => 100,
@@ -69,20 +69,7 @@ class ChannelsController extends BaseCurlController
                 //'edit' => 1,
                 'align' => 'center'
             ],
-            [
-                'field' => 'deduction',
-                'minWidth' => 100,
-                'title' => '扣量(点)',
-                //'edit' => 1,
-                'align' => 'center'
-            ],
-            [
-                'field' => 'number',
-                'minWidth' => 80,
-                'title' => '渠道码',
-//                'hide' => true,
-                'align' => 'center',
-            ],
+
             [
                 'field' => 'url',
                 'minWidth' => 80,
@@ -351,6 +338,19 @@ class ChannelsController extends BaseCurlController
         }*/
 
         return $data;
+    }
+
+    public function setOutputSearchFormTpl($shareData)
+    {
+        $data = [
+            [
+                'field' => 'query_like_number',
+                'type' => 'text',
+                'name' => '渠道码',
+            ]
+        ];
+        //赋值到ui数组里面必须是`search`的key值
+        $this->uiBlade['search'] = $data;
     }
 
 }
