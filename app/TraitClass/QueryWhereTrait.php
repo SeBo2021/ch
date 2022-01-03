@@ -54,19 +54,8 @@ trait QueryWhereTrait
     public function whereByQueryLikeNumber($value)
     {
         $data = [
-            'cn_name' => [
+            'number' => [
                 'type' => 'like',
-                'value' => $value
-            ]
-        ];
-        $this->addWhere($data);
-    }
-
-    public function whereByQueryCategoryId($value)
-    {
-        $data = [
-            'category_id' => [
-                'type' => '=',
                 'value' => $value
             ]
         ];
