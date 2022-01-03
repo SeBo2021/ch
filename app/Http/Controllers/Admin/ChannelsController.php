@@ -77,12 +77,12 @@ class ChannelsController extends BaseCurlController
                 'title' => '渠道推广链接',
                 'align' => 'center',
             ],
-            /*[
+            [
                 'field' => 'statistic_url',
                 'minWidth' => 80,
                 'title' => '统计链接地址',
                 'align' => 'center',
-            ],*/
+            ],
             [
                 'field' => 'status',
                 'minWidth' => 80,
@@ -148,7 +148,9 @@ class ChannelsController extends BaseCurlController
         if($id == ''){ //添加
             $parentChannelNumber = admin('account');
             $parentChannelInfo = $this->model->where('number',$parentChannelNumber)->first();
-            $promotion_code = $this->rq->input('promotion_code');
+            Log::info('===parentChannelInfo===',$parentChannelInfo->toArray());
+            Log::info('===promotion_code===',[$parentChannelInfo->promotion_code]);
+            $promotion_code = $this->rq->input('promotion_code') ?? $parentChannelInfo->promotion_code;
             $model->name = $this->rq->input('name');
             $model->promotion_code = $promotion_code;
             $model->pid = $parentChannelInfo->id;
@@ -161,17 +163,12 @@ class ChannelsController extends BaseCurlController
             $model->share_ratio = $parentChannelInfo->share_ratio;
             $model->level_one = $parentChannelInfo->level_one;
             $model->level_two = $parentChannelInfo->level_two;
-
             //
             $one = DB::connection('origin_mysql')->table('domain')->where('status',1)->inRandomOrder()->first();
-            switch ($model->type){
-                case 0:
-                    $model->url = $one->name . '?'.http_build_query(['channel_id' => $promotion_code]);
-                    break;
-                case 1:
-                    $model->url = $one->name . '/downloadFast?'.http_build_query(['channel_id' => $promotion_code]);
-                    break;
-            }
+            $model->url = match ($model->type) {
+                1, 2 => $one->name . '/downloadFast?' . http_build_query(['channel_id' => $promotion_code]),
+                0 => $one->name . '?' . http_build_query(['channel_id' => $promotion_code]),
+            };
             //$model->statistic_url = env('RESOURCE_DOMAIN') . '/channel/index.html?' . http_build_query(['code' => $model->number]);
             //https://sao.yinlian66.com/channel/index.html?code=1
             $model->save();
