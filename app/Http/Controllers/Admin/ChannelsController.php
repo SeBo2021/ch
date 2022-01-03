@@ -206,7 +206,7 @@ class ChannelsController extends BaseCurlController
     public function defaultHandleBtnAddTpl($shareData)
     {
         $data = [];
-        if(admin()!='root'){
+        if(admin('account')!='root'){
             if ($this->isCanCreate()) {
 
                 $data[] = [
