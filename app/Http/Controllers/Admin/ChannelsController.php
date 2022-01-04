@@ -169,6 +169,20 @@ class ChannelsController extends BaseCurlController
             };
             //$model->statistic_url = env('RESOURCE_DOMAIN') . '/channel/index.html?' . http_build_query(['code' => $model->number]);
             //https://sao.yinlian66.com/channel/index.html?code=1
+            //创建账号
+            $insertChannelAccount = [
+                'nickname' => $model->name,
+                'account' => $model->number,
+                'password' => $model->number,
+                'created_at' => time(),
+                'updated_at' => time(),
+            ];
+            $rid = DB::table('admins')->insertGetId($insertChannelAccount);
+            DB::table('model_has_roles')->insert([
+                'role_id' => 2,
+                'model_id' => $rid,
+                'model_type' => 'admin',
+            ]);
             $model->save();
 
             $this->writeChannelDeduction($model->id,$model->deduction,$model->updated_at);
