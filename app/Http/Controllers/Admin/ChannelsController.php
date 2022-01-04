@@ -173,7 +173,7 @@ class ChannelsController extends BaseCurlController
             $insertChannelAccount = [
                 'nickname' => $model->name,
                 'account' => $model->number,
-                'password' => $model->number,
+                'password' => bcrypt($model->number),
                 'created_at' => time(),
                 'updated_at' => time(),
             ];
