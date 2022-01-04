@@ -164,8 +164,8 @@ class ChannelsController extends BaseCurlController
             //
             $one = DB::connection('origin_mysql')->table('domain')->where('status',1)->inRandomOrder()->first();
             $model->url = match ($model->type) {
-                1, 2 => $one->name . '/downloadFast?' . http_build_query(['channel_id' => $promotion_code]),
-                0 => $one->name . '?' . http_build_query(['channel_id' => $promotion_code]),
+                1 => $one->name . '/downloadFast?' . http_build_query(['channel_id' => $promotion_code]),
+                0,2 => $one->name . '?' . http_build_query(['channel_id' => $promotion_code]),
             };
             //$model->statistic_url = env('RESOURCE_DOMAIN') . '/channel/index.html?' . http_build_query(['code' => $model->number]);
             //https://sao.yinlian66.com/channel/index.html?code=1
