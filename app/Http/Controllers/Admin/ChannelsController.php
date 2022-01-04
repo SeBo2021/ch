@@ -179,7 +179,7 @@ class ChannelsController extends BaseCurlController
             ];
             $rid = DB::table('admins')->insertGetId($insertChannelAccount);
             DB::table('model_has_roles')->insert([
-                'role_id' => 2,
+                'role_id' => 3,
                 'model_id' => $rid,
                 'model_type' => 'admin',
             ]);
