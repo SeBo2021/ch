@@ -117,6 +117,21 @@ trait QueryWhereTrait
 
     }
 
+    public function whereByQueryAtTime($value)
+    {
+        $dateArr = explode('~',$value);
+        if(isset($dateArr[0]) && isset($dateArr[1])){
+            $data1 = [
+                'at_time' => [
+                    'type' => 'between and',
+                    'value' => [strtotime($dateArr[0]),strtotime($dateArr[1])]
+                ]
+            ];
+            $this->addWhere($data1);
+        }
+
+    }
+
     public function whereByQueryIsChecked($value)
     {
         $data = [

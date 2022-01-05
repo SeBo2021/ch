@@ -205,13 +205,25 @@ class ChannelUserDayController extends BaseCurlController
                 'type' => 'text',
                 'name' => '渠道码',
             ],
-            [
-                'field' => 'query_date_at',
-                'type' => 'date',
-                'attr' => 'data-range=~',//需要特殊分割
-                'name' => '时间范围',
-            ],
         ];
+        switch ($this->channelInfo->type) {
+            case 2:
+                $data[] = [
+                    'field' => 'query_date_at',
+                    'type' => 'date',
+                    'attr' => 'data-range=~',//需要特殊分割
+                    'name' => '时间范围',
+                ];
+                break;
+            case 0:
+                $data[] = [
+                    'field' => 'query_at_time',
+                    'type' => 'date',
+                    'attr' => 'data-range=~',//需要特殊分割
+                    'name' => '时间范围',
+                ];
+                break;
+        }
         //赋值到ui数组里面必须是`search`的key值
         $this->uiBlade['search'] = $data;
     }
