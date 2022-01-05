@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCps;
+use Illuminate\Support\Facades\Log;
 
 class ChannelUserDayController extends BaseCurlController
 {
@@ -86,6 +87,7 @@ class ChannelUserDayController extends BaseCurlController
         $order_by_type = $this->orderByType();
         if($parentChannelNumber!='root'){
             $parentChannelInfo = $this->model->where('channel_code',$parentChannelNumber)->first();
+            Log::info('===channel_code===',[$parentChannelNumber]);
             if($parentChannelInfo){
                 $model = $this->orderBy($this->model->where('id',$parentChannelInfo->id??0)->orWhere('pid',$parentChannelInfo->id), $order_by_name, $order_by_type);
             }
