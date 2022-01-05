@@ -239,7 +239,7 @@ layui.define(['layerOpen', 'request', 'utable', 'uploader', 'laydate', 'colorpic
       lang: lang
     }
     if (range) {
-      config.range = true;
+      config.range = range;
     }
     if (set_config) {
       config = $.extend({}, config, set_config);

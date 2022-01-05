@@ -52,6 +52,7 @@ $route->middleware(['admin_auth'])->name($route_name)->group(function ($route) {
         'ArticleController',
         'CategoryController',
         'ChannelsController',
+        'ChannelUserDayController',
         //===========================
         'LoginLogController',
         'WhiteListController',

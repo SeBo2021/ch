@@ -62,6 +62,18 @@ trait QueryWhereTrait
         $this->addWhere($data);
     }
 
+    public function whereByQueryLikeChannelCode($value)
+    {
+        $data = [
+            'channel_code' => [
+                'type' => 'like',
+                'value' => $value
+            ],
+
+        ];
+        $this->addWhere($data);
+    }
+
     public function whereByQueryPhoneNumber($value)
     {
         if($value!==''){
@@ -90,12 +102,12 @@ trait QueryWhereTrait
 
     }
 
-    public function whereByQueryCreatedAt($value)
+    public function whereByQueryDateAt($value)
     {
         $dateArr = explode('~',$value);
         if(isset($dateArr[0]) && isset($dateArr[1])){
             $data1 = [
-                'created_at' => [
+                'date_at' => [
                     'type' => 'between',
                     'value' => [trim($dateArr[0]),trim($dateArr[1])]
                 ]
