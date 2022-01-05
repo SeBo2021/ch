@@ -77,6 +77,27 @@ class ChannelUserDayController extends BaseCurlController
         ];
     }
 
+    public function handleResultModel($model)
+    {
+        $parentChannelNumber = admin('account');
+        $page = $this->rq->input('page', 1);
+        $pagesize = $this->rq->input('limit', 30);
+        $order_by_name = $this->orderByName();
+        $order_by_type = $this->orderByType();
+        if($parentChannelNumber!='root'){
+            $parentChannelInfo = $this->model->where('channel_code',$parentChannelNumber)->first();
+            $model = $this->orderBy($this->model->where('id',$parentChannelInfo->id)->orWhere('pid',$parentChannelInfo->id), $order_by_name, $order_by_type);
+        }else{
+            $model = $this->orderBy($model, $order_by_name, $order_by_type);
+        }
+        $total = $model->count();
+        $result = $model->forPage($page, $pagesize)->get();
+        return [
+            'total' => $total,
+            'result' => $result
+        ];
+    }
+
     public function setListOutputItemExtend($item)
     {
         $item->share_amount = number_format($item->share_amount, 2, '.', '');
