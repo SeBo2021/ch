@@ -35,7 +35,7 @@ class ChannelUserDayController extends BaseCurlController
                 'align' => 'center'
             ],
             [
-                'field' => 'channel_code',
+                'field' => 'number',
                 'minWidth' => 80,
                 'title' => '渠道码',
 //                'hide' => true,
