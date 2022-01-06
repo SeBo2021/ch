@@ -15,7 +15,7 @@ class ChannelUserDayController extends BaseCurlController
     public function getAdminAccount()
     {
         $adminAccount = admin('account');
-        Log::info('===adminAccount===',$adminAccount);
+        Log::info('===adminAccount===',[$adminAccount]);
         return $adminAccount;
     }
 
