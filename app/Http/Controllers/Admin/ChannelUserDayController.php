@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpa;
 use App\Models\ChannelCps;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use JetBrains\PhpStorm\Pure;
@@ -16,8 +15,7 @@ class ChannelUserDayController extends BaseCurlController
     public function setModel(): ChannelCpa|ChannelCps
     {
         $number = admin('account');
-        $user = Auth::user();
-        Log::info('===account===',[$user]);
+//        Log::info('===account===',$number);
         $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',$number)->first();
         $type = $this->channelInfo ? $this->channelInfo->type : 2;
         return match ($type) {
@@ -28,6 +26,8 @@ class ChannelUserDayController extends BaseCurlController
 
     public function getCpaIndexCols()
     {
+        $number = admin('account');
+        Log::info('===account===',$number);
         return [
             [
                 'type' => 'checkbox'
