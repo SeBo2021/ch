@@ -16,6 +16,7 @@ class ChannelUserDayController extends BaseCurlController
     {
         $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',admin('account'))->first();
         $type = $this->channelInfo ? $this->channelInfo->type : 2;
+        Log::info('===ChannelType===',[$type]);
         return match ($type) {
             0 => $this->model = new ChannelCpa(),
             2 => $this->model = new ChannelCps(),
