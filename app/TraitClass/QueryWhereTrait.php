@@ -123,7 +123,7 @@ trait QueryWhereTrait
         if(isset($dateArr[0]) && isset($dateArr[1])){
             $data1 = [
                 'at_time' => [
-                    'type' => 'between and',
+                    'type' => 'between',
                     'value' => [strtotime($dateArr[0]),strtotime($dateArr[1])]
                 ]
             ];
