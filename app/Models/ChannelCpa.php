@@ -6,5 +6,5 @@ class ChannelCpa extends BaseModel
 {
     protected $connection = 'origin_mysql';
 
-    protected $table = 'statistic_day_channel';
+    protected $table = 'statistic_day_deduction';
 }
