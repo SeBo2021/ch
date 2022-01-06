@@ -153,7 +153,8 @@ class ChannelUserDayController extends BaseCurlController
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
         if($parentChannelNumber!='root'){
-            $parentChannelInfo = $this->model->where('channel_code',$parentChannelNumber)->first();
+            $channelCode = $this->channelInfo->type == 2 ? 'channel_code' : 'number';
+            $parentChannelInfo = $this->model->where($channelCode,$parentChannelNumber)->first();
             $id = $parentChannelInfo ? $parentChannelInfo->id : 0;
             if($parentChannelInfo){
                 $model = $this->orderBy($this->model->where('id',$id)->orWhere('pid',$id), $order_by_name, $order_by_type);
