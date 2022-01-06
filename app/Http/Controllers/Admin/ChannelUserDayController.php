@@ -27,7 +27,7 @@ class ChannelUserDayController extends BaseCurlController
     public function getCpaIndexCols()
     {
         $number = admin('account');
-        Log::info('===account===',$number);
+        Log::info('===account===',[$number]);
         return [
             [
                 'type' => 'checkbox'
