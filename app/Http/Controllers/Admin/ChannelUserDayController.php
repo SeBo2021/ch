@@ -197,7 +197,7 @@ class ChannelUserDayController extends BaseCurlController
                 $item->share_ratio = $item->share_ratio . '%';
                 break;
             case 0:
-                $info = DB::connection('origin_mysql')->table('channel')->where('id',$item->channel_id)->first();
+                $info = DB::connection('origin_mysql')->table('channels')->where('id',$item->channel_id)->first();
                 $item->name = $info->name;
                 $item->channel_code = $info->number;
                 $item->downloads = $info->install;
