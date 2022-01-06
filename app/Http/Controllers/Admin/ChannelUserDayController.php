@@ -12,7 +12,7 @@ class ChannelUserDayController extends BaseCurlController
 {
     public $channelInfo;
 
-    public function setModel(): ChannelCpa|ChannelCps
+    public function setModel()
     {
         $number = admin('account');
         Log::info('===account1===',[$number]);
