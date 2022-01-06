@@ -200,10 +200,10 @@ class ChannelUserDayController extends BaseCurlController
                 $info = DB::connection('origin_mysql')->table('channels')->where('id',$item->channel_id)->first();
                 $item->name = $info->name;
                 $item->channel_code = $info->number;
-                $item->downloads = $info->install;
+                $item->downloads = $item->install;
                 $item->unit_price = $info->unit_price;
-                $item->settlement_amount = round($info->unit_price * $info->install,2);
-                $item->at_time =  date('Y-m-d',$info->created_at);
+                $item->settlement_amount = round($info->unit_price * $item->install,2);
+                $item->at_time =  date('Y-m-d',$item->created_at);
                 break;
         }
 
