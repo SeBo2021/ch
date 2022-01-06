@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpa;
 use App\Models\ChannelCps;
-use App\Models\ChannelDay;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use JetBrains\PhpStorm\Pure;
@@ -13,15 +12,22 @@ class ChannelUserDayController extends BaseCurlController
 {
     public $channelInfo;
 
+    public function getAdminAccount()
+    {
+        $adminAccount = admin('account');
+        Log::info('===adminAccount===',$adminAccount);
+        return $adminAccount;
+    }
+
     public function setModel()
     {
-        /*Log::info('===account===',[$this->adminAccount]);
-        $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',$this->adminAccount)->first();
+        $adminAccount = $this->getAdminAccount();
+        $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',$adminAccount)->first();
         $type = $this->channelInfo ? $this->channelInfo->type : 2;
         return match ($type) {
             0 => $this->model = new ChannelCpa(),
             2 => $this->model = new ChannelCps(),
-        };*/
+        };
     }
 
     public function getCpaIndexCols()
@@ -139,13 +145,7 @@ class ChannelUserDayController extends BaseCurlController
 
     #[Pure] public function indexCols(): array
     {
-        $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',admin('account'))->first();
         $type = $this->channelInfo ? $this->channelInfo->type : 2;
-        Log::info('===type===',[$type]);
-        match ($type) {
-            0 => $this->model = new ChannelCpa(),
-            2 => $this->model = new ChannelCps(),
-        };
         return match ($type) {
             0 => $this->getCpaIndexCols(),
             2 => $this->getCpsIndexCols(),
