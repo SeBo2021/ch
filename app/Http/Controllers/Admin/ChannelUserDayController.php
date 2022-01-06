@@ -96,6 +96,12 @@ class ChannelUserDayController extends BaseCurlController
                 'align' => 'center'
             ],
             [
+                'field' => 'level',
+                'minWidth' => 100,
+                'title' => '级数',
+                'align' => 'center'
+            ],
+            [
                 'field' => 'channel_code',
                 'minWidth' => 80,
                 'title' => '渠道码',
@@ -190,6 +196,7 @@ class ChannelUserDayController extends BaseCurlController
 
     public function setListOutputItemExtend($item)
     {
+        $item->level = $item->pid > 0 ? '二级' : '一级';
         switch ($this->channelInfo->type) {
             case 2:
                 $item->share_amount = number_format($item->share_amount, 2, '.', '');
@@ -249,6 +256,7 @@ class ChannelUserDayController extends BaseCurlController
                 break;
         }
         //赋值到ui数组里面必须是`search`的key值
+        Log::info('===testTime==',$data);
         $this->uiBlade['search'] = $data;
     }
 
