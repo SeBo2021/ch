@@ -216,28 +216,35 @@ class ChannelUserDayController extends BaseCurlController
 
     public function setOutputSearchFormTpl($shareData)
     {
-        $data = [
-            [
-                'field' => 'query_like_channel_code',
-                'type' => 'text',
-                'name' => '渠道码',
-            ],
-        ];
         switch ($this->channelInfo->type) {
             case 2:
-                $data[] = [
-                    'field' => 'query_date_at',
-                    'type' => 'date',
-                    'attr' => 'data-range=~',//需要特殊分割
-                    'name' => '时间范围',
+                $data = [
+                    [
+                        'field' => 'query_like_channel_code',
+                        'type' => 'text',
+                        'name' => '渠道码',
+                    ],
+                    [
+                        'field' => 'query_date_at',
+                        'type' => 'date',
+                        'attr' => 'data-range=~',//需要特殊分割
+                        'name' => '时间范围',
+                    ]
                 ];
                 break;
             case 0:
-                $data[] = [
-                    'field' => 'query_at_time',
-                    'type' => 'date',
-                    'attr' => 'data-range=~',//需要特殊分割
-                    'name' => '时间范围',
+                $data = [
+                    [
+                        'field' => 'query_like_channel_code',
+                        'type' => 'text',
+                        'name' => '渠道码',
+                    ],
+                    [
+                        'field' => 'query_at_time',
+                        'type' => 'date',
+                        'attr' => 'data-range=~',//需要特殊分割
+                        'name' => '时间范围',
+                    ]
                 ];
                 break;
         }
