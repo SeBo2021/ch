@@ -12,22 +12,15 @@ class ChannelUserDayController extends BaseCurlController
 {
     public $channelInfo;
 
-    public function getAdminAccount()
-    {
-        $adminAccount = admin('account');
-        Log::info('===adminAccount===',[$adminAccount]);
-        return $adminAccount;
-    }
-
     public function setModel()
     {
-        $adminAccount = $this->getAdminAccount();
+        /*$adminAccount = $this->getAdminAccount();
         $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',$adminAccount)->first();
         $type = $this->channelInfo ? $this->channelInfo->type : 2;
         return match ($type) {
             0 => $this->model = new ChannelCpa(),
             2 => $this->model = new ChannelCps(),
-        };
+        };*/
     }
 
     public function getCpaIndexCols()
