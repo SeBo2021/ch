@@ -26,7 +26,7 @@ class ChannelUserDayController extends BaseCurlController
 
     public function getModel()
     {
-        Log::info('===adminAccount===',admin('account'));
+        Log::info('===adminAccount===',[admin()]);
         return $this->model;
     }
 
