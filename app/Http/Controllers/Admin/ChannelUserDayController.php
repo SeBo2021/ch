@@ -49,6 +49,12 @@ class ChannelUserDayController extends BaseCurlController
                 'align' => 'center'
             ],
             [
+                'field' => 'level',
+                'minWidth' => 100,
+                'title' => '级数',
+                'align' => 'center'
+            ],
+            [
                 'field' => 'number',
                 'minWidth' => 80,
                 'title' => '渠道码',
