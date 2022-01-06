@@ -174,7 +174,7 @@ class ChannelUserDayController extends BaseCurlController
 
             $id = $parentChannelInfo ? $parentChannelInfo->id : 0;
             if($parentChannelInfo){
-                $model = $this->orderBy($this->model->where('id',$id)->orWhere('pid',$id), $order_by_name, $order_by_type);
+                $model = $this->orderBy($this->model->where('channel_id',$id)->orWhere('pid',$id), $order_by_name, $order_by_type);
             }else{
                 return ['total' => 0, 'result' => []];
             }
