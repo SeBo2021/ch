@@ -14,9 +14,8 @@ class ChannelUserDayController extends BaseCurlController
 
     public function setModel()
     {
-        $number = admin('account');
-        Log::info('===account1===',[$number]);
-        $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',$number)->first();
+        Log::info('===account===',[$this->adminAccount]);
+        $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',$this->adminAccount)->first();
         $type = $this->channelInfo ? $this->channelInfo->type : 2;
         return match ($type) {
             0 => $this->model = new ChannelCpa(),
@@ -26,8 +25,6 @@ class ChannelUserDayController extends BaseCurlController
 
     public function getCpaIndexCols()
     {
-        $number = admin('account');
-        Log::info('===account===',[$number]);
         return [
             [
                 'type' => 'checkbox'

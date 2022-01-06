@@ -22,6 +22,7 @@ class BaseCurlController extends BaseController
     public $uiService;
     public $commonBladePath = 'commonCurl';
     public $guardName = 'admin';
+    public $adminAccount;
 
     /**
      * 插入操作日志
@@ -36,7 +37,7 @@ class BaseCurlController extends BaseController
         parent::__construct();
         //表格名称
         $this->getModelTableName();
-
+        $this->adminAccount = admin('account');
         //设置模型
         $this->setModel();
         //服务容器注入
