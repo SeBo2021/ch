@@ -15,7 +15,6 @@ namespace App\Http\Controllers\Admin;
 use App\Models\AdminLog;
 use App\Services\UiService;
 use App\TraitClass\ModelCurlTrait;
-use Illuminate\Support\Facades\Log;
 
 class BaseCurlController extends BaseController
 {
@@ -35,8 +34,6 @@ class BaseCurlController extends BaseController
     public function __construct()
     {
         parent::__construct();
-        $adminAccount = admin('account');
-        Log::info('===adminAccount===',[$adminAccount]);
         //表格名称
         $this->getModelTableName();
 

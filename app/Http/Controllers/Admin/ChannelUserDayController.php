@@ -21,6 +21,13 @@ class ChannelUserDayController extends BaseCurlController
             0 => $this->model = new ChannelCpa(),
             2 => $this->model = new ChannelCps(),
         };*/
+        return $this->model = new ChannelCpa();
+    }
+
+    public function getModel()
+    {
+        Log::info('===adminAccount===',admin('account'));
+        return $this->model;
     }
 
     public function getCpaIndexCols()
