@@ -12,7 +12,7 @@ class ChannelUserDayController extends BaseCurlController
 {
     public $channelInfo;
 
-    public function setModel(): ChannelCps
+    public function setModel()
     {
         $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',admin('account'))->first();
         $type = $this->channelInfo ? $this->channelInfo->type : 2;
