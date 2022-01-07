@@ -124,8 +124,8 @@
         </div>
         <div class="layui-card-body" style="height: 360px">
             <div class="layui-carousel layadmin-carousel layadmin-dataview">
-                <div class="layui-col-md6" id="activeUsers" style="height: 100%"></div>
-                <div class="layui-col-md6" id="users" style="height: 100%"></div>
+                <div class="layui-col-md12" id="summaryCpsOrCpa" style="height: 100%"></div>
+{{--                <div class="layui-col-md6" id="users" style="height: 100%"></div>--}}
             </div>
         </div>
     </div>
@@ -146,73 +146,123 @@
             increment:{"type":"increment"},
             users:{"type":"users"},*/
             dataOverview:{"type":"dataOverview","channel_type": {{$channel_type}},"channel_id": {{$channel_id}}},
-            summaryDownloads:{"type":"summaryDownloads","channel_type": {{$channel_type}},"channel_id": {{$channel_id}}}
+            summaryCpsOrCpa:{"type":"summaryCpsOrCpa","channel_type": {{$channel_type}},"channel_id": {{$channel_id}}}
         };
 
         //数据总览
         var dataOverview = function (){
                 $.get('/admin/home/list',ajaxParams.dataOverview,function (jsonRes) {
-                    $('#total_amount').text(jsonRes.total_amount);
-                    $('#month_amount').text(jsonRes.month_amount);
-                    $('#today_amount').text(jsonRes.today_amount);
-                    $('#month_orders').text(jsonRes.month_orders);
-                    $('#today_orders').text(jsonRes.today_orders);
-                    //
-                    $('#total_downloads').text(jsonRes.total_downloads);
-                    $('#month_downloads').text(jsonRes.month_downloads);
-                    $('#today_downloads').text(jsonRes.today_downloads);
+                    if(ajaxParams.dataOverview.channel_type === 2){
+                        $('#total_amount').text(jsonRes.total_amount);
+                        $('#month_amount').text(jsonRes.month_amount);
+                        $('#today_amount').text(jsonRes.today_amount);
+                        $('#month_orders').text(jsonRes.month_orders);
+                        $('#today_orders').text(jsonRes.today_orders);
+                    }else{
+                        //
+                        $('#total_downloads').text(jsonRes.total_downloads);
+                        $('#month_downloads').text(jsonRes.month_downloads);
+                        $('#today_downloads').text(jsonRes.today_downloads);
+                    }
                 });
             };
             // 15日图表
-            /*summaryDownloads = function () {
-                $.get('/admin/Home/list',ajaxParams.activeUsers,function (jsonRes) {
-                    var option = {
-                        legend: {
-                            data: ['日活数']
-                        },
-                        xAxis: {
-                            type: 'category',
-                            data: jsonRes.x
-                        },
-                        yAxis: {
-                            //type: 'value'
-                        },
-                        tooltip: {
-                            trigger: 'axis'
-                        },
-                        toolbox: {
-                            left: 'left',
-                            feature: {
-                                saveAsImage: {
-                                    'title':'下载'
+            summaryCpsOrCpa = function () {
+                $.get('/admin/home/list',ajaxParams.summaryCpsOrCpa,function (jsonRes) {
+                    let option = {};
+                    if(ajaxParams.dataOverview.channel_type === 2){
+                        option = {
+                            legend: {
+                                data: ['付费额','订单数']
+                            },
+                            xAxis: {
+                                type: 'category',
+                                data: jsonRes.x
+                            },
+                            yAxis: {
+                                //type: 'value'
+                            },
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            toolbox: {
+                                left: 'left',
+                                feature: {
+                                    saveAsImage: {
+                                        'title':'下载'
+                                    }
                                 }
-                            }
-                        },
-                        series: [
-                            {
-                                name: '日活数',
-                                data: jsonRes.y,
-                                /!*markPoint: {
-                                    data: [{
-                                        type: "max"
-                                    }],
-                                    symbolOffset: [0, 0],
-                                    symbolRotate: 2,
-                                },*!/
-                                label: {
-                                    show: true
+                            },
+                            series: [
+                                {
+                                    name: '付费额',
+                                    data: jsonRes.amount,
+                                    label: {
+                                        show: true
+                                    },
+                                    type: 'line'
                                 },
-                                type: 'line'
-                            }
-                        ]
-                    };
-                    var  item = echarts.init(document.getElementById('activeUsers'));
+                                {
+                                    name: '订单数',
+                                    data: jsonRes.order,
+                                    label: {
+                                        show: true
+                                    },
+                                    type: 'line'
+                                },
+                            ]
+                        };
+                    }else{
+                        option = {
+                            legend: {
+                                data: ['下载人数']
+                            },
+                            xAxis: {
+                                type: 'category',
+                                data: jsonRes.x
+                            },
+                            yAxis: {
+                                //type: 'value'
+                            },
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            toolbox: {
+                                left: 'left',
+                                feature: {
+                                    saveAsImage: {
+                                        'title':'下载'
+                                    }
+                                }
+                            },
+                            series: [
+                                {
+                                    name: '下载人数',
+                                    data: jsonRes.y,
+                                    /*markPoint: {
+                                        data: [{
+                                            type: "max"
+                                        }],
+                                        symbolOffset: [0, 0],
+                                        symbolRotate: 2,
+                                    },*/
+                                    label: {
+                                        show: true
+                                    },
+                                    type: 'line'
+                                }
+                            ]
+                        };
+
+                    }
+                    const item = echarts.init(document.getElementById('summaryCpsOrCpa'));
                     item.setOption(option);
                 });
-            };*/
+            };
 
 
         dataOverview();
+        summaryCpsOrCpa();
         //==============================
     </script>
 

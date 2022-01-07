@@ -56,27 +56,25 @@ class HomeController extends BaseCurlController
                 }
                 break;
 
-            case 'summaryDownloads':
-                /*$queryBuild = DB::connection('origin_mysql')->table('users_day')->select('at_time',DB::raw('count(uid) as users'));
-                if($channelId!==null){
-                    $queryBuild = $queryBuild->where('channel_id',$channelId);
-                }
-                if( $deviceSystem>0 ){
-                    $queryBuild = $queryBuild->where('device_system',$deviceSystem);
-                }
-                if($timeRange != 0){
-                    $queryBuild = $queryBuild
-                        ->where('at_time','>=',strtotime($startDate))
-                        ->where('at_time','<=',strtotime($endDate));
-                }
-                $activeUsers = $queryBuild->groupBy(['at_time'])->orderByDesc('at_time')->take(15)->get();
-                $activeUsers = array_reverse($activeUsers->toArray());
-                foreach ($activeUsers as $activeUser){
-                    $json['x'][] = date('Y-m-d',$activeUser->at_time);
-                    $json['y'][] = $activeUser->users;
-                }*/
+            case 'summaryCpsOrCpa':
+                if($channelType==2){ //cps
+                    $cpsData = DB::table('channel_cps')->where('channel_id',$channelId)->orderByDesc('date_at')->take(15)->get(['total_recharge_amount','orders','date_at']);
+                    foreach ($cpsData as $item){
+                        $json['x'][] = $item->date_at;
+                        $json['amount'][] = $item->total_recharge_amount;
+                        $json['order'][] = $item->orders;
+                    }
 
-                break;
+                }else{ //cpa
+                    $cpaData = DB::connection('origin_mysql')->table('statistic_day_deduction')
+                        ->where('channel_id',$channelId)
+                        ->orderByDesc('at_time')->take(15)
+                        ->get(['install','at_time']);
+                    foreach ($cpaData as $item){
+                        $json['x'][] = date('Y-m-d',$item->at_time);
+                        $json['y'][] = $item->install;
+                    }
+                }
 
         }
         return response()->json($json);
