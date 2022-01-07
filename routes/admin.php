@@ -37,6 +37,7 @@ $route->middleware(['admin_auth'])->name($route_name)->group(function ($route) {
     $checkPermissionRoutePrefix = 'admin.';
     $route->get('home', 'HomeController@home')->name('home');
     $route->get('/', 'HomeController@index')->name('index');
+    $route->get('home/list', 'HomeController@getList');
     //上传接口
     $route->any('upload/{type}', ['uses' => 'FileUploadController@handle'])->name('upload');
     //导入表格

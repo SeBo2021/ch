@@ -6,8 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class HomeController extends BaseController
+class HomeController extends BaseCurlController
 {
+    //去掉公共模板
+    public $commonBladePath = '';
+    public $pageName = '首页';
+
     /**
      * 首页
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
@@ -19,28 +23,41 @@ class HomeController extends BaseController
     public function getList(Request $request)
     {
         $json = [];
-        $adminAccount = admin('account');
-        $channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',$adminAccount)->first();
-        $channelId = $channelInfo ? $channelInfo->id : 0;
-        $channelType = $channelInfo ? $channelInfo->type : 0;
+        $channelId = $request->input('channel_id',0);
+        $channelType = $request->input('channel_type',1);
         switch ($request->input('type','')){
-            case 'data_overview':
-                /*if($channelType != 2){
-
-                }*/
-                $queryBuild = DB::connection('origin_mysql')->table('statistic_day_deduction')->select(DB::raw('SUM(install) as total_install'));
-
-                $totalData = $queryBuild->orderByDesc('at_time')->limit(30)->get()[0];
-
-                $json = [
-                    'total_' => $totalData->total_access,
-                    'hits' => $totalData->total_hits,
-                    'install' => $totalData->total_install,
-                ];
+            case 'dataOverview':
+                if($channelType==2){ //cps
+                    $queryBuild = DB::table('channel_cps')->where('channel_id',$channelId);
+                    $totalAmount = $queryBuild->sum('total_recharge_amount');
+                    $monthAmount = $queryBuild->whereDate('date_at','>=',date('Y-m-01'))->sum('total_recharge_amount');
+                    $todayAmount = $queryBuild->whereDate('date_at',date('Y-m-d'))->sum('total_recharge_amount');
+                    $monthOrders = $queryBuild->whereDate('date_at','>=',date('Y-m-01'))->sum('orders');
+                    $todayOrders = $queryBuild->whereDate('date_at',date('Y-m-d'))->sum('orders');
+                    $json = [
+                        'total_amount' => $totalAmount,
+                        'month_amount' => $monthAmount,
+                        'today_amount' => $todayAmount,
+                        'month_orders' => $monthOrders,
+                        'today_orders' => $todayOrders,
+                    ];
+                }else{ //cpa
+                    $queryBuild = DB::connection('origin_mysql')->table('statistic_day_deduction')->where('channel_id',$channelId);
+                    $totalDownloads = $queryBuild->sum('install');
+                    $currentMonthBeginTime = strtotime(date('Y-m-01 00:00:00'));
+                    $TodayBeginTime = strtotime(date('Y-m-d 00:00:00'));
+                    $monthDownloads = $queryBuild->where('at_time','>=',$currentMonthBeginTime)->sum('install');
+                    $todayDownloads = $queryBuild->where('at_time','>=',$TodayBeginTime)->sum('install');
+                    $json = [
+                        'total_downloads' => $totalDownloads,
+                        'month_downloads' => $monthDownloads,
+                        'today_downloads' => $todayDownloads,
+                    ];
+                }
                 break;
 
-            case 'activeUsers':
-                $queryBuild = DB::connection('origin_mysql')->table('users_day')->select('at_time',DB::raw('count(uid) as users'));
+            case 'summaryDownloads':
+                /*$queryBuild = DB::connection('origin_mysql')->table('users_day')->select('at_time',DB::raw('count(uid) as users'));
                 if($channelId!==null){
                     $queryBuild = $queryBuild->where('channel_id',$channelId);
                 }
@@ -57,7 +74,8 @@ class HomeController extends BaseController
                 foreach ($activeUsers as $activeUser){
                     $json['x'][] = date('Y-m-d',$activeUser->at_time);
                     $json['y'][] = $activeUser->users;
-                }
+                }*/
+
                 break;
 
         }
@@ -65,7 +83,9 @@ class HomeController extends BaseController
     }
 
     public function home(){
-        return $this->display();
+        $channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',admin('account'))->first();
+        $channel_id = $channelInfo ? $channelInfo->id : 0;
+        return $this->display(['channel_id' => $channel_id,'channel_type' =>$channelInfo ? $channelInfo->type : 0]);
     }
     public function map($type,Request $request){
         $this->setViewPath($type.'Map');
