@@ -42,7 +42,7 @@
             <div class="layui-carousel layadmin-carousel layadmin-dataview">
                 @if($channel_type==2)
                 <div class="layui-row">
-                    <div class="layui-col-md3">
+                    <div class="layui-col-md12">
                         <div class="grid-demo">
                             <fieldset class="layui-elem-field layui-field-title">
                                 <legend>累计付费</legend>
@@ -85,7 +85,7 @@
                 </div>
                 @else
                 <div class="layui-row">
-                    <div class="layui-col-md3">
+                    <div class="layui-col-md4">
                         <div class="grid-demo">
                             <fieldset class="layui-elem-field layui-field-title">
                                 <legend>累计下载</legend>
@@ -93,7 +93,7 @@
                             <pre class="layui-code layui-bg-blue" id="total_downloads"></pre>
                         </div>
                     </div>
-                    <div class="layui-col-md3">
+                    <div class="layui-col-md4">
                         <div class="grid-demo">
                             <fieldset class="layui-elem-field layui-field-title">
                                 <legend>本月下载</legend>
@@ -101,7 +101,7 @@
                             <pre class="layui-code layui-bg-black" id="month_downloads"></pre>
                         </div>
                     </div>
-                    <div class="layui-col-md3">
+                    <div class="layui-col-md4">
                         <div class="grid-demo">
                             <fieldset class="layui-elem-field layui-field-title">
                                 <legend>今日下载</legend>

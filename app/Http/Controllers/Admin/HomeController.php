@@ -58,7 +58,7 @@ class HomeController extends BaseCurlController
 
             case 'summaryCpsOrCpa':
                 if($channelType==2){ //cps
-                    $cpsData = DB::table('channel_cps')->where('channel_id',$channelId)->orderByDesc('date_at')->take(15)->get(['total_recharge_amount','orders','date_at']);
+                    $cpsData = DB::table('channel_cps')->where('channel_id',$channelId)->orderBy('date_at')->take(15)->get(['total_recharge_amount','orders','date_at']);
                     foreach ($cpsData as $item){
                         $json['x'][] = $item->date_at;
                         $json['amount'][] = $item->total_recharge_amount;
@@ -68,7 +68,7 @@ class HomeController extends BaseCurlController
                 }else{ //cpa
                     $cpaData = DB::connection('origin_mysql')->table('statistic_day_deduction')
                         ->where('channel_id',$channelId)
-                        ->orderByDesc('at_time')->take(15)
+                        ->orderBy('at_time')->take(15)
                         ->get(['install','at_time']);
                     foreach ($cpaData as $item){
                         $json['x'][] = date('Y-m-d',$item->at_time);
