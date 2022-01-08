@@ -216,7 +216,7 @@ class ChannelUserDayController extends BaseCurlController
                 $item->number = $info->number;
                 $item->downloads = round($item->install/100);
                 $item->unit_price = $info->unit_price;
-                $item->settlement_amount = round($info->unit_price * $item->install,2);
+                $item->settlement_amount = round($info->unit_price * $item->downloads,2);
                 $item->at_time =  date('Y-m-d',$item->created_at);
                 break;
         }
