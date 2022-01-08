@@ -178,6 +178,9 @@ class ChannelUserDayController extends BaseCurlController
         $pagesize = $this->rq->input('limit', 30);
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
+        $model = $this->orderBy($model, $order_by_name, $order_by_type);
+        $total = $model->count();
+        $result = $model->forPage($page, $pagesize)->get();
         if($parentChannelNumber!='root'){
             $parentChannelInfo = match ($this->channelInfo->type) {
                 2 => $this->model->where('channel_code', $parentChannelNumber)->first(),
@@ -185,15 +188,19 @@ class ChannelUserDayController extends BaseCurlController
             };
             //$id = $parentChannelInfo ? $parentChannelInfo->id : 0;
             if($parentChannelInfo){
-                $model = $this->orderBy($this->model->where('channel_id',$this->channelInfo->id)->orWhere('pid',$this->channelInfo->id), $order_by_name, $order_by_type);
+                //$model = $this->orderBy($this->model->where('channel_id',$this->channelInfo->id)->orWhere('pid',$this->channelInfo->id), $order_by_name, $order_by_type);
+                $handleLists = [];
+                foreach ($result as &$res){
+                    if($res->id==$this->channelInfo->id || $res->pid==$this->channelInfo->id){
+                        $handleLists[] = $res;
+                    }
+                }
+                $result = $handleLists;
             }else{
                 return ['total' => 0, 'result' => []];
             }
-        }else{
-            $model = $this->orderBy($model, $order_by_name, $order_by_type);
         }
-        $total = $model->count();
-        $result = $model->forPage($page, $pagesize)->get();
+
         return [
             'total' => $total,
             'result' => $result

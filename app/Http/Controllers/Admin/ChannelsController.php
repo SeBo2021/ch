@@ -254,14 +254,19 @@ class ChannelsController extends BaseCurlController
         $pagesize = $this->rq->input('limit', 30);
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
-        if($parentChannelNumber!='root'){
-            $parentChannelInfo = $this->model->where('number',$parentChannelNumber)->first();
-            $model = $this->orderBy($this->model->where('id',$parentChannelInfo->id)->orWhere('pid',$parentChannelInfo->id), $order_by_name, $order_by_type);
-        }else{
-            $model = $this->orderBy($model, $order_by_name, $order_by_type);
-        }
+        $model = $this->orderBy($model, $order_by_name, $order_by_type);
         $total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
+        if($parentChannelNumber!='root'){
+            $parentChannelInfo = $this->model->where('number',$parentChannelNumber)->first();
+            $agentList = [];
+            foreach ($result as &$res){
+                if($res->id==$parentChannelInfo->id || $res->pid==$parentChannelInfo->id){
+                    $agentList[] = $res;
+                }
+            }
+            $result = $agentList;
+        }
         return [
             'total' => $total,
             'result' => $result
