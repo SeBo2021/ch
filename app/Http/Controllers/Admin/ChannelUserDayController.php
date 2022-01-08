@@ -186,7 +186,7 @@ class ChannelUserDayController extends BaseCurlController
                 2 => $this->model->where('channel_code', $parentChannelNumber)->first(),
                 default => $this->model->where('channel_id', $this->channelInfo->id)->first(),
             };
-            Log::info('===CPADATA===',[$result,$parentChannelInfo]);
+            Log::info('===CPADATA===',[$this->channelInfo,$parentChannelNumber]);
             //$id = $parentChannelInfo ? $parentChannelInfo->id : 0;
             if($parentChannelInfo){
                 //$model = $this->orderBy($this->model->where('channel_id',$this->channelInfo->id)->orWhere('pid',$this->channelInfo->id), $order_by_name, $order_by_type);
