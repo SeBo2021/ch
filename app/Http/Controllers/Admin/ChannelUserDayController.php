@@ -270,7 +270,6 @@ class ChannelUserDayController extends BaseCurlController
                 break;
         }
         //赋值到ui数组里面必须是`search`的key值
-        Log::info('===testTime==',$data);
         $this->uiBlade['search'] = $data;
     }
 
