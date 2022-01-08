@@ -191,6 +191,7 @@ class ChannelUserDayController extends BaseCurlController
                 }
                 $result = $handleLists;
                 //Log::info('===CPADATA===',[$this->channelInfo,$parentChannelNumber]);
+                Log::info('===CPADATA===',[$this->channelInfo->id,$handleLists,$res->id]);
             }else{
                 return ['total' => 0, 'result' => []];
             }
