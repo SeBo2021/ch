@@ -49,9 +49,9 @@ class HomeController extends BaseCurlController
                     $monthDownloads = $queryBuild->where('at_time','>=',$currentMonthBeginTime)->sum('install');
                     $todayDownloads = $queryBuild->where('at_time','>=',$TodayBeginTime)->sum('install');
                     $json = [
-                        'total_downloads' => $totalDownloads,
-                        'month_downloads' => $monthDownloads,
-                        'today_downloads' => $todayDownloads,
+                        'total_downloads' => round($totalDownloads/100),
+                        'month_downloads' => round($monthDownloads/100),
+                        'today_downloads' => round($todayDownloads/100),
                     ];
                 }
                 break;
