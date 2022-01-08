@@ -181,18 +181,16 @@ class ChannelUserDayController extends BaseCurlController
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
         $total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
-        Log::info('===CPADATA-res===',[$result]);
         if($parentChannelNumber!='root'){
             if($this->channelInfo){
                 $handleLists = [];
                 foreach ($result as $res){
-                    if($res->id==$this->channelInfo->id || $res->pid==$this->channelInfo->id){
+                    if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
                         $handleLists[] = $res;
                     }
                 }
                 $result = $handleLists;
                 //Log::info('===CPADATA===',[$this->channelInfo,$parentChannelNumber]);
-                Log::info('===CPADATA===',[$this->channelInfo->id,$result]);
             }else{
                 return ['total' => 0, 'result' => []];
             }
