@@ -72,7 +72,7 @@ class HomeController extends BaseCurlController
                         ->get(['install','at_time']);
                     foreach ($cpaData as $item){
                         $json['x'][] = date('Y-m-d',$item->at_time);
-                        $json['y'][] = $item->install;
+                        $json['y'][] = round($item->install/100);
                     }
                 }
 
