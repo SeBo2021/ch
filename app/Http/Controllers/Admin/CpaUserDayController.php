@@ -137,9 +137,9 @@ class CpaUserDayController extends BaseCurlController
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
-        //$total = $model->count();
+        $total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
-        $handleLists = [];
+        /*$handleLists = [];
         //$total = 0;
         foreach ($result as $res) {
             if ($res->channel_id > 0) {
@@ -148,7 +148,7 @@ class CpaUserDayController extends BaseCurlController
             }
         }
         $result = $handleLists;
-        $total = count($result);
+        $total = count($result);*/
         return [
             'total' => $total,
             'result' => $result
