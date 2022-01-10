@@ -71,7 +71,7 @@ class CpaUserDayController extends BaseCurlController
         $item->level = $item->pid > 0 ? '二级' : '一级';
         if($item->channel_id >0){
             $info = DB::connection('origin_mysql')->table('channels')->where('id',$item->channel_id)->first();
-            $item->name = $info->name.'('.$item->channel_id.')';
+            $item->name = $info->name;
             $item->number = $info->number;
             $item->downloads = round($item->install/100);
             $item->unit_price = $info->unit_price;
@@ -137,21 +137,23 @@ class CpaUserDayController extends BaseCurlController
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
-        $total = $model->count();
-        $result = $model->forPage($page, $pagesize)->get();
-        /*$handleLists = [];
-        //$total = 0;
+        //$total = $model->count();
+        //$result = $model->forPage($page, $pagesize)->get();
+        $result = $model->get();
+        $handleLists = [];
         foreach ($result as $res) {
             if ($res->channel_id > 0) {
-                //++$total;
                 $handleLists[] = $res;
             }
         }
         $result = $handleLists;
-        $total = count($result);*/
+        $total = count($result);
+        //获取当前页数据
+        $offset = ($page-1)*$pagesize;
+        $currentPageData = array_slice($result,$offset,$pagesize);
         return [
             'total' => $total,
-            'result' => $result
+            'result' => $currentPageData
         ];
     }
 }
