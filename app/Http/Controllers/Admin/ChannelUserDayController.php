@@ -12,6 +12,8 @@ class ChannelUserDayController extends BaseCurlController
 {
     public $channelInfo;
 
+    public $adminAccount;
+
     public function setModel()
     {
         /*$adminAccount = $this->getAdminAccount();
@@ -27,16 +29,19 @@ class ChannelUserDayController extends BaseCurlController
     public function getModel()
     {
         $adminAccount = admin('account');
-        $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',$adminAccount)->first();
-        $type = $this->channelInfo ? $this->channelInfo->type : 2;
-        return match ($type) {
-            0 => new ChannelCpa(),
-            2 => new ChannelCps(),
-        };
-        //return $this->model;
+        $this->adminAccount = $adminAccount;
+        if($adminAccount!='root'){
+            $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',$adminAccount)->first();
+            $type = $this->channelInfo ? $this->channelInfo->type : 2;
+            return match ($type) {
+                0 => new ChannelCpa(),
+                2 => new ChannelCps(),
+            };
+        }
+        return $this->model;
     }
 
-    public function getCpaIndexCols()
+    public function getCpaIndexCols(): array
     {
         return [
             [
@@ -191,15 +196,14 @@ class ChannelUserDayController extends BaseCurlController
                 }
                 $result = $handleLists;
                 //Log::info('===CPADATA===',[$this->channelInfo,$parentChannelNumber]);
-            }else{
-                return ['total' => 0, 'result' => []];
+                return [
+                    'total' => $total,
+                    'result' => $result
+                ];
             }
         }
+        return ['total' => 0, 'result' => []];
 
-        return [
-            'total' => $total,
-            'result' => $result
-        ];
     }
 
     public function setListOutputItemExtend($item)
