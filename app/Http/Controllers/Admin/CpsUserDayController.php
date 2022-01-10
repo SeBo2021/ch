@@ -11,6 +11,11 @@ class CpsUserDayController extends BaseCurlController
         return $this->model = new ChannelCps();
     }
 
+    public function defaultHandleBtnAddTpl($shareData): array
+    {
+        return [];
+    }
+
     public function indexCols(): array
     {
         return [

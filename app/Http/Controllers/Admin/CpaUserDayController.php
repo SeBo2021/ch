@@ -88,6 +88,11 @@ class CpaUserDayController extends BaseCurlController
         return $item;
     }
 
+    public function defaultHandleBtnAddTpl($shareData): array
+    {
+        return [];
+    }
+
     public function setOutputSearchFormTpl($shareData)
     {
         $data = [
