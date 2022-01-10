@@ -97,11 +97,6 @@ class CpaUserDayController extends BaseCurlController
     {
         $data = [
             [
-                'field' => 'query_like_channel_code',
-                'type' => 'text',
-                'name' => '渠道码',
-            ],
-            [
                 'field' => 'query_at_time',
                 'type' => 'date',
                 'attr' => 'data-range=~',//需要特殊分割
@@ -119,11 +114,13 @@ class CpaUserDayController extends BaseCurlController
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
-        $total = $model->count();
+        //$total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
         $handleLists = [];
+        $total = 0;
         foreach ($result as $res) {
             if ($res->channel_id > 0) {
+                ++$total;
                 $handleLists[] = $res;
             }
         }
