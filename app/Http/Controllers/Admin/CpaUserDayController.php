@@ -76,15 +76,14 @@ class CpaUserDayController extends BaseCurlController
             $item->downloads = round($item->install/100);
             $item->unit_price = $info->unit_price;
             $item->settlement_amount = round($info->unit_price * $item->downloads,2);
-            $item->at_time =  date('Y-m-d',$item->created_at);
         }else{
             $item->name = '官方';
             $item->number = '-';
             $item->downloads = round($item->install/100);
             $item->unit_price = '-';
             $item->settlement_amount = '-';
-            $item->at_time =  date('Y-m-d',$item->created_at);
         }
+        $item->at_time =  date('Y-m-d',$item->at_time);
         return $item;
     }
 
@@ -141,14 +140,15 @@ class CpaUserDayController extends BaseCurlController
         //$total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
         $handleLists = [];
-        $total = 0;
+        //$total = 0;
         foreach ($result as $res) {
             if ($res->channel_id > 0) {
-                ++$total;
+                //++$total;
                 $handleLists[] = $res;
             }
         }
         $result = $handleLists;
+        $total = count($result);
         return [
             'total' => $total,
             'result' => $result
