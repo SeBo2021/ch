@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCps;
+use Illuminate\Support\Facades\DB;
 
 class CpsUserDayController extends BaseCurlController
 {
@@ -90,6 +91,23 @@ class CpsUserDayController extends BaseCurlController
         return $item;
     }
 
+    public function getCpsChannels()
+    {
+        $res = DB::connection('origin_mysql')->table('channels')
+            ->where('status',1)
+            ->where('type',2)
+            ->where('pid',0)
+            ->get(['id','name']);
+        $data = $this->uiService->allDataArr('请选择渠道(一级)');
+        foreach ($res as $item) {
+            $data[$item->id] = [
+                'id' => $item->id,
+                'name' => $item->name,
+            ];
+        }
+        return $data;
+    }
+
     public function setOutputSearchFormTpl($shareData)
     {
         $data = [
@@ -97,6 +115,13 @@ class CpsUserDayController extends BaseCurlController
                 'field' => 'query_like_channel_code',
                 'type' => 'text',
                 'name' => '渠道码',
+            ],
+            [
+                'field' => 'query_channel_id',
+                'type' => 'select',
+                'name' => '渠道',
+                'default' => '',
+                'data' => $this->getCpsChannels()
             ],
             [
                 'field' => 'query_date_at',
