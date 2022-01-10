@@ -95,10 +95,10 @@ trait QueryWhereTrait
                     'type' => '=',
                     'value' => $value
                 ],
-                'pid' => [
+                /*'pid' => [
                     'type' => 'or',
                     'value' => $value
-                ]
+                ]*/
             ];
             $this->addWhere($data);
         }
