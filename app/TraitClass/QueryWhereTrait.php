@@ -91,14 +91,14 @@ trait QueryWhereTrait
     {
         if($value!==''){
             $data = [
-                'id' => [
+                'channel_id' => [
                     'type' => '=',
                     'value' => $value
                 ],
-                /*'pid' => [
+                'pid' => [
                     'type' => 'or',
                     'value' => $value
-                ]*/
+                ]
             ];
             $this->addWhere($data);
         }
