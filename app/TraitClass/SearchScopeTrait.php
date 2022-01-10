@@ -126,6 +126,9 @@ trait SearchScopeTrait
                 case '=':
                     $query->where($k, $v['type'], $v['value']);
                     break;
+                case 'or':
+                    $query->orWhere($k, $v['value']);
+                    break;
                 case 'in':
                     $query->whereIn($k, $v['value']);
                     break;

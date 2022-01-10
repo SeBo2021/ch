@@ -93,9 +93,32 @@ class CpaUserDayController extends BaseCurlController
         return [];
     }
 
+    public function getCpaChannels()
+    {
+        $res = DB::connection('origin_mysql')->table('channels')
+            ->where('status',1)
+            ->where('type',0)
+            ->get(['id','name']);
+        $data = $this->uiService->allDataArr('请选择渠道(一级)');
+        foreach ($res as $item) {
+            $data[$item->id] = [
+                'id' => $item->id,
+                'name' => $item->name,
+            ];
+        }
+        return $data;
+    }
+
     public function setOutputSearchFormTpl($shareData)
     {
         $data = [
+            [
+                'field' => 'query_channel_id',
+                'type' => 'select',
+                'name' => '渠道',
+                'default' => '',
+                'data' => $this->getCpaChannels()
+            ],
             [
                 'field' => 'query_at_time',
                 'type' => 'date',

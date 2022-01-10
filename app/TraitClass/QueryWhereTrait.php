@@ -69,7 +69,6 @@ trait QueryWhereTrait
                 'type' => 'like',
                 'value' => $value
             ],
-
         ];
         $this->addWhere($data);
     }
@@ -92,8 +91,12 @@ trait QueryWhereTrait
     {
         if($value!==''){
             $data = [
-                'channel_id' => [
+                'id' => [
                     'type' => '=',
+                    'value' => $value
+                ],
+                'pid' => [
+                    'type' => 'or',
                     'value' => $value
                 ]
             ];
