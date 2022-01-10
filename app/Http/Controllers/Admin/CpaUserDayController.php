@@ -98,6 +98,7 @@ class CpaUserDayController extends BaseCurlController
         $res = DB::connection('origin_mysql')->table('channels')
             ->where('status',1)
             ->where('type',0)
+            ->where('pid',0)
             ->get(['id','name']);
         $data = $this->uiService->allDataArr('请选择渠道(一级)');
         foreach ($res as $item) {
