@@ -10,15 +10,13 @@
 
             @php
                 $menu=admin_menu();
-
+                $isRoot = admin('is_root');
             @endphp
             @if(!empty($menu))
                 @foreach($menu as $k=>$v)
                     @if($v['menu_show'])
                         @if(isset($v['_child']) && !empty($v['_child']) && array_sum(array_column($v['_child'],'menu_show'))>0 )
                             {{--检验是否有任意一个子权限--}}
-
-
 
                             @if(acan_anys(array_column($v['_child'],'name')))
                                 <li data-name="home" class="layui-nav-item ">
@@ -30,7 +28,7 @@
 
                                     <dl class="layui-nav-child">
                                         @foreach($v['_child'] as $k2=>$v2)
-                                            @if(acan($v2['name']))
+                                            @if(acan($v2['name']) && !($isRoot==1 && $v2['name']=='用户日统计'))
                                                 @if($v2['menu_show'])
                                                     <dd>
                                                         <a lay-href="{{ nroute($v2['name']) }}">{{ lang($v2['cn_name']) }}</a>
