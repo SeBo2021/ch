@@ -112,16 +112,16 @@ class CpsUserDayController extends BaseCurlController
     {
         $data = [
             [
-                'field' => 'query_like_channel_code',
-                'type' => 'text',
-                'name' => '渠道码',
-            ],
-            [
                 'field' => 'query_channel_id',
                 'type' => 'select',
                 'name' => '渠道',
                 'default' => '',
                 'data' => $this->getCpsChannels()
+            ],
+            [
+                'field' => 'query_like_channel_code',
+                'type' => 'text',
+                'name' => '渠道码',
             ],
             [
                 'field' => 'query_date_at',
