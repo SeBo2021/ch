@@ -38,7 +38,7 @@ class ChannelCpaByDay extends Command
      */
     public function handle()
     {
-        $channels = DB::connection('origin_mysql')->table('channels')->where('status',1)->where('type',2)
+        $channels = DB::connection('origin_mysql')->table('channels')->where('status',1)->where('type',0)
             ->get(['id','pid','name','promotion_code','number','share_ratio']);
         $currentDate = date('Y-m-d');
         $currentTime = strtotime($currentDate);
