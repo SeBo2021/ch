@@ -120,6 +120,11 @@ class CpaUserDayController extends BaseCurlController
                 'data' => $this->getCpaChannels()
             ],
             [
+                'field' => 'query_channel_number',
+                'type' => 'text',
+                'name' => '渠道码',
+            ],
+            [
                 'field' => 'query_at_time',
                 'type' => 'date',
                 'attr' => 'data-range=~',//需要特殊分割

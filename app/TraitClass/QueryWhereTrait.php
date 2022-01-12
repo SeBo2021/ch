@@ -12,6 +12,7 @@
 
 namespace App\TraitClass;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 trait QueryWhereTrait
@@ -99,6 +100,21 @@ trait QueryWhereTrait
                     'type' => 'or',
                     'value' => $value
                 ]
+            ];
+            $this->addWhere($data);
+        }
+
+    }
+
+    public function whereByQueryChannelNumber($value)
+    {
+        if($value!==''){
+            $channelId = DB::connection('origin_mysql')->table('channels')->where('number',$value)->value('id');
+            $data = [
+                'channel_id' => [
+                    'type' => '=',
+                    'value' => $channelId
+                ],
             ];
             $this->addWhere($data);
         }
