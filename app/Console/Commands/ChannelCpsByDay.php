@@ -38,24 +38,28 @@ class ChannelCpsByDay extends Command
      */
     public function handle()
     {
-        //todo 每半小时执行一次
-        //查`channel_cps`表
-        //DB::table('channel_cps')->
-        //查远程订单
-        $fields = 'id,number,uid,amount,channel_id';
+        $channels = DB::connection('origin_mysql')->table('channels')->where('status',1)->where('type',2)
+            ->get(['id','pid','name','promotion_code','number','share_ratio']);
         $currentDate = date('Y-m-d');
-        $orders = DB::connection('origin_mysql')
-            ->table('orders')
-            //->select(DB::raw($fields))
-            ->where('status',1)
-            ->whereDate('created_at',$currentDate)
-            ->orderBy('id')
-            ->get($fields);
-
-        /*$n = 0;
-        foreach ($orders as $order){
-            $order->
-        }*/
+        foreach ($channels as $channel) {
+            $exists = DB::table('channel_cps')->where('channel_id',$channel->id)->where('date_at',$currentDate)->exists();
+            if(!$exists){
+                $insertData = [
+                    'name' => $channel->name,
+                    'channel_id' => $channel->id,
+                    'pid' => $channel->pid,
+                    'promotion_code' => $channel->promotion_code,
+                    'channel_code' => $channel->number,
+                    'share_ratio' => $channel->share_ratio,
+                    'total_recharge_amount' => 0,
+                    'order_index' => 0,
+                    'usage_index' => 0,
+                    'share_amount' => 0,
+                    'date_at' => $currentDate,
+                ];
+                DB::table('channel_cps')->insert($insertData);
+            }
+        }
         $this->info('######渠道日统计cps执行成功######');
         return 0;
     }
