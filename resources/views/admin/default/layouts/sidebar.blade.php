@@ -28,7 +28,7 @@
 
                                     <dl class="layui-nav-child">
                                         @foreach($v['_child'] as $k2=>$v2)
-                                            @if(acan($v2['name']) && !($isRoot==1 && $v2['name']=='用户日统计'))
+                                            @if(acan($v2['name']) && (($isRoot!=1) && ($v2['name']!='用户日统计')))
                                                 @if($v2['menu_show'])
                                                     <dd>
                                                         <a lay-href="{{ nroute($v2['name']) }}">{{ lang($v2['cn_name']) }}</a>
