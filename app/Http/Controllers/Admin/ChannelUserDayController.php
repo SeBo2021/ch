@@ -185,7 +185,7 @@ class ChannelUserDayController extends BaseCurlController
         $order_by_type = $this->orderByType();
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
         //$total = $model->count();
-        $result = $model->forPage($page, $pagesize)->get();
+        $result = $model->get();
         if($parentChannelNumber!='root'){
             if($this->channelInfo){
                 $handleLists = [];
