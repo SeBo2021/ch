@@ -184,7 +184,7 @@ class ChannelUserDayController extends BaseCurlController
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
-        $total = $model->count();
+        //$total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
         if($parentChannelNumber!='root'){
             if($this->channelInfo){
@@ -196,9 +196,13 @@ class ChannelUserDayController extends BaseCurlController
                 }
                 $result = $handleLists;
                 //Log::info('===CPADATA===',[$this->channelInfo,$parentChannelNumber]);
+                $total = count($result);
+                //获取当前页数据
+                $offset = ($page-1)*$pagesize;
+                $currentPageData = array_slice($result,$offset,$pagesize);
                 return [
                     'total' => $total,
-                    'result' => $result
+                    'result' => $currentPageData
                 ];
             }
         }
