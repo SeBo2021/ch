@@ -155,7 +155,8 @@ class CpaUserDayController extends BaseCurlController
         $result = $model->get();
         $handleLists = [];
         foreach ($result as $res) {
-            if ($res->channel_id > 0) {
+            $type = DB::connection('origin_mysql')->table('channels')->where('id',$res->channel_id)->value('type');
+            if ($res->channel_id > 0 && $type!=2) {
                 if(isset($handleLists[$res->channel_id])){
                     $handleLists[$res->channel_id]->install += $res->install;
                 }else{
