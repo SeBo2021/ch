@@ -160,7 +160,7 @@ class CpaUserDayController extends BaseCurlController
                 }
             }
         }
-        $result = $handleLists;
+        $result = array_values($handleLists);
         $total = count($result);
         //获取当前页数据
         $offset = ($page-1)*$pagesize;
