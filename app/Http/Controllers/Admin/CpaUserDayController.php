@@ -71,11 +71,14 @@ class CpaUserDayController extends BaseCurlController
         $item->level = $item->pid > 0 ? '二级' : '一级';
         if($item->channel_id >0){
             $info = DB::connection('origin_mysql')->table('channels')->where('id',$item->channel_id)->first();
-            $item->name = $info->name ?? '被删除';
-            $item->number = $info->number;
+            $name = $info->name ?? '被删除';
+            $number = $info->number ?? '';
+            $unit_price = $info->unit_price ?? 0;
+            $item->name = $name;
+            $item->number = $number;
             $item->downloads = round($item->install/100);
-            $item->unit_price = $info->unit_price;
-            $item->settlement_amount = round($info->unit_price * $item->downloads,2);
+            $item->unit_price = $unit_price;
+            $item->settlement_amount = round($unit_price * $item->downloads,2);
         }else{
             $item->name = '官方';
             $item->number = '-';
