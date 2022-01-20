@@ -153,7 +153,11 @@ class CpaUserDayController extends BaseCurlController
         $handleLists = [];
         foreach ($result as $res) {
             if ($res->channel_id > 0) {
-                $handleLists[] = $res;
+                if(isset($handleLists[$res->channel_id])){
+                    $handleLists[$res->channel_id]->install += $res->install;
+                }else{
+                    $handleLists[$res->channel_id] = $res;
+                }
             }
         }
         $result = $handleLists;
