@@ -144,7 +144,7 @@ class CpaUserDayController extends BaseCurlController
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
         //$total = $model->count();
         //$result = $model->forPage($page, $pagesize)->get();
-        $fields = 'pid,channel_id,at_time,SUM(access) as access,
+        $fields = 'id,pid,channel_id,at_time,SUM(access) as access,
                 SUM(hits) as hits,
                 SUM(install) as install,
                 SUM(register) as register';
