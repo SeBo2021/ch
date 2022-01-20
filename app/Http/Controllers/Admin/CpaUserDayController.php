@@ -144,11 +144,12 @@ class CpaUserDayController extends BaseCurlController
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
         //$total = $model->count();
         //$result = $model->forPage($page, $pagesize)->get();
-        $fields = 'id,pid,channel_id,at_time,SUM(access) as access,
+        /*$fields = 'id,pid,channel_id,at_time,SUM(access) as access,
                 SUM(hits) as hits,
                 SUM(install) as install,
                 SUM(register) as register';
-        $result = $model->select(DB::raw($fields))->groupBy('channel_id')->get();
+        $result = $model->select(DB::raw($fields))->groupBy('channel_id')->get();*/
+        $result = $model->get();
         $handleLists = [];
         foreach ($result as $res) {
             if ($res->channel_id > 0) {
