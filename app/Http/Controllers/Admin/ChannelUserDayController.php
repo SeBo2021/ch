@@ -249,6 +249,7 @@ class ChannelUserDayController extends BaseCurlController
 
     public function setOutputSearchFormTpl($shareData)
     {
+        $data = [];
         switch ($this->channelInfo->type) {
             case 2:
                 $data = [
