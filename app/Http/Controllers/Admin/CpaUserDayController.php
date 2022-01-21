@@ -158,9 +158,9 @@ class CpaUserDayController extends BaseCurlController
             $type = DB::connection('origin_mysql')->table('channels')->where('id',$res->channel_id)->value('type');
             if ($res->channel_id > 0 && $type!=1) {
                 if(isset($handleLists[$res->channel_id])){
-                    $handleLists[$res->channel_id]->install += $res->install;
+                    $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
                 }else{
-                    $handleLists[$res->channel_id] = $res;
+                    $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
                 }
             }
         }
