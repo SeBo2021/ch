@@ -186,25 +186,35 @@ class ChannelUserDayController extends BaseCurlController
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
         //$total = $model->count();
         $result = $model->get();
-        if($parentChannelNumber!='root'){
-            if($this->channelInfo){
-                $handleLists = [];
+        if($parentChannelNumber!='root' && $this->channelInfo){
+            $handleLists = [];
+            if($this->channelInfo->type == 0){ //cpa
+                foreach ($result as $res){
+                    if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
+                        if(isset($handleLists[$res->channel_id])){
+                            $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
+                        }else{
+                            $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
+                        }
+                    }
+                }
+            }else{
                 foreach ($result as $res){
                     if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
                         $handleLists[] = $res;
                     }
                 }
-                $result = $handleLists;
-                //Log::info('===CPADATA===',[$this->channelInfo,$parentChannelNumber]);
-                $total = count($result);
-                //获取当前页数据
-                $offset = ($page-1)*$pagesize;
-                $currentPageData = array_slice($result,$offset,$pagesize);
-                return [
-                    'total' => $total,
-                    'result' => $currentPageData
-                ];
             }
+            $result = $handleLists;
+            //Log::info('===CPADATA===',[$this->channelInfo,$parentChannelNumber]);
+            $total = count($result);
+            //获取当前页数据
+            $offset = ($page-1)*$pagesize;
+            $currentPageData = array_slice($result,$offset,$pagesize);
+            return [
+                'total' => $total,
+                'result' => $currentPageData
+            ];
         }
         return ['total' => 0, 'result' => []];
 
