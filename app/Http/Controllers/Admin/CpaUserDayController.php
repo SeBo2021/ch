@@ -42,14 +42,14 @@ class CpaUserDayController extends BaseCurlController
             [
                 'field' => 'downloads_real',
                 'minWidth' => 80,
-                'title' => '今日下载人数(扣量后)',
+                'title' => '真实下载人数',
                 'align' => 'center',
             ],
 
             [
                 'field' => 'downloads',
                 'minWidth' => 80,
-                'title' => '今日下载人数(扣量后)',
+                'title' => '下载人数(扣量后)',
                 'align' => 'center',
             ],
             [
@@ -84,7 +84,7 @@ class CpaUserDayController extends BaseCurlController
             $item->name = $name;
             $item->number = $number;
             $item->downloads = round($item->install/100);
-            $item->downloads_real = round($item->install_real/100);
+            $item->downloads_real = $item->install_real;
             $item->unit_price = $unit_price;
             $item->settlement_amount = round($unit_price * $item->downloads,2);
         }else{
