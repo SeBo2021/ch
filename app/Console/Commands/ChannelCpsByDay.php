@@ -52,6 +52,8 @@ class ChannelCpsByDay extends Command
                     'channel_code' => $channel->number,
                     'share_ratio' => $channel->share_ratio,
                     'total_recharge_amount' => 0,
+                    'total_amount' => 0,
+                    'total_orders' => 0,
                     'order_index' => 0,
                     'usage_index' => 0,
                     'share_amount' => 0,

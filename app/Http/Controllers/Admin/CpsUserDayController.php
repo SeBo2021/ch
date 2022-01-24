@@ -51,15 +51,27 @@ class CpsUserDayController extends BaseCurlController
             ],
 
             [
+                'field' => 'total_orders',
+                'minWidth' => 80,
+                'title' => '真实订单',
+                'align' => 'center',
+            ],
+            [
+                'field' => 'total_amount',
+                'minWidth' => 80,
+                'title' => '真实充值金额',
+                'align' => 'center',
+            ],
+            [
                 'field' => 'orders',
                 'minWidth' => 80,
-                'title' => '订单',
+                'title' => '扣量后订单',
                 'align' => 'center',
             ],
             [
                 'field' => 'total_recharge_amount',
                 'minWidth' => 80,
-                'title' => '总充值金额',
+                'title' => '扣量后总充值金额',
                 'align' => 'center',
             ],
             [
