@@ -40,9 +40,16 @@ class CpaUserDayController extends BaseCurlController
             ],
 
             [
+                'field' => 'downloads_real',
+                'minWidth' => 80,
+                'title' => '今日下载人数(扣量后)',
+                'align' => 'center',
+            ],
+
+            [
                 'field' => 'downloads',
                 'minWidth' => 80,
-                'title' => '今日下载人数',
+                'title' => '今日下载人数(扣量后)',
                 'align' => 'center',
             ],
             [
@@ -77,12 +84,14 @@ class CpaUserDayController extends BaseCurlController
             $item->name = $name;
             $item->number = $number;
             $item->downloads = round($item->install/100);
+            $item->downloads_real = round($item->install_real/100);
             $item->unit_price = $unit_price;
             $item->settlement_amount = round($unit_price * $item->downloads,2);
         }else{
             $item->name = '官方';
             $item->number = '-';
             $item->downloads = round($item->install/100);
+            $item->downloads_real = round($item->install_real/100);
             $item->unit_price = '-';
             $item->settlement_amount = '-';
         }
@@ -154,8 +163,10 @@ class CpaUserDayController extends BaseCurlController
         $result = $model->select(DB::raw($fields))->groupBy('channel_id')->get();*/
         $result = $model->get();
         $handleLists = [];
-        foreach ($result as $res) {
-            $type = DB::connection('origin_mysql')->table('channels')->where('id',$res->channel_id)->value('type');
+        $channelsModel = DB::connection('origin_mysql')->table('channels');
+        //$statisticDayModel = DB::connection('origin_mysql')->table('statistic_day');
+        foreach ($result as &$res) {
+            $type = $channelsModel->where('id',$res->channel_id)->value('type');
             if ($res->channel_id > 0 && $type==0) {
                 if(isset($handleLists[$res->channel_id])){
                     $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
