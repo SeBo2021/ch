@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use phpDocumentor\Reflection\Types\False_;
 
 class ChannelsController extends BaseCurlController
 {
@@ -141,6 +142,14 @@ class ChannelsController extends BaseCurlController
             'created_at' =>$date ?? date('Y-m-d H:i:s'),
         ];
         DB::connection('origin_mysql')->table('statistic_channel_deduction')->insert($insertData);
+    }
+
+    public function beforeSaveEvent($model, $id = '')
+    {
+        if((!$model->name) && (!$model->promotion_code)){
+            return 'failed';
+        }
+        return $model;
     }
 
     public function afterSaveSuccessEvent($model, $id = '')
