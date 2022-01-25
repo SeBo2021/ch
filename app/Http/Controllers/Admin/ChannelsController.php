@@ -192,20 +192,21 @@ class ChannelsController extends BaseCurlController
     }
 
     //表单验证
-    /*public function checkRule($id = '')
+    public function checkRule($id = '')
     {
-        $data = [
-            'name'=>'required|unique:channels,name',
+        return [
+            'name'=>'required',
+            'promotion_code'=>'required',
         ];
-        return $data;
     }
 
     public function checkRuleFieldName($id = '')
     {
         return [
-            'name'=>'代理商名称',
+            'name'=>'渠道名称',
+            'promotion_code'=>'推广码',
         ];
-    }*/
+    }
     //弹窗大小
     /*public function layuiOpenWidth(): string
     {
