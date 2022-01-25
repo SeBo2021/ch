@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="layui-card-body ">
-            <div class="layui-carousel layadmin-carousel layadmin-dataview">
+            {{--<div class="layui-carousel layadmin-carousel layadmin-dataview">
                 @if($channel_type==2)
                 <div class="layui-row">
                     <div class="layui-col-md12">
@@ -112,7 +112,7 @@
 
                 </div>
                 @endif
-            </div>
+            </div>--}}
         </div>
     </div>
 
