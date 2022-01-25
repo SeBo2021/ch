@@ -68,6 +68,7 @@ class HomeController extends BaseCurlController
                 }else{ //cpa
                     $cpaData = DB::connection('origin_mysql')->table('statistic_day_deduction')
                         ->where('channel_id',$channelId)
+                        ->groupBy('at_time')
                         ->orderBy('at_time')->take(15)
                         ->get(['install','at_time']);
                     foreach ($cpaData as $item){
