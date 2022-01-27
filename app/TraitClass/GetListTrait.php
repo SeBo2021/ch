@@ -40,8 +40,9 @@ trait GetListTrait
 
         //显示内容设置
         $arr_data = $this->listOutputData($handled['result']);
-
-        return $this->listOutputJson($handled['total'], $arr_data, $debug);
+        //合计行数据
+        $totalRow = $handled['totalRow'] ?? [];
+        return $this->listOutputJson($handled['total'], $arr_data, $debug, $totalRow);
     }
 
     public function handleResultModel($model)
@@ -59,7 +60,7 @@ trait GetListTrait
         ];
     }
 
-    public function listOutputJson($total, $data, $debug = "0")
+    public function listOutputJson($total, $data, $debug = "0",$totalRow=[])
     {
         $json = [
             'code' => 200,
@@ -68,6 +69,9 @@ trait GetListTrait
             'data' => $data,
             'other' => $this->listOutputOtherData($total, $data)
         ];
+        if(!empty($totalRow)){
+            $json['totalRow'] = $totalRow;
+        }
         if ($debug) {
             return dd($data);
         }

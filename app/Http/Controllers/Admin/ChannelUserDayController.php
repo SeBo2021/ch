@@ -234,7 +234,7 @@ class ChannelUserDayController extends BaseCurlController
             $currentPageData = array_slice($result,$offset,$pagesize);
             return [
                 'total' => $total,
-                'totalRow' => $totalRow,
+                'totalRow' => $totalRow ?? [],
                 'result' => $currentPageData
             ];
         }
