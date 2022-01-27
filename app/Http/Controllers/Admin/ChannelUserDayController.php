@@ -128,7 +128,12 @@ class ChannelUserDayController extends BaseCurlController
                 'hide' => true,
                 'align' => 'center'
             ],
-
+            [
+                'field' => 'install',
+                'minWidth' => 80,
+                'title' => '下载数',
+                'align' => 'center',
+            ],
             [
                 'field' => 'orders',
                 'minWidth' => 80,
@@ -220,15 +225,19 @@ class ChannelUserDayController extends BaseCurlController
                 $totalRow = [
                     'settlement_amount' => $settlement_amount
                 ];
-            }else{
+            }else{ //cps
                 $total_recharge_amount = 0;
+                $installTotal = 0;
                 foreach ($result as $res){
                     if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
                         $handleLists[] = $res;
                         $total_recharge_amount += $res->share_amount;
+                        $installTotal += $res->install;
                     }
                 }
+
                 $totalRow = [
+                    'install' => $installTotal,
                     'total_recharge_amount' => number_format($total_recharge_amount, 2, '.', '')
                 ];
             }
