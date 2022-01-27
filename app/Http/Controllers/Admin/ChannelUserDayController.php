@@ -232,12 +232,13 @@ class ChannelUserDayController extends BaseCurlController
                     if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
                         $handleLists[] = $res;
                         $total_recharge_amount += $res->share_amount;
+                        $res->install += 0;
                         $installTotal += $res->install;
                     }
                 }
 
                 $totalRow = [
-                    'install' => 9999,
+                    'install' => $installTotal,
                     'total_recharge_amount' => number_format($total_recharge_amount, 2, '.', '')
                 ];
             }
