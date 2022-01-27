@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpa;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use JetBrains\PhpStorm\ArrayShape;
 
 class CpaUserDayController extends BaseCurlController
@@ -137,7 +138,7 @@ class CpaUserDayController extends BaseCurlController
         $this->uiBlade['search'] = $data;
     }
 
-    #[ArrayShape(['total' => "mixed", 'result' => "array"])] public function handleResultModel($model): array
+    public function handleResultModel($model): array
     {
         $page = $this->rq->input('page', 1);
         $created_at = $this->rq->input('created_at',null);
@@ -155,8 +156,10 @@ class CpaUserDayController extends BaseCurlController
         if($created_at!==null){
             $dateArr = explode('~',$created_at);
             if(isset($dateArr[0]) && isset($dateArr[1])){
-                $model = $model->where('at_time','>=',strtotime(trim($dateArr[0]).' 00:00:00'))
-                    ->where('at_time','<=',strtotime(trim($dateArr[1]).' 23:59:59'));
+                $startTime = strtotime(trim($dateArr[0]).' 00:00:00');
+                $endTime = strtotime(trim($dateArr[1]).' 23:59:59');
+                Log::info('==TimeCondition==',[$startTime,$endTime]);
+                $model = $model->where('at_time','>=',$startTime)->where('at_time','<=',$endTime);
             }
         }
         $result = $model->get();
