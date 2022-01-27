@@ -69,7 +69,7 @@ class ChannelUserDayController extends BaseCurlController
             ],
 
             [
-                'field' => 'downloads',
+                'field' => 'install',
                 'minWidth' => 80,
                 'title' => '今日下载人数',
                 'align' => 'center',
@@ -193,12 +193,12 @@ class ChannelUserDayController extends BaseCurlController
             $channelBuild = DB::connection('origin_mysql')->table('channels');
             if($this->channelInfo->type == 0){ //cpa
                 $settlement_amount = 0;
-                foreach ($result as $res){
+                foreach ($result as &$res){
                     $channelInfo = $channelBuild->where('id',$res->channel_id)->first();
                     if($channelInfo){
+                        $res->install = round($res->install/100);
                         $res->settlement_amount = round($channelInfo->unit_price * $res->downloads,2);
                         $settlement_amount += $res->settlement_amount;
-                        $res->downloads = round($res->install/100);
                         $res->unit_price = $channelInfo->unit_price;
                         $res->name = $channelInfo->name;
                         $res->number = $channelInfo->number;
