@@ -210,13 +210,13 @@ class ChannelUserDayController extends BaseCurlController
                         }
                     }
                 }
-                if(!empty($handleLists)){
+                /*if(!empty($handleLists)){
                     $totalPrice = [];
                     foreach ($handleLists as $handleList){
                         $totalPrice[] = $handleList->settlement_amount;
                     }
                     $settlement_amount = array_sum($totalPrice);
-                }
+                }*/
                 $totalRow = [
                     'settlement_amount' => ''
                 ];
