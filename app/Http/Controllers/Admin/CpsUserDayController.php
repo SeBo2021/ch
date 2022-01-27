@@ -150,6 +150,11 @@ class CpsUserDayController extends BaseCurlController
 
     #[ArrayShape(['total' => "mixed", 'result' => "array"])] public function handleResultModel($model): array
     {
+        $totalRow = [
+            'share_amount' =>$model->sum('share_amount'),
+            'total_recharge_amount' => $model->sum('total_recharge_amount'),
+            'total_amount' => $model->sum('total_amount'),
+        ];
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
         $order_by_name = $this->orderByName();
@@ -157,11 +162,6 @@ class CpsUserDayController extends BaseCurlController
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
         $total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
-        $totalRow = [
-            'share_amount' =>$model->sum('share_amount'),
-            'total_recharge_amount' => $model->sum('total_recharge_amount'),
-            'total_amount' => $model->sum('total_amount'),
-        ];
         return [
             'total' => $total,
             'totalRow' => $totalRow ?? [],
