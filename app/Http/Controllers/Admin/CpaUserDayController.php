@@ -33,7 +33,7 @@ class CpaUserDayController extends BaseCurlController
                 'align' => 'center'
             ],
             [
-                'field' => 'install',
+                'field' => 'number',
                 'minWidth' => 80,
                 'title' => '渠道码',
 //                'hide' => true,
@@ -48,7 +48,7 @@ class CpaUserDayController extends BaseCurlController
             ],
 
             [
-                'field' => 'downloads',
+                'field' => 'install',
                 'minWidth' => 80,
                 'title' => '下载人数(扣量后)',
                 'align' => 'center',
