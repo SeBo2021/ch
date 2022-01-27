@@ -212,6 +212,7 @@ class ChannelUserDayController extends BaseCurlController
                         }
                     }
                 }
+                Log::info('==testToltalA==',$settlement_amount);
                 $totalRow = [
                     'settlement_amount' => array_sum($settlement_amount)
                 ];
