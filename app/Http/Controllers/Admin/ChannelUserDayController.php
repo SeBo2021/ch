@@ -193,18 +193,17 @@ class ChannelUserDayController extends BaseCurlController
 //            $channelBuild = DB::connection('origin_mysql')->table('channels')->where();
             if($this->channelInfo->type == 0){ //cpa
                 $settlement_amount = '';
-//                $channelsBuild = DB::connection('origin_mysql')->table('channels');
+                $channelsBuild = DB::connection('origin_mysql')->table('channels');
                 foreach ($result as $res){
                     if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
-                        $channelInfo = DB::connection('origin_mysql')->table('channels')->where('id',$res->channel_id)->first();
-                        //$res->install = round($res->install/100);
-                        //$channelInfo->unit_price = $channelInfo->unit_price??0;
-                        //$res->settlement_amount = round($channelInfo->unit_price * $res->downloads,2);
-//                    $settlement_amount += $res->settlement_amount;
-//                    $res->unit_price = $channelInfo->unit_price;
+                        $channelInfo = $channelsBuild->where('id',$res->channel_id)->first();
+                        $res->install = round($res->install/100);
+                        $channelInfo->unit_price = $channelInfo->unit_price??0;
+                        $res->settlement_amount = round($channelInfo->unit_price * $res->downloads,2);
+                        $settlement_amount += $res->settlement_amount;
+                        $res->unit_price = $channelInfo->unit_price;
                         $res->name = $channelInfo->name;
                         $res->number = $channelInfo->number;
-                        Log::info('===ChannelInfo===',[$channelInfo,$res->channel_id]);
                         if(isset($handleLists[$res->channel_id])){
                             $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
                         }else{
