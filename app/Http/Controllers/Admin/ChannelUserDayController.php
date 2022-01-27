@@ -45,7 +45,8 @@ class ChannelUserDayController extends BaseCurlController
     {
         return [
             [
-                'type' => 'checkbox'
+                'type' => 'checkbox',
+                'totalRowText' => '合计',
             ],
             [
                 'field' => 'name',
@@ -98,7 +99,8 @@ class ChannelUserDayController extends BaseCurlController
     {
         return [
             [
-                'type' => 'checkbox'
+                'type' => 'checkbox',
+                'totalRowText' => '合计',
             ],
             [
                 'field' => 'name',
@@ -188,8 +190,17 @@ class ChannelUserDayController extends BaseCurlController
         $result = $model->get();
         if($parentChannelNumber!='root' && $this->channelInfo){
             $handleLists = [];
+            $channelBuild = DB::connection('origin_mysql')->table('channels');
             if($this->channelInfo->type == 0){ //cpa
+                $settlement_amount = 0;
                 foreach ($result as $res){
+                    $channelInfo = $channelBuild->where('id',$res->channel_id)->first();
+                    $res->settlement_amount = round($channelInfo->unit_price * $res->downloads,2);
+                    $settlement_amount += $res->settlement_amount;
+                    $res->downloads = round($res->install/100);
+                    $res->unit_price = $channelInfo->unit_price;
+                    $res->name = $channelInfo->name;
+                    $res->number = $channelInfo->number;
                     if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
                         if(isset($handleLists[$res->channel_id])){
                             $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
@@ -198,12 +209,20 @@ class ChannelUserDayController extends BaseCurlController
                         }
                     }
                 }
+                $totalRow = [
+                    'settlement_amount' => $settlement_amount
+                ];
             }else{
+                $total_recharge_amount = 0;
                 foreach ($result as $res){
                     if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
                         $handleLists[] = $res;
+                        $total_recharge_amount += $res->share_amount;
                     }
                 }
+                $totalRow = [
+                    'total_recharge_amount' => number_format($total_recharge_amount, 2, '.', '')
+                ];
             }
             $result = $handleLists;
             //Log::info('===CPADATA===',[$this->channelInfo,$parentChannelNumber]);
@@ -213,6 +232,7 @@ class ChannelUserDayController extends BaseCurlController
             $currentPageData = array_slice($result,$offset,$pagesize);
             return [
                 'total' => $total,
+                'totalRow' => $totalRow,
                 'result' => $currentPageData
             ];
         }
@@ -229,12 +249,12 @@ class ChannelUserDayController extends BaseCurlController
                 $item->share_ratio = $item->share_ratio . '%';
                 break;
             case 0:
-                $info = DB::connection('origin_mysql')->table('channels')->where('id',$item->channel_id)->first();
-                $item->name = $info->name;
-                $item->number = $info->number;
-                $item->downloads = round($item->install/100);
-                $item->unit_price = $info->unit_price;
-                $item->settlement_amount = round($info->unit_price * $item->downloads,2);
+                //$info = DB::connection('origin_mysql')->table('channels')->where('id',$item->channel_id)->first();
+                //$item->name = $info->name;
+                //$item->number = $info->number;
+                //$item->downloads = round($item->install/100);
+                //$item->unit_price = $info->unit_price;
+                //$item->settlement_amount = round($info->unit_price * $item->downloads,2);
                 $item->at_time =  date('Y-m-d',$item->at_time);
                 break;
         }
@@ -284,6 +304,13 @@ class ChannelUserDayController extends BaseCurlController
         }
         //赋值到ui数组里面必须是`search`的key值
         $this->uiBlade['search'] = $data;
+    }
+
+    //首页共享数据
+    public function indexShareData()
+    {
+        //设置首页数据替换
+        $this->setListConfig(['open_width' => '600px', 'open_height' => '700px','tableConfig' => ['totalRow' => true]]);
     }
 
 }
