@@ -157,20 +157,11 @@ class CpsUserDayController extends BaseCurlController
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
         $total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
-        if(!empty($result)){
-            $share_amount = [];
-            $total_recharge_amount = [];
-            $total_amount = [];
-            foreach ($result as $item){
-                $share_amount[] = $item->share_amount;
-                $total_recharge_amount[] = $item->total_recharge_amount;
-            }
-            $totalRow = [
-                'share_amount' => array_sum($share_amount),
-                'total_recharge_amount' => array_sum($total_recharge_amount),
-                'total_amount' => array_sum($total_amount),
-            ];
-        }
+        $totalRow = [
+            'share_amount' =>$model->sum('share_amount'),
+            'total_recharge_amount' => $model->sum('total_recharge_amount'),
+            'total_amount' => $model->sum('total_amount'),
+        ];
         return [
             'total' => $total,
             'totalRow' => $totalRow ?? [],
