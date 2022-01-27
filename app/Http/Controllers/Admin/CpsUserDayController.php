@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCps;
 use Illuminate\Support\Facades\DB;
+use JetBrains\PhpStorm\ArrayShape;
 
 class CpsUserDayController extends BaseCurlController
 {
@@ -21,7 +22,8 @@ class CpsUserDayController extends BaseCurlController
     {
         return [
             [
-                'type' => 'checkbox'
+                'type' => 'checkbox',
+                'totalRowText' => '合计',
             ],
             [
                 'field' => 'name',
@@ -144,6 +146,36 @@ class CpsUserDayController extends BaseCurlController
         ];
         //赋值到ui数组里面必须是`search`的key值
         $this->uiBlade['search'] = $data;
+    }
+
+    #[ArrayShape(['total' => "mixed", 'result' => "array"])] public function handleResultModel($model): array
+    {
+        $page = $this->rq->input('page', 1);
+        $pagesize = $this->rq->input('limit', 30);
+        $order_by_name = $this->orderByName();
+        $order_by_type = $this->orderByType();
+        $model = $this->orderBy($model, $order_by_name, $order_by_type);
+        $total = $model->count();
+        $result = $model->forPage($page, $pagesize)->get();
+        if(!empty($result)){
+            $share_amount = [];
+            $total_recharge_amount = [];
+            $total_amount = [];
+            foreach ($result as $item){
+                $share_amount[] = $item->share_amount;
+                $total_recharge_amount[] = $item->total_recharge_amount;
+            }
+            $totalRow = [
+                'share_amount' => array_sum($share_amount),
+                'total_recharge_amount' => array_sum($total_recharge_amount),
+                'total_amount' => array_sum($total_amount),
+            ];
+        }
+        return [
+            'total' => $total,
+            'totalRow' => $totalRow ?? [],
+            'result' => $result
+        ];
     }
 
 }
