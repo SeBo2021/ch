@@ -218,7 +218,7 @@ class ChannelUserDayController extends BaseCurlController
                     $settlement_amount = array_sum($totalPrice);
                 }
                 $totalRow = [
-                    'settlement_amount' => $settlement_amount
+                    'settlement_amount' => ''
                 ];
             }else{
                 $total_recharge_amount = 0;
