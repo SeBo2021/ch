@@ -208,16 +208,15 @@ class ChannelUserDayController extends BaseCurlController
                         }else{
                             $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
                         }
-                        $settlement_amount +=  $handleLists[$res->channel_id.'-'.$res->at_time]->settlement_amount;
                     }
                 }
-                /*if(!empty($handleLists)){
+                if(!empty($handleLists)){
                     $totalPrice = [];
                     foreach ($handleLists as $handleList){
                         $totalPrice[] = $handleList->settlement_amount;
                     }
                     $settlement_amount = array_sum($totalPrice);
-                }*/
+                }
                 $totalRow = [
                     'settlement_amount' => $settlement_amount
                 ];
