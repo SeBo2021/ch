@@ -155,7 +155,7 @@ class CpaUserDayController extends BaseCurlController
         if($created_at!==null){
             $dateArr = explode('~',$created_at);
             if(isset($dateArr[0]) && isset($dateArr[1])){
-                $model = $model->whereBetween('recharge.created_at', [trim($dateArr[0]),trim($dateArr[1])]);
+                $model = $model->whereBetween('at_time', [strtotime(trim($dateArr[0]).' 00:00:00'),strtotime(trim($dateArr[1]).' 23:59:59')]);
             }
         }
         $result = $model->get();
