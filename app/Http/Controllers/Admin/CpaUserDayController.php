@@ -17,7 +17,8 @@ class CpaUserDayController extends BaseCurlController
     {
         return [
             [
-                'type' => 'checkbox'
+                'type' => 'checkbox',
+                'totalRowText' => '合计',
             ],
             [
                 'field' => 'name',
@@ -32,7 +33,7 @@ class CpaUserDayController extends BaseCurlController
                 'align' => 'center'
             ],
             [
-                'field' => 'number',
+                'field' => 'install',
                 'minWidth' => 80,
                 'title' => '渠道码',
 //                'hide' => true,
@@ -40,7 +41,7 @@ class CpaUserDayController extends BaseCurlController
             ],
 
             [
-                'field' => 'downloads_real',
+                'field' => 'install_real',
                 'minWidth' => 80,
                 'title' => '真实下载人数',
                 'align' => 'center',
@@ -77,21 +78,20 @@ class CpaUserDayController extends BaseCurlController
     {
         $item->level = $item->pid > 0 ? '二级' : '一级';
         if($item->channel_id >0){
-            $info = DB::connection('origin_mysql')->table('channels')->where('id',$item->channel_id)->first();
+            /*$info = DB::connection('origin_mysql')->table('channels')->where('id',$item->channel_id)->first();
             $name = $info->name ?? '被删除';
             $number = $info->number ?? '';
             $unit_price = $info->unit_price ?? 0;
             $item->name = $name;
-            $item->number = $number;
-            $item->downloads = round($item->install/100);
-            $item->downloads_real = $item->install_real;
-            $item->unit_price = $unit_price;
-            $item->settlement_amount = round($unit_price * $item->downloads,2);
+            $item->number = $number;*/
+            $item->install = round($item->install/100);
+//            $item->unit_price = $unit_price;
+            $item->settlement_amount = round($item->unit_price * $item->downloads,2);
         }else{
             $item->name = '官方';
             $item->number = '-';
-            $item->downloads = round($item->install/100);
-            $item->downloads_real = round($item->install_real/100);
+            $item->install = round($item->install/100);
+            $item->install_real = round($item->install_real/100);
             $item->unit_price = '-';
             $item->settlement_amount = '-';
         }
@@ -163,26 +163,48 @@ class CpaUserDayController extends BaseCurlController
         $result = $model->select(DB::raw($fields))->groupBy('channel_id')->get();*/
         $result = $model->get();
         $handleLists = [];
-        $channelsModel = DB::connection('origin_mysql')->table('channels');
+//        $channelsModel = DB::connection('origin_mysql')->table('channels');
         //$statisticDayModel = DB::connection('origin_mysql')->table('statistic_day');
         foreach ($result as &$res) {
-            $type = $channelsModel->where('id',$res->channel_id)->value('type');
-            if ($res->channel_id > 0 && $type==0) {
-                if(isset($handleLists[$res->channel_id])){
-                    $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
-                }else{
-                    $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
+            $info = DB::connection('origin_mysql')->table('channels')->where('id',$res->channel_id)->first();
+            if($info){
+                if ($res->channel_id > 0 && $info->type==0) {
+                    $unitPrice = $info->unit_price ?? 0;
+                    $res->settlement_amount = round($unitPrice * $res->install,2);
+                    if(isset($handleLists[$res->channel_id])){
+                        $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
+                    }else{
+                        $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
+                    }
                 }
             }
         }
-        $result = array_values($handleLists);
-        $total = count($result);
+        $settlement_amount = 0;
+        if(!empty($handleLists)){
+            $totalPrice = [];
+            foreach ($handleLists as $handleList){
+                $totalPrice[] = $handleList->settlement_amount;
+            }
+            $settlement_amount = array_sum($totalPrice);
+        }
+        $totalRow = [
+            'settlement_amount' => $settlement_amount
+        ];
+        $total = count($handleLists);
         //获取当前页数据
         $offset = ($page-1)*$pagesize;
-        $currentPageData = array_slice($result,$offset,$pagesize);
+        $currentPageData = array_slice($handleLists,$offset,$pagesize);
         return [
             'total' => $total,
+            'totalRow' => $totalRow ?? [],
             'result' => $currentPageData
         ];
+    }
+
+    //首页共享数据
+    public function indexShareData()
+    {
+        //设置首页数据替换
+        $this->setListConfig(['open_width' => '600px', 'open_height' => '700px','tableConfig' => ['totalRow' => true]]);
     }
 }
