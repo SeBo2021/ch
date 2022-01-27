@@ -190,12 +190,12 @@ class ChannelUserDayController extends BaseCurlController
         $result = $model->get();
         if($parentChannelNumber!='root' && $this->channelInfo){
             $handleLists = [];
-            $channelBuild = DB::connection('origin_mysql')->table('channels');
+//            $channelBuild = DB::connection('origin_mysql')->table('channels')->where();
             if($this->channelInfo->type == 0){ //cpa
                 $settlement_amount = '';
                 foreach ($result as $res){
-                    $channelInfo = $channelBuild->where('id',$res->channel_id)->first();
-                    Log::info('===ChannelInfo===',[$channelInfo]);
+                    $channelInfo = DB::connection('origin_mysql')->table('channels')->where('id',$res->channel_id)->first();
+                    Log::info('===ChannelInfo===',[$channelInfo,$res->channel_id]);
                     //$res->install = round($res->install/100);
                     //$channelInfo->unit_price = $channelInfo->unit_price??0;
                     //$res->settlement_amount = round($channelInfo->unit_price * $res->downloads,2);
