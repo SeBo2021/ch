@@ -192,19 +192,19 @@ class ChannelUserDayController extends BaseCurlController
             $handleLists = [];
 //            $channelBuild = DB::connection('origin_mysql')->table('channels')->where();
             if($this->channelInfo->type == 0){ //cpa
-                $settlement_amount = [];
+                $settlement_amount = 0;
                 $channelsBuild = DB::connection('origin_mysql')->table('channels');
                 foreach ($result as $res){
                     if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
                         $channelInfo = $channelsBuild->where('id',$res->channel_id)->first();
-                        $res->install = round($res->install/100);
+                        $res->install = (int)round($res->install/100);
                         $channelInfo->unit_price = $channelInfo->unit_price??0;
                         $res->settlement_amount = round($channelInfo->unit_price * $res->install,2);
                         //$settlement_amount = (int)$res->settlement_amount + $settlement_amount;
                         $res->unit_price = $channelInfo->unit_price;
                         $res->name = $channelInfo->name;
                         $res->number = $channelInfo->number;
-                        $settlement_amount[] = $channelInfo->unit_price * $res->install;
+                        $settlement_amount += $channelInfo->unit_price * $res->install;
                         if(isset($handleLists[$res->channel_id])){
                             $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
                         }else{
@@ -212,9 +212,8 @@ class ChannelUserDayController extends BaseCurlController
                         }
                     }
                 }
-                Log::info('==testToltalA==',$settlement_amount);
                 $totalRow = [
-                    'settlement_amount' => array_sum($settlement_amount)
+                    'settlement_amount' => $settlement_amount
                 ];
             }else{
                 $total_recharge_amount = 0;
