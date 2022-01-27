@@ -178,4 +178,11 @@ class CpsUserDayController extends BaseCurlController
         ];
     }
 
+    //首页共享数据
+    public function indexShareData()
+    {
+        //设置首页数据替换
+        $this->setListConfig(['open_width' => '600px', 'open_height' => '700px','tableConfig' => ['totalRow' => true]]);
+    }
+
 }
