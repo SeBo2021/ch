@@ -197,15 +197,17 @@ class ChannelUserDayController extends BaseCurlController
                 foreach ($result as $res){
                     if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
                         $channelInfo = $channelsBuild->where('id',$res->channel_id)->first();
-                        $res->install = (int)round($res->install/100);
-                        $res->settlement_amount = round($channelInfo->unit_price * $res->install,2);
-                        $res->unit_price = $channelInfo->unit_price ?? 0;
-                        $res->name = $channelInfo->name;
-                        $res->number = $channelInfo->number;
-                        if(isset($handleLists[$res->channel_id])){
-                            $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
-                        }else{
-                            $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
+                        if($channelInfo){
+                            $res->install = (int)round($res->install/100);
+                            $res->unit_price = $channelInfo->unit_price ?? 0;
+                            $res->settlement_amount = round($res->unit_price * $res->install,2);
+                            $res->name = $channelInfo->name;
+                            $res->number = $channelInfo->number;
+                            if(isset($handleLists[$res->channel_id])){
+                                $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
+                            }else{
+                                $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
+                            }
                         }
                     }
                 }
