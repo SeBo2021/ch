@@ -77,16 +77,7 @@ class CpaUserDayController extends BaseCurlController
     public function setListOutputItemExtend($item)
     {
         $item->level = $item->pid > 0 ? '二级' : '一级';
-        if($item->channel_id >0){
-            /*$info = DB::connection('origin_mysql')->table('channels')->where('id',$item->channel_id)->first();
-            $name = $info->name ?? '被删除';
-            $number = $info->number ?? '';
-            $unit_price = $info->unit_price ?? 0;
-            $item->name = $name;
-            $item->number = $number;*/
-            $item->install = round($item->install/100);
-            //$item->settlement_amount = round($item->unit_price * $item->downloads,2);
-        }else{
+        if($item->channel_id ==0){
             $item->name = '官方';
             $item->number = '-';
             $item->install = round($item->install/100);
