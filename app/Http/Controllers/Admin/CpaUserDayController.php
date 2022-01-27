@@ -85,8 +85,7 @@ class CpaUserDayController extends BaseCurlController
             $item->name = $name;
             $item->number = $number;*/
             $item->install = round($item->install/100);
-//            $item->unit_price = $unit_price;
-            $item->settlement_amount = round($item->unit_price * $item->downloads,2);
+            //$item->settlement_amount = round($item->unit_price * $item->downloads,2);
         }else{
             $item->name = '官方';
             $item->number = '-';
@@ -173,7 +172,7 @@ class CpaUserDayController extends BaseCurlController
                     $res->name = $info->name;
                     $res->number = $info->number;
                     $res->unit_price = $unitPrice;
-                    $res->settlement_amount = round($unitPrice * $res->install,2);
+                    $res->settlement_amount = round($res->unit_price * $res->install,2);
                     if(isset($handleLists[$res->channel_id])){
                         $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
                     }else{
