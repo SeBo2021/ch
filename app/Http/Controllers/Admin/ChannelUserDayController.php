@@ -193,10 +193,9 @@ class ChannelUserDayController extends BaseCurlController
 //            $channelBuild = DB::connection('origin_mysql')->table('channels')->where();
             if($this->channelInfo->type == 0){ //cpa
                 $settlement_amount = 0;
-                $channelsBuild = DB::connection('origin_mysql')->table('channels');
                 foreach ($result as $res){
                     if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
-                        $channelInfo = $channelsBuild->where('id',$res->channel_id)->first();
+                        $channelInfo = DB::connection('origin_mysql')->table('channels')->where('id',$res->channel_id)->first();
                         if($channelInfo){
                             $res->install = (int)round($res->install/100);
                             $res->unit_price = $channelInfo->unit_price ?? 0;
