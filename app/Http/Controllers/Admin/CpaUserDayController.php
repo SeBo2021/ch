@@ -141,7 +141,7 @@ class CpaUserDayController extends BaseCurlController
     public function handleResultModel($model): array
     {
         $page = $this->rq->input('page', 1);
-        $created_at = $this->rq->input('created_at',null);
+        $created_at = $this->rq->input('at_time',null);
         $pagesize = $this->rq->input('limit', 30);
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
