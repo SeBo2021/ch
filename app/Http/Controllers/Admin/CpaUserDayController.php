@@ -127,7 +127,7 @@ class CpaUserDayController extends BaseCurlController
                 'name' => '渠道码',
             ],
             [
-                'field' => 'query_at_time',
+                'field' => 'at_time',
                 'type' => 'date',
                 'attr' => 'data-range=~',//需要特殊分割
                 'name' => '时间范围',
@@ -140,6 +140,7 @@ class CpaUserDayController extends BaseCurlController
     #[ArrayShape(['total' => "mixed", 'result' => "array"])] public function handleResultModel($model): array
     {
         $page = $this->rq->input('page', 1);
+        $created_at = $this->rq->input('created_at',null);
         $pagesize = $this->rq->input('limit', 30);
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
@@ -151,6 +152,12 @@ class CpaUserDayController extends BaseCurlController
                 SUM(install) as install,
                 SUM(register) as register';
         $result = $model->select(DB::raw($fields))->groupBy('channel_id')->get();*/
+        if($created_at!==null){
+            $dateArr = explode('~',$created_at);
+            if(isset($dateArr[0]) && isset($dateArr[1])){
+                $model = $model->whereBetween('recharge.created_at', [trim($dateArr[0]),trim($dateArr[1])]);
+            }
+        }
         $result = $model->get();
         $handleLists = [];
 //        $channelsModel = DB::connection('origin_mysql')->table('channels');
