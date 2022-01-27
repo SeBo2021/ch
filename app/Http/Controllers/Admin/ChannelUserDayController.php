@@ -204,14 +204,15 @@ class ChannelUserDayController extends BaseCurlController
 //                    $res->unit_price = $channelInfo->unit_price;
 //                    $res->name = $channelInfo->name;
 //                    $res->number = $channelInfo->number;
-                    if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
-                        if(isset($handleLists[$res->channel_id])){
-                            $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
-                        }else{
-                            $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
+                    if($channelInfo){
+                        if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
+                            if(isset($handleLists[$res->channel_id])){
+                                $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
+                            }else{
+                                $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
+                            }
                         }
                     }
-
                 }
                 $totalRow = [
                     'settlement_amount' => $settlement_amount
