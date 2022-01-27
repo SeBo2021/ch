@@ -155,11 +155,9 @@ class CpaUserDayController extends BaseCurlController
         $result = $model->select(DB::raw($fields))->groupBy('channel_id')->get();*/
         if($created_at!==null){
             $dateArr = explode('~',$created_at);
-            Log::info('==TimeConditionArr==',$dateArr);
             if(isset($dateArr[0]) && isset($dateArr[1])){
                 $startTime = strtotime(trim($dateArr[0]).' 00:00:00');
                 $endTime = strtotime(trim($dateArr[1]).' 23:59:59');
-                Log::info('==TimeCondition==',[$startTime,$endTime]);
                 $model = $model->where('at_time','>=',$startTime)->where('at_time','<=',$endTime);
             }
         }
