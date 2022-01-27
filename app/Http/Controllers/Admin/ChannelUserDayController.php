@@ -193,21 +193,19 @@ class ChannelUserDayController extends BaseCurlController
             $channelBuild = DB::connection('origin_mysql')->table('channels');
             if($this->channelInfo->type == 0){ //cpa
                 $settlement_amount = 0;
-                foreach ($result as &$res){
+                foreach ($result as $res){
                     $channelInfo = $channelBuild->where('id',$res->channel_id)->first();
-                    if($channelInfo){
-                        $res->install = round($res->install/100);
-                        $res->settlement_amount = round($channelInfo->unit_price * $res->downloads,2);
-                        $settlement_amount += $res->settlement_amount;
-                        $res->unit_price = $channelInfo->unit_price;
-                        $res->name = $channelInfo->name;
-                        $res->number = $channelInfo->number;
-                        if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
-                            if(isset($handleLists[$res->channel_id])){
-                                $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
-                            }else{
-                                $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
-                            }
+                    $res->install = round($res->install/100);
+                    $res->settlement_amount = round($channelInfo->unit_price * $res->downloads,2);
+                    $settlement_amount += $res->settlement_amount;
+                    $res->unit_price = $channelInfo->unit_price;
+                    $res->name = $channelInfo->name;
+                    $res->number = $channelInfo->number;
+                    if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
+                        if(isset($handleLists[$res->channel_id])){
+                            $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
+                        }else{
+                            $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
                         }
                     }
 
