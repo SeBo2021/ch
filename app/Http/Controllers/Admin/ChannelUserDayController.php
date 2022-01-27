@@ -195,19 +195,22 @@ class ChannelUserDayController extends BaseCurlController
                 $settlement_amount = 0;
                 foreach ($result as $res){
                     $channelInfo = $channelBuild->where('id',$res->channel_id)->first();
-                    $res->settlement_amount = round($channelInfo->unit_price * $res->downloads,2);
-                    $settlement_amount += $res->settlement_amount;
-                    $res->downloads = round($res->install/100);
-                    $res->unit_price = $channelInfo->unit_price;
-                    $res->name = $channelInfo->name;
-                    $res->number = $channelInfo->number;
-                    if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
-                        if(isset($handleLists[$res->channel_id])){
-                            $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
-                        }else{
-                            $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
+                    if($channelInfo){
+                        $res->settlement_amount = round($channelInfo->unit_price * $res->downloads,2);
+                        $settlement_amount += $res->settlement_amount;
+                        $res->downloads = round($res->install/100);
+                        $res->unit_price = $channelInfo->unit_price;
+                        $res->name = $channelInfo->name;
+                        $res->number = $channelInfo->number;
+                        if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
+                            if(isset($handleLists[$res->channel_id])){
+                                $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
+                            }else{
+                                $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
+                            }
                         }
                     }
+
                 }
                 $totalRow = [
                     'settlement_amount' => $settlement_amount
