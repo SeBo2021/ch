@@ -283,17 +283,23 @@ class ChannelsController extends BaseCurlController
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
-        $total = $model->count();
-        $result = $model->forPage($page, $pagesize)->get();
+
         if($parentChannelNumber!='root'){
             $parentChannelInfo = $this->model->where('number',$parentChannelNumber)->first();
             $agentList = [];
-            foreach ($result as &$res){
+            $resultAll = $model->get();
+            foreach ($resultAll as &$res){
                 if($res->id==$parentChannelInfo->id || $res->pid==$parentChannelInfo->id){
                     $agentList[] = $res;
                 }
             }
-            $result = $agentList;
+            $total = count($agentList);
+            //获取当前页数据
+            $offset = ($page-1)*$pagesize;
+            $result = array_slice($agentList,$offset,$pagesize);
+        }else{
+            $total = $model->count();
+            $result = $model->forPage($page, $pagesize)->get();
         }
         return [
             'total' => $total,
