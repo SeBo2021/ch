@@ -153,7 +153,7 @@ class CpsUserDayController extends BaseCurlController
         $this->uiBlade['search'] = $data;
     }
 
-    #[ArrayShape(['total' => "mixed", 'result' => "array"])] public function handleResultModel($model): array
+    #[ArrayShape(['total' => "mixed", 'totalRow' => "array", 'result' => "mixed"])] public function handleResultModel($model): array
     {
         $installTotal = $model->sum('install');
         $totalRow = [
