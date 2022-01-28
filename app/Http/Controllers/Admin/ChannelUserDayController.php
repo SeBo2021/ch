@@ -131,7 +131,7 @@ class ChannelUserDayController extends BaseCurlController
             [
                 'field' => 'install',
                 'minWidth' => 80,
-                'title' => '下载数',
+                'title' => '下载量',
                 'align' => 'center',
             ],
             [
@@ -238,7 +238,7 @@ class ChannelUserDayController extends BaseCurlController
                 }
 
                 $totalRow = [
-                    'install' => $installTotal,
+                    'install' => $installTotal ?? '0',
                     'total_recharge_amount' => number_format($total_recharge_amount, 2, '.', '')
                 ];
             }

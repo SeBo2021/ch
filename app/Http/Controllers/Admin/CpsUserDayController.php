@@ -51,7 +51,12 @@ class CpsUserDayController extends BaseCurlController
                 'hide' => true,
                 'align' => 'center'
             ],
-
+            [
+                'field' => 'install',
+                'minWidth' => 80,
+                'title' => '下载量',
+                'align' => 'center',
+            ],
             [
                 'field' => 'total_orders',
                 'minWidth' => 80,
@@ -150,9 +155,11 @@ class CpsUserDayController extends BaseCurlController
 
     #[ArrayShape(['total' => "mixed", 'result' => "array"])] public function handleResultModel($model): array
     {
+        $installTotal = $model->sum('install');
         $totalRow = [
             'share_amount' =>$model->sum('share_amount'),
             'total_recharge_amount' => $model->sum('total_recharge_amount'),
+            'install' => $installTotal ?? '0',
             'total_amount' => $model->sum('total_amount'),
         ];
         $page = $this->rq->input('page', 1);
