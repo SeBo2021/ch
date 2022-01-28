@@ -8,6 +8,8 @@ use JetBrains\PhpStorm\ArrayShape;
 
 class TotalCpsController extends BaseCurlController
 {
+    public $denyCommonBladePathActionName = ['index','create','edit'];
+
     public function setModel(): ChannelCpsTotal
     {
         return $this->model = new ChannelCpsTotal();
