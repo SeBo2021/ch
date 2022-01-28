@@ -238,7 +238,7 @@ class ChannelUserDayController extends BaseCurlController
                 }
 
                 $totalRow = [
-                    'install' => $installTotal ?? '0',
+                    'install' => $installTotal>0 ? $installTotal : '0',
                     'total_recharge_amount' => number_format($total_recharge_amount, 2, '.', '')
                 ];
             }
