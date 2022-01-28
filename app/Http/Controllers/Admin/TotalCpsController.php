@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\ChannelCps;
+use App\Models\ChannelCpsTotal;
 use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;
 
 class TotalCpsController extends BaseCurlController
 {
-    public function setModel(): ChannelCps
+    public function setModel(): ChannelCpsTotal
     {
-        return $this->model = new ChannelCps();
+        return $this->model = new ChannelCpsTotal();
     }
 
     public function defaultHandleBtnAddTpl($shareData): array

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpa;
-use App\Models\ChannelCps;
+use App\Models\ChannelCpsTotal;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use JetBrains\PhpStorm\Pure;
@@ -23,7 +23,7 @@ class ChannelUserDayController extends BaseCurlController
             0 => $this->model = new ChannelCpa(),
             2 => $this->model = new ChannelCps(),
         };*/
-        return $this->model = new ChannelCps();
+        return $this->model = new ChannelCpsTotal();
     }
 
     public function getModel()
@@ -35,7 +35,7 @@ class ChannelUserDayController extends BaseCurlController
             $type = $this->channelInfo ? $this->channelInfo->type : 2;
             return match ($type) {
                 0 => new ChannelCpa(),
-                2 => new ChannelCps(),
+                2 => new ChannelCpsTotal(),
             };
         }
         return $this->model;
