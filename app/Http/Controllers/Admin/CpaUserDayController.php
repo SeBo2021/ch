@@ -170,8 +170,8 @@ class CpaUserDayController extends BaseCurlController
             if($info){
                 if ($res->channel_id > 0 && $info->type==0) {
                     $unitPrice = $info->unit_price;
-                    $res->name = $info->name;
-                    $res->number = $info->number;
+                    $res->channel_name = $info->name;
+                    $res->channel_code = $info->number;
                     $res->unit_price = $unitPrice;
                     $res->install = (int)round($res->install/100);
                     $res->settlement_amount = round($res->unit_price * $res->install,2);
