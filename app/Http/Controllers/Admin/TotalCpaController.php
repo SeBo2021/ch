@@ -166,8 +166,7 @@ class TotalCpaController extends BaseCurlController
         $hits = (int) $model->sum('hits');
         $active_users = (int) $model->sum('active_users');*/
 
-        $result = $model->where('channel_type',0)->orderBy('channel_id','desc')->get();
-
+        $result = $model->where('channel_type',0)->where('channel_id','>',0)->orderBy('channel_id','desc')->get();
         $lists = [];
         $install = [];
         $install_real = [];
