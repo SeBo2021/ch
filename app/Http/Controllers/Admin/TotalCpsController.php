@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpsTotal;
 use App\Models\ChannelDayStatistic;
+use App\TraitClass\ChannelTrait;
 use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;
 
 class TotalCpsController extends BaseCurlController
 {
+    use ChannelTrait;
     //设置页面的名称
     public $pageName = 'CPS总计';
 
-    public function setModel()
+    public function setModel(): ChannelDayStatistic
     {
         return $this->model = new ChannelDayStatistic();
     }
@@ -131,7 +133,7 @@ class TotalCpsController extends BaseCurlController
         return $item;
     }
 
-    public function getCpsChannels()
+    /*public function getCpsChannels()
     {
         $res = DB::connection('origin_mysql')->table('channels')
             ->where('status',1)
@@ -146,18 +148,25 @@ class TotalCpsController extends BaseCurlController
             ];
         }
         return $data;
-    }
+    }*/
 
     public function setOutputSearchFormTpl($shareData)
     {
         $data = [
-            /*[
+            [
+                'field' => 'query_channel_id_tree',
+                'type' => 'select',
+                'name' => '渠道',
+                'default' => '',
+                'data' => $this->getTopChannels(2)
+            ],
+            [
                 'field' => 'query_channel_id',
                 'type' => 'select',
                 'name' => '渠道',
                 'default' => '',
-                'data' => $this->getCpsChannels()
-            ],*/
+                'data' => $this->getAllChannels(2)
+            ],
             [
                 'field' => 'query_date_at',
                 'type' => 'date',

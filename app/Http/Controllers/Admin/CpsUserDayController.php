@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpsTotal;
 use App\Models\ChannelDayStatistic;
+use App\TraitClass\ChannelTrait;
 use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;
 
 class CpsUserDayController extends BaseCurlController
 {
+    use ChannelTrait;
     public function setModel()
     {
         return $this->model = new ChannelDayStatistic();
@@ -133,11 +135,11 @@ class CpsUserDayController extends BaseCurlController
     {
         $data = [
             [
-                'field' => 'query_channel_id',
+                'field' => 'query_channel_id_tree',
                 'type' => 'select',
                 'name' => '渠道',
                 'default' => '',
-                'data' => $this->getCpsChannels()
+                'data' => $this->getTopChannels(2)
             ],
             [
                 'field' => 'query_like_channel_code',

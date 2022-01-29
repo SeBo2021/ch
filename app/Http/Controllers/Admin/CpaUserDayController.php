@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpa;
 use App\Models\ChannelDayStatistic;
+use App\TraitClass\ChannelTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use JetBrains\PhpStorm\ArrayShape;
 
 class CpaUserDayController extends BaseCurlController
 {
+    use ChannelTrait;
     public function setModel(): ChannelDayStatistic
     {
         return $this->model = new ChannelDayStatistic();
@@ -117,11 +119,11 @@ class CpaUserDayController extends BaseCurlController
     {
         $data = [
             [
-                'field' => 'query_channel_id',
+                'field' => 'query_channel_id_tree',
                 'type' => 'select',
                 'name' => '渠道',
                 'default' => '',
-                'data' => $this->getCpaChannels()
+                'data' => $this->getTopChannels(2)
             ],
             [
                 'field' => 'query_channel_number',

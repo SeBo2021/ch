@@ -88,7 +88,7 @@ trait QueryWhereTrait
 
     }
 
-    public function whereByQueryChannelId($value)
+    public function whereByQueryChannelIdTree($value)
     {
         if($value!==''){
             $data = [
@@ -100,6 +100,20 @@ trait QueryWhereTrait
                     'type' => 'or',
                     'value' => $value
                 ]
+            ];
+            $this->addWhere($data);
+        }
+
+    }
+
+    public function whereByQueryChannelId($value)
+    {
+        if($value!==''){
+            $data = [
+                'channel_id' => [
+                    'type' => '=',
+                    'value' => $value
+                ],
             ];
             $this->addWhere($data);
         }
