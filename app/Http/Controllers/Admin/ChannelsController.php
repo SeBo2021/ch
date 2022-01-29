@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Channel;
+use App\Models\ChannelDayStatistic;
 use App\Services\UiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,9 +34,9 @@ class ChannelsController extends BaseCurlController
         ],
     ];
 
-    public function setModel(): Channel
+    public function setModel(): ChannelDayStatistic
     {
-        return $this->model = new Channel();
+        return $this->model = new ChannelDayStatistic();
     }
 
     public function indexCols(): array

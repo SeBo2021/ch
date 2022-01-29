@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpsTotal;
+use App\Models\ChannelDayStatistic;
 use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -13,7 +14,7 @@ class TotalCpsController extends BaseCurlController
 
     public function setModel()
     {
-        return $this->model = new ChannelCpsTotal();
+        return $this->model = new ChannelDayStatistic();
     }
 
     /*public function defaultHandleBtnAddTpl($shareData): array
@@ -25,7 +26,8 @@ class TotalCpsController extends BaseCurlController
     {
         return [
             [
-                'type' => 'checkbox'
+                'type' => 'checkbox',
+                'totalRowText' => '合计',
             ],
             [
                 'field' => 'channel_id',
@@ -40,7 +42,7 @@ class TotalCpsController extends BaseCurlController
                 'align' => 'center'
             ],
             [
-                'field' => 'name',
+                'field' => 'channel_name',
                 'minWidth' => 100,
                 'title' => '渠道名称',
                 'align' => 'center'
@@ -59,11 +61,17 @@ class TotalCpsController extends BaseCurlController
                 'align' => 'center',
             ],
             [
-                'field' => 'install',
+                'field' => 'install_real',
                 'minWidth' => 80,
                 'title' => '安装量',
                 'align' => 'center',
             ],
+            /*[
+                'field' => 'install',
+                'minWidth' => 80,
+                'title' => '扣量后安装量',
+                'align' => 'center',
+            ],*/
             [
                 'field' => 'active_users',
                 'minWidth' => 80,
@@ -117,11 +125,7 @@ class TotalCpsController extends BaseCurlController
 
     public function setListOutputItemExtend($item)
     {
-        $item->access = 0;
         $item->cps = 'CPS';
-        $item->hits = 0;
-        $item->install = 0;
-        $item->active_users = 0;
         $item->share_amount = number_format($item->share_amount, 2, '.', '');
         $item->share_ratio = $item->share_ratio . '%';
         return $item;
@@ -174,47 +178,99 @@ class TotalCpsController extends BaseCurlController
     {
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
-        //channel_cps
-        /*$fields1 = 'SUM(access) as total_access,
-                SUM(hits) as total_hits,
-                SUM(install) as total_install,
-                SUM(register) as total_register,
-                SUM(keep_day_users) as total_keep_day_users,
-                SUM(keep_week_users) as total_keep_week_users,
-                SUM(keep_month_users) as total_keep_month_users,
-                SUM(keep_day_rate) as total_keep_day_rate,
-                SUM(keep_week_rate) as total_keep_week_rate,
-                SUM(keep_month_rate) as total_keep_month_rate';*/
-        $fields1 = 'SUM(install) as total_install,
-                SUM(orders) as orders,
-                SUM(total_recharge_amount) as total_recharge_amount,
+
+        $fields = 'SUM(access) as access,
+                SUM(hits) as hits,
+                SUM(install_real) as install_real,
+                SUM(active_users) as active_users,
+                SUM(total_orders) as total_orders,
                 SUM(total_amount) as total_amount,
                 SUM(share_amount) as share_amount,
-                SUM(total_orders) as total_orders';
-        $cpsBuild = $model->select('id','pid','name','channel_id','share_ratio',DB::raw($fields1));
-        $result_cps = $cpsBuild->groupBy('channel_id')->orderBy('channel_id','desc')->get();
-        $list = [];
-        foreach ($result_cps as $res){
-            $list[$res->channel_id] = $res;
+                SUM(orders) as orders,
+                SUM(total_recharge_amount) as total_recharge_amount,
+                SUM(install) as install';
+        $model = $model->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->where('channel_type',2)->groupBy('channel_id');
+        /*$install = (int) $model->sum('install');
+        $access = (int) $model->sum('access');
+        $hits = (int) $model->sum('hits');
+        $active_users = (int) $model->sum('active_users');*/
+
+        $result = $model->orderBy('channel_id','desc')->get();
+
+        $lists = [];
+        $install = [];
+        $access = [];
+        $hits = [];
+        $active_users = [];
+        $total_orders = [];
+        $total_amount = [];
+        $share_amount = [];
+        $orders = [];
+        $total_recharge_amount = [];
+        foreach ($result as $res){
+            $lists[$res->channel_id] = $res;
+            $install[] = $res->install_real;
+            $access[] = $res->access;
+            $hits[] = $res->hits;
+            $active_users[] = $res->active_users;
+            $total_orders[] = $res->total_orders;
+            $total_amount[] = $res->total_amount;
+            $share_amount[] = $res->share_amount;
+            $orders[] = $res->orders;
+            $total_recharge_amount[] = $res->total_recharge_amount;
         }
-        //统计访问量、点击量、安装量 todo
 
-        /*//激活人数(有过观景记录的人)
-        $activeUsersBuild = DB::connection('origin_mysql')->table('users_day');
-        $result_active_users = $activeUsersBuild->select('pid','channel_id','at_time',DB::raw('count(uid) as users'))->groupBy('channel_id')->get();
-        foreach ($result_active_users as $result_active_user)
-        {
-            $list[$result_active_user->channel_id]->active_users = $result_active_user->users;
-        }*/
-
-        $total = count($list);
-        //获取当前页数据
         $offset = ($page-1)*$pagesize;
-        $currentPageData = array_slice($list,$offset,$pagesize);
+        $currentPageData = array_slice($lists,$offset,$pagesize);
+
+        $total = count($lists);
+        $install = array_sum($install);
+        $hits = array_sum($hits);
+        $access = array_sum($access);
+        $active_users = array_sum($active_users);
+        $total_orders = array_sum($total_orders);
+        $total_amount = array_sum($total_amount);
+        $share_amount = array_sum($share_amount);
+        $orders = array_sum($orders);
+        $total_recharge_amount = array_sum($total_recharge_amount);
+        $totalRow = [
+            'install_real' => $install>0 ? $install :'0',
+            'hits' => $hits>0 ? $hits :'0',
+            'access' => $access>0 ? $access :'0',
+            'active_users' => $active_users>0 ? $active_users :'0',
+            'total_orders' => $total_orders>0 ? $total_orders :'0',
+            'total_amount' => $total_amount>0 ? $total_amount :'0',
+            'share_amount' => $share_amount>0 ? $share_amount :'0',
+            'orders' => $orders>0 ? $orders :'0',
+            'total_recharge_amount' => $total_recharge_amount>0 ? $total_recharge_amount :'0',
+        ];
         return [
             'total' => $total,
+            'totalRow' => $totalRow ?? [],
             'result' => $currentPageData
         ];
+    }
+
+    /*public function insertIntoCpsData()
+    {
+        $sql = 'insert into channel_day_statistics(
+    channel_id,channel_name,channel_promotion_code,channel_code,channel_pid,total_recharge_amount,share_ratio,share_amount,date_at,orders,total_orders) select
+    channel_id,name,promotion_code,channel_code,pid,total_recharge_amount,share_ratio,share_amount,date_at,orders,total_orders from channel_cps;';
+        $sql = 'replace into channel_day_statistics(
+    channel_id,channel_name,channel_promotion_code,channel_code,channel_pid,total_recharge_amount,share_ratio,share_amount,date_at,orders,total_orders) select
+    channel_id,name,promotion_code,channel_code,pid,total_recharge_amount,share_ratio,share_amount,date_at,orders,total_orders from channel_cps;';
+
+        $sql = 'replace into channel_day_statistics(channel_id,access,hits,install_real,install,date_at) select channel_id,access,hits,install_real,install,from_unixtime(at_time, '%Y-%m-%d') as date_at from statistic_day_deduction';
+        $sql = 'update channel_day_statistics inner join (select channel_id,from_unixtime(at_time, '%Y-%m-%d') as date_at,count(uid) as users from users_day group by channel_id,date_at) u on channel_day_statistics.channel_id=u.channel_id and channel_day_statistics.date_at=u.date_at set active_users=u.users';
+        更新渠道类型
+        $sql = 'update channel_day_statistics inner join (select type,id from channels) c on channel_day_statistics.channel_id=c.id set channel_day_statistics.channel_type=c.type';
+    }*/
+
+    //首页共享数据
+    public function indexShareData()
+    {
+        //设置首页数据替换
+        $this->setListConfig(['open_width' => '600px', 'open_height' => '700px','tableConfig' => ['totalRow' => true]]);
     }
 
 }
