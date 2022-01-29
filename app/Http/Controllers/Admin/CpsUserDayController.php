@@ -167,6 +167,7 @@ class CpsUserDayController extends BaseCurlController
         $pagesize = $this->rq->input('limit', 30);
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
+        $model = $model->where('channel_type',2);
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
         $total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
