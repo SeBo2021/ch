@@ -11,7 +11,7 @@ layui.define(['treetable'], function (exports) {
     var defatul_config = {
       treeColIndex: 3,//第几列设置折叠图标
       treeIdName: 'id',//ID的值
-      treePidName: 'parent_id',//父级id
+      treePidName: config.parent_field ? config.parent_field :'parent_id',//父级id
       treeSpid: 0,
       elem: '#' + tableNameId,
       treeDefaultClose: 0,//是否折叠
@@ -23,7 +23,7 @@ layui.define(['treetable'], function (exports) {
       text: {
         none: appLang.trans('无数据') //默认：无数据。注：该属性为 layui 2.2.5 开始新增
       },
-      where: {
+      where: config.where ? config.where : {
         limit: 10000,
         sort: 'sort'
       },

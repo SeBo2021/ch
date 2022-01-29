@@ -13,8 +13,11 @@
         layui.use(['treeListTable',], function () {
             var treeListTable = layui.treeListTable;
             var cols = @json($cols);
-            treeListTable.render(listConfig.index_url, cols,{treeDefaultClose:1});
-
+            // console.log(cols);
+            treeListTable.render(listConfig.index_url, cols,{treeDefaultClose:1,parent_field:'pid',where:{
+                    limit: 10000,
+                    sort: 'channel_id'
+                }});
         });
     </script>
 @endsection
