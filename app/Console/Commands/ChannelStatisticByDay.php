@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class ChannelCpsByDay extends Command
+class ChannelStatisticByDay extends Command
 {
     /**
      * The name and signature of the console command.
@@ -42,13 +42,13 @@ class ChannelCpsByDay extends Command
             ->get(['id','pid','name','promotion_code','number','share_ratio']);
         $currentDate = date('Y-m-d');
         foreach ($channels as $channel) {
-            $exists = DB::table('channel_cps')->where('channel_id',$channel->id)->where('date_at',$currentDate)->exists();
+            $exists = DB::table('channel_day_statistics')->where('channel_id',$channel->id)->where('date_at',$currentDate)->exists();
             if(!$exists){
                 $insertData = [
-                    'name' => $channel->name,
+                    'channel_name' => $channel->name,
                     'channel_id' => $channel->id,
-                    'pid' => $channel->pid,
-                    'promotion_code' => $channel->promotion_code,
+                    'channel_pid' => $channel->pid,
+                    'channel_promotion_code' => $channel->promotion_code,
                     'channel_code' => $channel->number,
                     'share_ratio' => $channel->share_ratio,
                     'total_recharge_amount' => 0,
@@ -62,7 +62,7 @@ class ChannelCpsByDay extends Command
                 DB::table('channel_cps')->insert($insertData);
             }
         }
-        $this->info('######渠道日统计cps执行成功######');
+        $this->info('######渠道日统计初始化数据执行成功######');
         return 0;
     }
 }
