@@ -219,11 +219,11 @@ class ChannelsController extends BaseCurlController
     }
 
     //表单验证
-    #[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRule($id = '')
+    /*#[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRule($id = '')
     {
         return [
-            'name'=>'required|unique',
-            'promotion_code'=>'required|unique',
+            'name'=>'required',
+            'promotion_code'=>'required',
         ];
     }
 
@@ -233,7 +233,7 @@ class ChannelsController extends BaseCurlController
             'name'=>'渠道名称',
             'promotion_code'=>'推广码',
         ];
-    }
+    }*/
     //弹窗大小
     /*public function layuiOpenWidth(): string
     {
