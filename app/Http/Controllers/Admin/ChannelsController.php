@@ -147,7 +147,7 @@ class ChannelsController extends BaseCurlController
 
     public function beforeSaveEvent($model, $id = '')
     {
-        dump($model);
+        dump($model->name);
         if((!$this->rq->name) && (!$model->rq->promotion_code)){
             return (['code' => -1, 'msg' => lang('系统错误')]);
         }
