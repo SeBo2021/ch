@@ -264,6 +264,7 @@ class TotalCpsController extends BaseCurlController
         $sql = 'update channel_day_statistics inner join (select channel_id,from_unixtime(at_time, '%Y-%m-%d') as date_at,count(uid) as users from users_day group by channel_id,date_at) u on channel_day_statistics.channel_id=u.channel_id and channel_day_statistics.date_at=u.date_at set active_users=u.users';
         更新渠道类型
         $sql = 'update channel_day_statistics inner join (select type,id from channels) c on channel_day_statistics.channel_id=c.id set channel_day_statistics.channel_type=c.type';
+        $sql = 'update channel_day_statistics inner join (select type,id,pid from channels) c on channel_day_statistics.channel_id=c.id set channel_day_statistics.channel_pid=c.pid';
     }*/
 
     //首页共享数据

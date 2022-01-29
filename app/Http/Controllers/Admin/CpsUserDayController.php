@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpsTotal;
+use App\Models\ChannelDayStatistic;
 use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;
 
 class CpsUserDayController extends BaseCurlController
 {
-    public function setModel(): ChannelCpsTotal
+    public function setModel()
     {
-        return $this->model = new ChannelCpsTotal();
+        return $this->model = new ChannelDayStatistic();
     }
 
     public function defaultHandleBtnAddTpl($shareData): array
@@ -26,7 +27,7 @@ class CpsUserDayController extends BaseCurlController
                 'totalRowText' => '合计',
             ],
             [
-                'field' => 'name',
+                'field' => 'channel_name',
                 'minWidth' => 100,
                 'title' => '渠道名称',
                 'align' => 'center'
@@ -45,7 +46,7 @@ class CpsUserDayController extends BaseCurlController
                 'align' => 'center',
             ],
             [
-                'field' => 'promotion_code',
+                'field' => 'channel_promotion_code',
                 'minWidth' => 100,
                 'title' => '推广码',
                 'hide' => true,
