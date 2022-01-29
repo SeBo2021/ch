@@ -225,7 +225,12 @@ class ChannelsController extends BaseCurlController
     public function checkRuleData($request)
     {
         $params = $request->all();
-        dump($params);
+        $name = $params['name'] ?? '';
+        $one = DB::connection('origin_mysql')->table('channels')->where('name',$name)->first();
+        if($one){
+            //return (['code' => 1, 'msg' => lang('已有相同渠道')]);
+            return (['msg' => '已有相同渠道', 'data' => [], 'code' => 1]);
+        }
         return $params;
     }
 
