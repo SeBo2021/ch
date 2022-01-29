@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpa;
+use App\Models\ChannelDayStatistic;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use JetBrains\PhpStorm\ArrayShape;
 
 class CpaUserDayController extends BaseCurlController
 {
-    public function setModel(): ChannelCpa
+    public function setModel(): ChannelDayStatistic
     {
-        return $this->model = new ChannelCpa();
+        return $this->model = new ChannelDayStatistic();
     }
 
     public function indexCols(): array
