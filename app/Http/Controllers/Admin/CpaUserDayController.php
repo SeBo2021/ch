@@ -161,7 +161,7 @@ class CpaUserDayController extends BaseCurlController
                 $model = $model->where('at_time','>=',$startTime)->where('at_time','<=',$endTime);
             }
         }
-        $result = $model->get();
+        $result = $model->where('channel_type',0)->get();
         $handleLists = [];
 //        $channelsModel = DB::connection('origin_mysql')->table('channels');
         //$statisticDayModel = DB::connection('origin_mysql')->table('statistic_day');
