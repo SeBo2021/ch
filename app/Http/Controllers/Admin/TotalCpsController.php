@@ -200,12 +200,12 @@ class TotalCpsController extends BaseCurlController
         //统计访问量、点击量、安装量 todo
 
         //激活人数(有过观景记录的人)
-        $activeUsersBuild = DB::connection('origin_mysql')->table('users_day');
+        /*$activeUsersBuild = DB::connection('origin_mysql')->table('users_day');
         $result_active_users = $activeUsersBuild->select('pid','channel_id','at_time',DB::raw('count(uid) as users'))->groupBy('channel_id')->get();
         foreach ($result_active_users as $result_active_user)
         {
             $list[$result_active_user->channel_id]->active_users = $result_active_user->users;
-        }
+        }*/
 
         $total = count($list);
         //获取当前页数据
