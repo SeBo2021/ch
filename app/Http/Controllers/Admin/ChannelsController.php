@@ -156,11 +156,14 @@ class ChannelsController extends BaseCurlController
         if($one){
             return (['code' => -1, 'msg' => lang('已有相同渠道')]);
         }*/
-        Validator::make([
+        $validated = Validator::make([
             'name' => $this->rq->name
         ],[
             'name' => 'required|unique:name'
-        ])->validate();
+        ])->validated();
+        if(!isset($validated['name'])){
+            return (['code' => -1, 'msg' => lang('名称不能为空且不能相同')]);
+        }
         return $model;
     }
 
