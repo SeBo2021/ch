@@ -156,14 +156,14 @@ class TotalCpsController extends BaseCurlController
             [
                 'field' => 'query_channel_id_tree',
                 'type' => 'select',
-                'name' => '渠道',
+                'name' => '顶级渠道',
                 'default' => '',
                 'data' => $this->getTopChannels(2)
             ],
             [
                 'field' => 'query_channel_id',
                 'type' => 'select',
-                'name' => '渠道',
+                'name' => '所有渠道',
                 'default' => '',
                 'data' => $this->getAllChannels(2)
             ],
