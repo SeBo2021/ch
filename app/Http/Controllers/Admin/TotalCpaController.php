@@ -25,7 +25,7 @@ class TotalCpaController extends BaseCurlController
                 'totalRowText' => '合计',
             ],
             [
-                'field' => 'cps',
+                'field' => 'cpa',
                 'minWidth' => 100,
                 'title' => '渠道类型',
                 'align' => 'center'
@@ -112,6 +112,7 @@ class TotalCpaController extends BaseCurlController
             $item->settlement_amount = '-';
         }
         $item->at_time =  date('Y-m-d',$item->at_time);
+        $item->cpa = 'CPA';
         return $item;
     }
 
