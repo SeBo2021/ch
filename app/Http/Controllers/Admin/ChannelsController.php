@@ -151,7 +151,7 @@ class ChannelsController extends BaseCurlController
             return (['code' => -1, 'msg' => lang('系统错误')]);
         }
         $one = DB::connection('origin_mysql')->table('channels')->where('name',$this->rq->name)->first();
-        dump($one);
+        //dump($one);
         if($one){
             return (['code' => -1, 'msg' => lang('已有相同渠道')]);
         }
