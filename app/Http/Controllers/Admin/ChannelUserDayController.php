@@ -196,39 +196,27 @@ class ChannelUserDayController extends BaseCurlController
             $handleLists = [];
 //            $channelBuild = DB::connection('origin_mysql')->table('channels')->where();
             if($this->channelInfo->type == 0){ //cpa
-                $result = $model->where('channel_type',0)->where('channel_id','>',0)->get();
-                $settlement_amount = 0;
+                $result = $model->where('channel_type',0)->where('channel_id','>',0)->orWhere('channel_pid',$this->channelInfo->id)->get();
+                $totalPrice = [];
                 foreach ($result as $res){
-                    if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
-                        $channelInfo = DB::connection('origin_mysql')->table('channels')->where('id',$res->channel_id)->first();
-                        if($channelInfo){
-                            $res->install = (int)round($res->install/100);
-                            $res->unit_price = $channelInfo->unit_price ?? 0;
-                            $res->settlement_amount = round($res->unit_price * $res->install,2);
-                        }
-                    }
-                }
-                if(!empty($handleLists)){
-                    $totalPrice = [];
-                    foreach ($handleLists as $handleList){
-                        $totalPrice[] = $handleList->settlement_amount;
-                    }
-                    $settlement_amount = array_sum($totalPrice);
+                    $res->install = (int)round($res->install/100);
+                    $res->unit_price = $channelInfo->unit_price ?? 0;
+                    $res->settlement_amount = round($res->unit_price * $res->install,2);
+                    $totalPrice[] = $res->settlement_amount;
+                    $handleLists[] = $res;
                 }
                 $totalRow = [
-                    'settlement_amount' => $settlement_amount
+                    'settlement_amount' => array_sum($totalPrice)
                 ];
             }else{ //cps
-                $result = $model->where('channel_type',2)->where('channel_id','>',0)->get();
+                $result = $model->where('channel_type',2)->where('channel_id','>',0)->orWhere('channel_pid',$this->channelInfo->id)->get();
                 $total_recharge_amount = 0;
                 $installTotal = 0;
                 foreach ($result as $res){
-                    if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
-                        $handleLists[] = $res;
-                        $total_recharge_amount += $res->share_amount;
-                        $res->install_real += 0;
-                        $installTotal += $res->install_real;
-                    }
+                    $handleLists[] = $res;
+                    $total_recharge_amount += $res->share_amount;
+                    $res->install_real += 0;
+                    $installTotal += $res->install_real;
                 }
 
                 $totalRow = [
