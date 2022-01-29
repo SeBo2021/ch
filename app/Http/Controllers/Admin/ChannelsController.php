@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use JetBrains\PhpStorm\ArrayShape;
 use phpDocumentor\Reflection\Types\False_;
 
 class ChannelsController extends BaseCurlController
@@ -218,12 +219,16 @@ class ChannelsController extends BaseCurlController
     }
 
     //表单验证
-    public function checkRule($id = '')
+    #[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRule($id = '')
     {
         return [
+            'name'=>'required|unique:channels,name',
+            'promotion_code'=>'required|unique:channels,promotion_code',
+        ];
+        /*return [
             'name'=>'required',
             'promotion_code'=>'required',
-        ];
+        ];*/
     }
 
     public function checkRuleFieldName($id = '')
