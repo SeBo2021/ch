@@ -247,8 +247,8 @@ class ChannelsController extends BaseCurlController
     #[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRule($id = ''): array
     {
         return [
-            'name'=>'required|unique:channels,name',
-            'promotion_code'=>'required|unique:channels,promotion_code',
+            'name'=>'required|unique:connection.channels,name',
+            'promotion_code'=>'required|unique:connection.channels,promotion_code',
         ];
     }
 
