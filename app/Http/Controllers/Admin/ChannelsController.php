@@ -147,14 +147,14 @@ class ChannelsController extends BaseCurlController
 
     public function beforeSaveEvent($model, $id = '')
     {
-        if((!$this->rq->name) && (!$model->rq->promotion_code)){
+        /*if((!$this->rq->name) && (!$model->rq->promotion_code)){
             return (['code' => -1, 'msg' => lang('系统错误')]);
         }
         $one = DB::connection('origin_mysql')->table('channels')->where('name',$this->rq->name)->first();
         //dump($one);
         if($one){
             return (['code' => -1, 'msg' => lang('已有相同渠道')]);
-        }
+        }*/
         return $model;
     }
 
@@ -220,6 +220,13 @@ class ChannelsController extends BaseCurlController
             DB::table('channel_day_statistics')->insert($insertData);
         }
         return $model;
+    }
+
+    public function checkRuleData($request)
+    {
+        $params = $request->all();
+        dump($params);
+        return $params;
     }
 
     //表单验证
