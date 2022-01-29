@@ -31,12 +31,12 @@ class TotalCpsController extends BaseCurlController
                 'type' => 'checkbox',
                 'totalRowText' => '合计',
             ],
-            [
+            /*[
                 'field' => 'channel_id',
                 'width' => 80,
                 'title' => '渠道ID',
                 'align' => 'center',
-            ],
+            ],*/
             [
                 'field' => 'cps',
                 'minWidth' => 100,
