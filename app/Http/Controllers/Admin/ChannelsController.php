@@ -160,7 +160,7 @@ class ChannelsController extends BaseCurlController
             'name' => $this->rq->name
         ],[
             'name' => 'required|unique:name'
-        ])->validated();
+        ])->validate();
         return $model;
     }
 
