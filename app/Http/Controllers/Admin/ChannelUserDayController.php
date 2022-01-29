@@ -198,15 +198,20 @@ class ChannelUserDayController extends BaseCurlController
             $result = $model->where('channel_id',$this->channelInfo->id)->orWhere('channel_pid',$this->channelInfo->id)->get();
             if($this->channelInfo->type == 0){ //cpa
                 $totalPrice = [];
+                $totalInstall = [];
                 foreach ($result as $res){
                     $res->install = (int)round($res->install/100);
+                    $totalInstall[] = $res->install;
                     $res->unit_price = $channelInfo->unit_price ?? 0;
                     $res->settlement_amount = round($res->unit_price * $res->install,2);
                     $totalPrice[] = $res->settlement_amount;
                     $handleLists[] = $res;
                 }
+                $settlement_amount = array_sum($totalPrice);
+                $installTotal = array_sum($totalInstall);
                 $totalRow = [
-                    'settlement_amount' => array_sum($totalPrice)
+                    'install' => $installTotal>0 ? $installTotal : '0',
+                    'settlement_amount' => $settlement_amount>0 ? : '0'
                 ];
             }else{ //cps
                 $total_recharge_amount = 0;
