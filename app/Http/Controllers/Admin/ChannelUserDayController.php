@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpa;
 use App\Models\ChannelCpsTotal;
+use App\Models\ChannelDayStatistic;
+use App\TraitClass\ChannelTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use JetBrains\PhpStorm\Pure;
 
 class ChannelUserDayController extends BaseCurlController
 {
+    use ChannelTrait;
+
     public $channelInfo;
 
     public $adminAccount;
@@ -23,7 +27,7 @@ class ChannelUserDayController extends BaseCurlController
             0 => $this->model = new ChannelCpa(),
             2 => $this->model = new ChannelCps(),
         };*/
-        return $this->model = new ChannelCpsTotal();
+        return $this->model = new ChannelDayStatistic();
     }
 
     public function getModel()
@@ -32,11 +36,6 @@ class ChannelUserDayController extends BaseCurlController
         $this->adminAccount = $adminAccount;
         if($adminAccount!='root'){
             $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',$adminAccount)->first();
-            $type = $this->channelInfo ? $this->channelInfo->type : 2;
-            return match ($type) {
-                0 => new ChannelCpa(),
-                2 => new ChannelCpsTotal(),
-            };
         }
         return $this->model;
     }
@@ -49,7 +48,7 @@ class ChannelUserDayController extends BaseCurlController
                 'totalRowText' => '合计',
             ],
             [
-                'field' => 'name',
+                'field' => 'channel_name',
                 'minWidth' => 100,
                 'title' => '渠道名称',
                 'align' => 'center'
@@ -61,7 +60,7 @@ class ChannelUserDayController extends BaseCurlController
                 'align' => 'center'
             ],
             [
-                'field' => 'number',
+                'field' => 'channel_code',
                 'minWidth' => 80,
                 'title' => '渠道码',
 //                'hide' => true,
@@ -103,7 +102,7 @@ class ChannelUserDayController extends BaseCurlController
                 'totalRowText' => '合计',
             ],
             [
-                'field' => 'name',
+                'field' => 'channel_name',
                 'minWidth' => 100,
                 'title' => '渠道名称',
                 'align' => 'center'
@@ -122,7 +121,7 @@ class ChannelUserDayController extends BaseCurlController
                 'align' => 'center',
             ],
             [
-                'field' => 'promotion_code',
+                'field' => 'channel_promotion_code',
                 'minWidth' => 100,
                 'title' => '推广码',
                 'hide' => true,
@@ -205,13 +204,6 @@ class ChannelUserDayController extends BaseCurlController
                             $res->install = (int)round($res->install/100);
                             $res->unit_price = $channelInfo->unit_price ?? 0;
                             $res->settlement_amount = round($res->unit_price * $res->install,2);
-                            $res->name = $channelInfo->name;
-                            $res->number = $channelInfo->number;
-                            if(isset($handleLists[$res->channel_id])){
-                                $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
-                            }else{
-                                $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
-                            }
                         }
                     }
                 }
@@ -232,8 +224,8 @@ class ChannelUserDayController extends BaseCurlController
                     if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
                         $handleLists[] = $res;
                         $total_recharge_amount += $res->share_amount;
-                        $res->install += 0;
-                        $installTotal += $res->install;
+                        $res->install_real += 0;
+                        $installTotal += $res->install_real;
                     }
                 }
 
@@ -261,22 +253,8 @@ class ChannelUserDayController extends BaseCurlController
     public function setListOutputItemExtend($item)
     {
         $item->level = $item->pid > 0 ? '二级' : '一级';
-        switch ($this->channelInfo->type) {
-            case 2:
-                $item->share_amount = number_format($item->share_amount, 2, '.', '');
-                $item->share_ratio = $item->share_ratio . '%';
-                break;
-            case 0:
-                //$info = DB::connection('origin_mysql')->table('channels')->where('id',$item->channel_id)->first();
-                //$item->name = $info->name;
-                //$item->number = $info->number;
-                //$item->downloads = round($item->install/100);
-                //$item->unit_price = $info->unit_price;
-                //$item->settlement_amount = round($info->unit_price * $item->downloads,2);
-                $item->at_time =  date('Y-m-d',$item->at_time);
-                break;
-        }
-
+        $item->share_amount = number_format($item->share_amount, 2, '.', '');
+        $item->share_ratio = $item->share_ratio . '%';
         return $item;
     }
 
@@ -287,39 +265,19 @@ class ChannelUserDayController extends BaseCurlController
 
     public function setOutputSearchFormTpl($shareData)
     {
-        $data = [];
-        switch ($this->channelInfo->type) {
-            case 2:
-                $data = [
-                    [
-                        'field' => 'query_like_channel_code',
-                        'type' => 'text',
-                        'name' => '渠道码',
-                    ],
-                    [
-                        'field' => 'query_date_at',
-                        'type' => 'date',
-                        'attr' => 'data-range=~',//需要特殊分割
-                        'name' => '时间范围',
-                    ]
-                ];
-                break;
-            case 0:
-                $data = [
-                    [
-                        'field' => 'query_like_channel_code',
-                        'type' => 'text',
-                        'name' => '渠道码',
-                    ],
-                    [
-                        'field' => 'query_at_time',
-                        'type' => 'date',
-                        'attr' => 'data-range=~',//需要特殊分割
-                        'name' => '时间范围',
-                    ]
-                ];
-                break;
-        }
+        $data = [
+            [
+                'field' => 'query_like_channel_code',
+                'type' => 'text',
+                'name' => '渠道码',
+            ],
+            [
+                'field' => 'query_at_time',
+                'type' => 'date',
+                'attr' => 'data-range=~',//需要特殊分割
+                'name' => '时间范围',
+            ]
+        ];
         //赋值到ui数组里面必须是`search`的key值
         $this->uiBlade['search'] = $data;
     }
