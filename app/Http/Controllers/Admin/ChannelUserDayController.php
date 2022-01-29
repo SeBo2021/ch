@@ -86,7 +86,7 @@ class ChannelUserDayController extends BaseCurlController
                 'align' => 'center',
             ],
             [
-                'field' => 'at_time',
+                'field' => 'date_at',
                 'minWidth' => 150,
                 'title' => '统计日期',
                 'align' => 'center'
