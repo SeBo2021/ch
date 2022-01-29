@@ -100,11 +100,10 @@ class TotalCpaController extends BaseCurlController
         if($item->channel_id ==0){
             $item->channel_name = '官方';
             $item->channel_code = '-';
-            $item->install = round($item->install/100);
-            $item->install_real = round($item->install_real/100);
             $item->unit_price = '-';
             $item->settlement_amount = '-';
         }
+        $item->install = round($item->install/100);
         $item->at_time =  date('Y-m-d',$item->at_time);
         $item->cpa = 'CPA';
         return $item;
@@ -171,6 +170,7 @@ class TotalCpaController extends BaseCurlController
 
         $lists = [];
         $install = [];
+        $install_real = [];
         $access = [];
         $hits = [];
         $active_users = [];
@@ -181,7 +181,8 @@ class TotalCpaController extends BaseCurlController
         $total_recharge_amount = [];
         foreach ($result as $res){
             $lists[$res->channel_id] = $res;
-            $install[] = $res->install_real;
+            $install[] = $res->install;
+            $install_real[] = $res->install_real;
             $access[] = $res->access;
             $hits[] = $res->hits;
             $active_users[] = $res->active_users;
@@ -197,6 +198,7 @@ class TotalCpaController extends BaseCurlController
 
         $total = count($lists);
         $install = array_sum($install);
+        $install_real = array_sum($install_real);
         $hits = array_sum($hits);
         $access = array_sum($access);
         $active_users = array_sum($active_users);
@@ -206,7 +208,8 @@ class TotalCpaController extends BaseCurlController
         $orders = array_sum($orders);
         $total_recharge_amount = array_sum($total_recharge_amount);
         $totalRow = [
-            'install_real' => $install>0 ? $install :'0',
+            'install' => $install>0 ? $install :'0',
+            'install_real' => $install_real>0 ? $install_real :'0',
             'hits' => $hits>0 ? $hits :'0',
             'access' => $access>0 ? $access :'0',
             'active_users' => $active_users>0 ? $active_users :'0',

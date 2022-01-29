@@ -88,6 +88,7 @@ class TotalMonthController extends BaseCurlController
         }
         $item->type = '包月';
         $item->at_time =  date('Y-m-d',$item->at_time);
+        $item->install = round($item->install/100);
         return $item;
     }
 
