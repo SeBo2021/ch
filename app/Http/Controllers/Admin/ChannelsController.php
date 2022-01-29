@@ -148,6 +148,12 @@ class ChannelsController extends BaseCurlController
 
     public function beforeSaveEvent($model, $id = '')
     {
+
+        return $model;
+    }
+
+    public function afterSaveSuccessEvent($model, $id = '')
+    {
         if((!$model->name) && (!$model->promotion_code)){
             return (['code' => -1, 'msg' => lang('系统错误')]);
         }
@@ -155,11 +161,6 @@ class ChannelsController extends BaseCurlController
         if($one){
             return (['code' => -1, 'msg' => lang('系统错误')]);
         }
-        return $model;
-    }
-
-    public function afterSaveSuccessEvent($model, $id = '')
-    {
         if($id == ''){ //添加
             $parentChannelNumber = admin('account');
             $parentChannelInfo = $this->model->where('number',$parentChannelNumber)->first();
