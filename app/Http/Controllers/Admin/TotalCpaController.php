@@ -91,12 +91,6 @@ class TotalCpaController extends BaseCurlController
                 'title' => '充值总金额',
                 'align' => 'center',
             ],
-            [
-                'field' => 'at_time',
-                'minWidth' => 150,
-                'title' => '统计日期',
-                'align' => 'center'
-            ],
         ];
     }
 
@@ -139,11 +133,6 @@ class TotalCpaController extends BaseCurlController
                 'name' => '所有渠道',
                 'default' => '',
                 'data' => $this->getAllChannels(0)
-            ],
-            [
-                'field' => 'query_channel_number',
-                'type' => 'text',
-                'name' => '渠道码',
             ],
             [
                 'field' => 'query_date_at',

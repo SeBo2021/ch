@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpa;
+use App\Models\ChannelDayStatistic;
+use App\TraitClass\ChannelTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use JetBrains\PhpStorm\ArrayShape;
 
 class TotalMonthController extends BaseCurlController
 {
-    public function setModel(): ChannelCpa
+    use ChannelTrait;
+
+    public function setModel(): ChannelDayStatistic
     {
-        return $this->model = new ChannelCpa();
+        return $this->model = new ChannelDayStatistic();
     }
 
     public function indexCols(): array
@@ -22,55 +26,53 @@ class TotalMonthController extends BaseCurlController
                 'totalRowText' => '合计',
             ],
             [
-                'field' => 'name',
+                'field' => 'type',
+                'minWidth' => 100,
+                'title' => '渠道类型',
+                'align' => 'center'
+            ],
+            [
+                'field' => 'channel_name',
                 'minWidth' => 100,
                 'title' => '渠道名称',
                 'align' => 'center'
             ],
             [
-                'field' => 'level',
+                'field' => 'access',
                 'minWidth' => 100,
-                'title' => '级数',
+                'title' => '访问量',
                 'align' => 'center'
             ],
             [
-                'field' => 'number',
+                'field' => 'hits',
                 'minWidth' => 80,
-                'title' => '渠道码',
+                'title' => '点击量',
 //                'hide' => true,
                 'align' => 'center',
             ],
-
             [
                 'field' => 'install_real',
                 'minWidth' => 80,
-                'title' => '真实下载人数',
+                'title' => '安装量',
                 'align' => 'center',
             ],
-
             [
-                'field' => 'install',
+                'field' => 'active_users',
                 'minWidth' => 80,
-                'title' => '下载人数(扣量后)',
+                'title' => '激活人数(有过观景记录的人)',
                 'align' => 'center',
             ],
             [
-                'field' => 'unit_price',
+                'field' => 'total_orders',
                 'minWidth' => 80,
-                'title' => '单价(¥)',
+                'title' => '充值订单数',
                 'align' => 'center',
             ],
             [
-                'field' => 'settlement_amount',
+                'field' => 'total_amount',
                 'minWidth' => 80,
-                'title' => '结算金额(¥)',
+                'title' => '充值总金额',
                 'align' => 'center',
-            ],
-            [
-                'field' => 'at_time',
-                'minWidth' => 150,
-                'title' => '统计日期',
-                'align' => 'center'
             ],
         ];
     }
@@ -79,13 +81,12 @@ class TotalMonthController extends BaseCurlController
     {
         $item->level = $item->pid > 0 ? '二级' : '一级';
         if($item->channel_id ==0){
-            $item->name = '官方';
-            $item->number = '-';
             $item->install = round($item->install/100);
             $item->install_real = round($item->install_real/100);
             $item->unit_price = '-';
             $item->settlement_amount = '-';
         }
+        $item->type = '包月';
         $item->at_time =  date('Y-m-d',$item->at_time);
         return $item;
     }
@@ -116,16 +117,18 @@ class TotalMonthController extends BaseCurlController
     {
         $data = [
             [
-                'field' => 'query_channel_id',
+                'field' => 'query_channel_id_tree',
                 'type' => 'select',
-                'name' => '渠道',
+                'name' => '顶级渠道',
                 'default' => '',
-                'data' => $this->getCpaChannels()
+                'data' => $this->getTopChannels(1)
             ],
             [
-                'field' => 'query_channel_number',
-                'type' => 'text',
-                'name' => '渠道码',
+                'field' => 'query_channel_id',
+                'type' => 'select',
+                'name' => '所有渠道',
+                'default' => '',
+                'data' => $this->getAllChannels(1)
             ],
             [
                 'field' => 'at_time',
@@ -141,27 +144,11 @@ class TotalMonthController extends BaseCurlController
     public function handleResultModel($model): array
     {
         $page = $this->rq->input('page', 1);
-        $created_at = $this->rq->input('at_time',null);
         $pagesize = $this->rq->input('limit', 30);
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
-        //$total = $model->count();
-        //$result = $model->forPage($page, $pagesize)->get();
-        /*$fields = 'id,pid,channel_id,at_time,SUM(access) as access,
-                SUM(hits) as hits,
-                SUM(install) as install,
-                SUM(register) as register';
-        $result = $model->select(DB::raw($fields))->groupBy('channel_id')->get();*/
-        if($created_at!==null){
-            $dateArr = explode('~',$created_at);
-            if(isset($dateArr[0]) && isset($dateArr[1])){
-                $startTime = strtotime(trim($dateArr[0]).' 00:00:00');
-                $endTime = strtotime(trim($dateArr[1]).' 23:59:59');
-                $model = $model->where('at_time','>=',$startTime)->where('at_time','<=',$endTime);
-            }
-        }
-        $result = $model->get();
+        $result = $model->where('channel_type',1)->get();
         $handleLists = [];
 //        $channelsModel = DB::connection('origin_mysql')->table('channels');
         //$statisticDayModel = DB::connection('origin_mysql')->table('statistic_day');
@@ -170,8 +157,6 @@ class TotalMonthController extends BaseCurlController
             if($info){
                 if ($res->channel_id > 0 && $info->type==0) {
                     $unitPrice = $info->unit_price;
-                    $res->name = $info->name;
-                    $res->number = $info->number;
                     $res->unit_price = $unitPrice;
                     $res->install = (int)round($res->install/100);
                     $res->settlement_amount = round($res->unit_price * $res->install,2);
