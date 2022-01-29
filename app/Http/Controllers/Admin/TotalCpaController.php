@@ -74,7 +74,7 @@ class TotalCpaController extends BaseCurlController
                 'align' => 'center',
             ],
             [
-                'field' => 'settlement_amount',
+                'field' => 'share_amount',
                 'minWidth' => 80,
                 'title' => '结算金额(¥)',
                 'align' => 'center',
@@ -96,15 +96,16 @@ class TotalCpaController extends BaseCurlController
 
     public function setListOutputItemExtend($item)
     {
+        $item->install = round($item->install/100);
+        $item->share_amount = $item->unit_price * $item->install;
         $item->level = $item->pid > 0 ? '二级' : '一级';
         if($item->channel_id ==0){
             $item->channel_name = '官方';
             $item->channel_code = '-';
             $item->unit_price = '-';
-            $item->settlement_amount = '-';
+            $item->share_amount = '-';
         }
-        $item->install = round($item->install/100);
-        $item->share_amount = $item->unit_price * $item->install;
+
         $item->at_time =  date('Y-m-d',$item->at_time);
         $item->cpa = 'CPA';
         return $item;
