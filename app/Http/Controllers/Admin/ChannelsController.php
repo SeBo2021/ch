@@ -8,6 +8,7 @@ use App\Services\UiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ArrayShape;
 use phpDocumentor\Reflection\Types\False_;
@@ -155,6 +156,11 @@ class ChannelsController extends BaseCurlController
         if($one){
             return (['code' => -1, 'msg' => lang('已有相同渠道')]);
         }*/
+        $validated = Validator::make([
+            'name' => $model->name
+        ],[
+            'name' => 'required'
+        ])->validated();
         return $model;
     }
 
@@ -222,7 +228,7 @@ class ChannelsController extends BaseCurlController
         return $model;
     }
 
-    public function checkRuleData($request)
+    /*public function checkRuleData($request)
     {
         $params = $request->all();
         $name = $params['name'] ?? '';
@@ -232,7 +238,7 @@ class ChannelsController extends BaseCurlController
             return (['msg' => '已有相同渠道', 'data' => [], 'code' => 1]);
         }
         return $params;
-    }
+    }*/
 
     //表单验证
     /*#[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRule($id = ''): array
