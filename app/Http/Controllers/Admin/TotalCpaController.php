@@ -149,52 +149,73 @@ class TotalCpaController extends BaseCurlController
     {
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
-        $order_by_name = $this->orderByName();
-        $order_by_type = $this->orderByType();
-        $model = $this->orderBy($model, $order_by_name, $order_by_type);
-        //$total = $model->count();
-        //$result = $model->forPage($page, $pagesize)->get();
-        /*$fields = 'id,pid,channel_id,at_time,SUM(access) as access,
-                SUM(hits) as hits,
-                SUM(install) as install,
-                SUM(register) as register';
-        $result = $model->select(DB::raw($fields))->groupBy('channel_id')->get();*/
 
-        $result = $model->where('channel_type',0)->get();
-        $handleLists = [];
-//        $channelsModel = DB::connection('origin_mysql')->table('channels');
-        //$statisticDayModel = DB::connection('origin_mysql')->table('statistic_day');
-        foreach ($result as &$res) {
-            $info = DB::connection('origin_mysql')->table('channels')->where('id',$res->channel_id)->first();
-            if($info){
-                if ($res->channel_id > 0 && $info->type==0) {
-                    $unitPrice = $info->unit_price;
-                    $res->unit_price = $unitPrice;
-                    $res->install = (int)round($res->install/100);
-                    $res->settlement_amount = round($res->unit_price * $res->install,2);
-                    if(isset($handleLists[$res->channel_id])){
-                        $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
-                    }else{
-                        $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
-                    }
-                }
-            }
+        $fields = 'SUM(access) as access,
+                SUM(hits) as hits,
+                SUM(install_real) as install_real,
+                SUM(active_users) as active_users,
+                SUM(total_orders) as total_orders,
+                SUM(total_amount) as total_amount,
+                SUM(share_amount) as share_amount,
+                SUM(orders) as orders,
+                SUM(total_recharge_amount) as total_recharge_amount,
+                SUM(install) as install';
+        //$this->indexCols();
+        $model = $model->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
+        /*$install = (int) $model->sum('install');
+        $access = (int) $model->sum('access');
+        $hits = (int) $model->sum('hits');
+        $active_users = (int) $model->sum('active_users');*/
+
+        $result = $model->where('channel_type',0)->orderBy('channel_id','desc')->get();
+
+        $lists = [];
+        $install = [];
+        $access = [];
+        $hits = [];
+        $active_users = [];
+        $total_orders = [];
+        $total_amount = [];
+        $share_amount = [];
+        $orders = [];
+        $total_recharge_amount = [];
+        foreach ($result as $res){
+            $lists[$res->channel_id] = $res;
+            $install[] = $res->install_real;
+            $access[] = $res->access;
+            $hits[] = $res->hits;
+            $active_users[] = $res->active_users;
+            $total_orders[] = $res->total_orders;
+            $total_amount[] = $res->total_amount;
+            $share_amount[] = $res->share_amount;
+            $orders[] = $res->orders;
+            $total_recharge_amount[] = $res->total_recharge_amount;
         }
-        $settlement_amount = 0;
-        if(!empty($handleLists)){
-            $totalPrice = [];
-            foreach ($handleLists as $handleList){
-                $totalPrice[] = $handleList->settlement_amount;
-            }
-            $settlement_amount = array_sum($totalPrice);
-        }
-        $totalRow = [
-            'settlement_amount' => $settlement_amount
-        ];
-        $total = count($handleLists);
-        //获取当前页数据
+
         $offset = ($page-1)*$pagesize;
-        $currentPageData = array_slice($handleLists,$offset,$pagesize);
+        $currentPageData = array_slice($lists,$offset,$pagesize);
+
+        $total = count($lists);
+        $install = array_sum($install);
+        $hits = array_sum($hits);
+        $access = array_sum($access);
+        $active_users = array_sum($active_users);
+        $total_orders = array_sum($total_orders);
+        $total_amount = array_sum($total_amount);
+        $share_amount = array_sum($share_amount);
+        $orders = array_sum($orders);
+        $total_recharge_amount = array_sum($total_recharge_amount);
+        $totalRow = [
+            'install_real' => $install>0 ? $install :'0',
+            'hits' => $hits>0 ? $hits :'0',
+            'access' => $access>0 ? $access :'0',
+            'active_users' => $active_users>0 ? $active_users :'0',
+            'total_orders' => $total_orders>0 ? $total_orders :'0',
+            'total_amount' => $total_amount>0 ? $total_amount :'0',
+            'share_amount' => $share_amount>0 ? $share_amount :'0',
+            'orders' => $orders>0 ? $orders :'0',
+            'total_recharge_amount' => $total_recharge_amount>0 ? $total_recharge_amount :'0',
+        ];
         return [
             'total' => $total,
             'totalRow' => $totalRow ?? [],
