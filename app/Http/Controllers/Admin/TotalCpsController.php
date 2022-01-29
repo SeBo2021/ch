@@ -128,7 +128,7 @@ class TotalCpsController extends BaseCurlController
     public function setListOutputItemExtend($item)
     {
         $item->cps = 'CPS';
-        //$item->share_amount = number_format($item->share_amount, 2, '.', '');
+        $item->share_amount = number_format($item->share_amount, 2, '.', '');
         $item->share_ratio = $item->share_ratio . '%';
         $item->install = round($item->install/100);
         return $item;

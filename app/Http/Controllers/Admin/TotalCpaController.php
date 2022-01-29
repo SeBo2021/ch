@@ -104,6 +104,7 @@ class TotalCpaController extends BaseCurlController
             $item->settlement_amount = '-';
         }
         $item->install = round($item->install/100);
+        $item->share_amount = $item->unit_price * $item->install;
         $item->at_time =  date('Y-m-d',$item->at_time);
         $item->cpa = 'CPA';
         return $item;
@@ -180,14 +181,15 @@ class TotalCpaController extends BaseCurlController
         $total_recharge_amount = [];
         foreach ($result as $res){
             $lists[$res->channel_id] = $res;
-            $install[] = round($res->install/100);
+            $installVal = round($res->install/100);
+            $install[] = $installVal;
             $install_real[] = $res->install_real;
             $access[] = $res->access;
             $hits[] = $res->hits;
             $active_users[] = $res->active_users;
             $total_orders[] = $res->total_orders;
             $total_amount[] = $res->total_amount;
-            $share_amount[] = $res->share_amount;
+            $share_amount[] = $res->unit_price * $installVal;
             $orders[] = $res->orders;
             $total_recharge_amount[] = $res->total_recharge_amount;
         }
