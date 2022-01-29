@@ -197,24 +197,22 @@ class ChannelsController extends BaseCurlController
 
             $this->writeChannelDeduction($model->id,$model->deduction,$model->updated_at);
             //如果是cps
-            if($model->type == 2){
-                $insertData = [
-                    'name' => $model->name,
-                    'channel_id' => $model->id,
-                    'pid' => $model->pid,
-                    'promotion_code' => $model->promotion_code,
-                    'channel_code' => $model->number,
-                    'share_ratio' => $model->share_ratio,
-                    'total_recharge_amount' => 0,
-                    'total_amount' => 0,
-                    'total_orders' => 0,
-                    'order_index' => 0,
-                    'usage_index' => 0,
-                    'share_amount' => 0,
-                    'date_at' => date('Y-m-d'),
-                ];
-                DB::table('channel_cps')->insert($insertData);
-            }
+            $insertData = [
+                'channel_name' => $model->name,
+                'channel_id' => $model->id,
+                'channel_pid' => $model->pid,
+                'channel_promotion_code' => $model->promotion_code,
+                'channel_code' => $model->number,
+                'share_ratio' => $model->share_ratio,
+                'total_recharge_amount' => 0,
+                'total_amount' => 0,
+                'total_orders' => 0,
+                'order_index' => 0,
+                'usage_index' => 0,
+                'share_amount' => 0,
+                'date_at' => date('Y-m-d'),
+            ];
+            DB::table('channel_day_statistics')->insert($insertData);
         }
         return $model;
     }

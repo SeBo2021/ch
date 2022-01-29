@@ -191,11 +191,12 @@ class ChannelUserDayController extends BaseCurlController
         $order_by_type = $this->orderByType();
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
         //$total = $model->count();
-        $result = $model->get();
+        //$result = $model->get();
         if($parentChannelNumber!='root' && $this->channelInfo){
             $handleLists = [];
 //            $channelBuild = DB::connection('origin_mysql')->table('channels')->where();
             if($this->channelInfo->type == 0){ //cpa
+                $result = $model->where('channel_type',0)->where('channel_id','>',0)->get();
                 $settlement_amount = 0;
                 foreach ($result as $res){
                     if(($res->channel_id==$this->channelInfo->id) || ($res->pid==$this->channelInfo->id)){
@@ -218,6 +219,7 @@ class ChannelUserDayController extends BaseCurlController
                     'settlement_amount' => $settlement_amount
                 ];
             }else{ //cps
+                $result = $model->where('channel_type',2)->where('channel_id','>',0)->get();
                 $total_recharge_amount = 0;
                 $installTotal = 0;
                 foreach ($result as $res){
