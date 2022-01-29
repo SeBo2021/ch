@@ -204,7 +204,7 @@ class TotalCpsController extends BaseCurlController
         $result_active_users = $activeUsersBuild->select('pid','channel_id','at_time',DB::raw('count(uid) as users'))->groupBy('channel_id')->get();
         foreach ($result_active_users as $result_active_user)
         {
-            $list[$result_active_user->channel_id]->active_users = $result_active_user->active_users;
+            $list[$result_active_user->channel_id]->active_users = $result_active_user->users;
         }
 
         $total = count($list);
