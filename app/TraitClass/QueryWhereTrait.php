@@ -96,7 +96,7 @@ trait QueryWhereTrait
                     'type' => '=',
                     'value' => $value
                 ],
-                'pid' => [
+                'channel_pid' => [
                     'type' => 'or',
                     'value' => $value
                 ]
