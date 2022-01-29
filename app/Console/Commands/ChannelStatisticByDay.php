@@ -12,7 +12,7 @@ class ChannelStatisticByDay extends Command
      *
      * @var string
      */
-    protected $signature = 'cps:day';
+    protected $signature = 'channel:day';
 
     /**
      * The console command description.
