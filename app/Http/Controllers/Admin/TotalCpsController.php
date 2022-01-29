@@ -207,7 +207,6 @@ class TotalCpsController extends BaseCurlController
             $list[$result_active_user->channel_id]->active_users = $result_active_user->active_users;
         }
 
-
         $total = count($list);
         //获取当前页数据
         $offset = ($page-1)*$pagesize;
