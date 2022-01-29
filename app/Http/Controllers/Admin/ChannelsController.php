@@ -129,7 +129,6 @@ class ChannelsController extends BaseCurlController
                 'type' => 'text',
                 'name' => '推广码',
                 'must' => 1,
-                'default' => '',
             ],
         ];
         //赋值给UI数组里面,必须是form为key
@@ -223,7 +222,7 @@ class ChannelsController extends BaseCurlController
     }
 
     //表单验证
-    /*#[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRule($id = '')
+    #[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRule($id = ''): array
     {
         return [
             'name'=>'required',
@@ -231,13 +230,13 @@ class ChannelsController extends BaseCurlController
         ];
     }
 
-    public function checkRuleFieldName($id = '')
+    #[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRuleFieldName($id = ''): array
     {
         return [
             'name'=>'渠道名称',
             'promotion_code'=>'推广码',
         ];
-    }*/
+    }
     //弹窗大小
     /*public function layuiOpenWidth(): string
     {
