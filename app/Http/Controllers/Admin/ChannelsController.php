@@ -156,14 +156,14 @@ class ChannelsController extends BaseCurlController
         if($one){
             return (['code' => -1, 'msg' => lang('已有相同渠道')]);
         }*/
-        $validated = Validator::make([
+        /*$validated = Validator::make([
             'name' => $this->rq->name
         ],[
             'name' => 'required|unique:name'
         ])->validated();
         if(!isset($validated['name'])){
             return (['code' => -1, 'msg' => lang('名称不能为空且不能相同')]);
-        }
+        }*/
         return $model;
     }
 
@@ -244,11 +244,11 @@ class ChannelsController extends BaseCurlController
     }*/
 
     //表单验证
-    /*#[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRule($id = ''): array
+    #[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRule($id = ''): array
     {
         return [
-            'name'=>'required|unique:name',
-            'promotion_code'=>'required',
+            'name'=>'required|unique:channels,name',
+            'promotion_code'=>'required|unique:channels,promotion_code',
         ];
     }
 
@@ -258,7 +258,7 @@ class ChannelsController extends BaseCurlController
             'name'=>'渠道名称',
             'promotion_code'=>'推广码',
         ];
-    }*/
+    }
     //弹窗大小
     /*public function layuiOpenWidth(): string
     {
