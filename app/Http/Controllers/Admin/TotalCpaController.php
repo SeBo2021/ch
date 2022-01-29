@@ -181,7 +181,7 @@ class TotalCpaController extends BaseCurlController
         $total_recharge_amount = [];
         foreach ($result as $res){
             $lists[$res->channel_id] = $res;
-            $install[] = $res->install;
+            $install[] = round($res->install/100);
             $install_real[] = $res->install_real;
             $access[] = $res->access;
             $hits[] = $res->hits;
