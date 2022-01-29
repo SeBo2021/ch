@@ -149,7 +149,11 @@ class ChannelsController extends BaseCurlController
     public function beforeSaveEvent($model, $id = '')
     {
         if((!$model->name) && (!$model->promotion_code)){
-            return 'failed';
+            return (['code' => -1, 'msg' => lang('系统错误')]);
+        }
+        $one = DB::connection('origin_mysql')->table('channels')->where('name',$model->name)->first();
+        if($one){
+            return (['code' => -1, 'msg' => lang('系统错误')]);
         }
         return $model;
     }
