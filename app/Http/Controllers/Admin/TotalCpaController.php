@@ -125,14 +125,14 @@ class TotalCpaController extends BaseCurlController
                 'type' => 'select',
                 'name' => '顶级渠道',
                 'default' => '',
-                'data' => $this->getTopChannels(0)
+                'data' => $this->getTopChannels(1)
             ],
             [
                 'field' => 'query_channel_id',
                 'type' => 'select',
                 'name' => '所有渠道',
                 'default' => '',
-                'data' => $this->getAllChannels(0)
+                'data' => $this->getAllChannels(1)
             ],
             [
                 'field' => 'query_date_at',
