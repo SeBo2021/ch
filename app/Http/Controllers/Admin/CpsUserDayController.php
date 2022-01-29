@@ -108,6 +108,7 @@ class CpsUserDayController extends BaseCurlController
         $item->level = $item->pid > 0 ? '二级' : '一级';
         $item->share_amount = number_format($item->share_amount, 2, '.', '');
         $item->share_ratio = $item->share_ratio . '%';
+        $item->install = round($item->install/100);
         return $item;
     }
 
@@ -160,7 +161,7 @@ class CpsUserDayController extends BaseCurlController
         $totalRow = [
             'share_amount' =>$model->sum('share_amount'),
             'total_recharge_amount' => $model->sum('total_recharge_amount'),
-            'install' => $installTotal>0 ? $installTotal : '0',
+            'install' => $installTotal>0 ? round($installTotal/100) : '0',
             'total_amount' => $model->sum('total_amount'),
         ];
         $page = $this->rq->input('page', 1);
