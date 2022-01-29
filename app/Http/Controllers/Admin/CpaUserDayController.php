@@ -22,7 +22,7 @@ class CpaUserDayController extends BaseCurlController
                 'totalRowText' => '合计',
             ],
             [
-                'field' => 'name',
+                'field' => 'channel_name',
                 'minWidth' => 100,
                 'title' => '渠道名称',
                 'align' => 'center'
@@ -34,7 +34,7 @@ class CpaUserDayController extends BaseCurlController
                 'align' => 'center'
             ],
             [
-                'field' => 'number',
+                'field' => 'channel_code',
                 'minWidth' => 80,
                 'title' => '渠道码',
 //                'hide' => true,
@@ -77,10 +77,10 @@ class CpaUserDayController extends BaseCurlController
 
     public function setListOutputItemExtend($item)
     {
-        $item->level = $item->pid > 0 ? '二级' : '一级';
+        $item->level = $item->channel_pid > 0 ? '二级' : '一级';
         if($item->channel_id ==0){
-            $item->name = '官方';
-            $item->number = '-';
+            $item->channel = '官方';
+            $item->channel_code = '-';
             $item->install = round($item->install/100);
             $item->install_real = round($item->install_real/100);
             $item->unit_price = '-';
