@@ -84,7 +84,6 @@ class TotalMonthController extends BaseCurlController
             $item->install = round($item->install/100);
             $item->install_real = round($item->install_real/100);
             $item->unit_price = '-';
-            $item->settlement_amount = '-';
         }
         $item->type = '包月';
         $item->at_time =  date('Y-m-d',$item->at_time);
@@ -148,46 +147,27 @@ class TotalMonthController extends BaseCurlController
         $pagesize = $this->rq->input('limit', 30);
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
+        $model = $model->where('channel_type',1);
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
-        $result = $model->where('channel_type',1)->get();
-        $handleLists = [];
-//        $channelsModel = DB::connection('origin_mysql')->table('channels');
-        //$statisticDayModel = DB::connection('origin_mysql')->table('statistic_day');
-        foreach ($result as &$res) {
-            $info = DB::connection('origin_mysql')->table('channels')->where('id',$res->channel_id)->first();
-            if($info){
-                if ($res->channel_id > 0 && $info->type==0) {
-                    $unitPrice = $info->unit_price;
-                    $res->unit_price = $unitPrice;
-                    $res->install = (int)round($res->install/100);
-                    $res->settlement_amount = round($res->unit_price * $res->install,2);
-                    if(isset($handleLists[$res->channel_id])){
-                        $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
-                    }else{
-                        $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
-                    }
-                }
-            }
+        $total = $model->count();
+        $result = $model->forPage($page, $pagesize)->get();
+        $totalPrice = [];
+        foreach ($result as $res) {
+            $res->install = (int)round($res->install/100);
+            $totalPrice[] = round($res->unit_price * $res->install,2);
         }
-        $settlement_amount = 0;
-        if(!empty($handleLists)){
-            $totalPrice = [];
-            foreach ($handleLists as $handleList){
-                $totalPrice[] = $handleList->settlement_amount;
-            }
-            $settlement_amount = array_sum($totalPrice);
-        }
+        $settlement_amount = array_sum($totalPrice);
         $totalRow = [
             'settlement_amount' => $settlement_amount
         ];
-        $total = count($handleLists);
+
         //获取当前页数据
-        $offset = ($page-1)*$pagesize;
-        $currentPageData = array_slice($handleLists,$offset,$pagesize);
+        /*$offset = ($page-1)*$pagesize;
+        $currentPageData = array_slice($handleLists,$offset,$pagesize);*/
         return [
             'total' => $total,
             'totalRow' => $totalRow ?? [],
-            'result' => $currentPageData
+            'result' => $result
         ];
     }
 
