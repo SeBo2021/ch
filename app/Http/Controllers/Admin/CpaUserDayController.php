@@ -149,12 +149,15 @@ class CpaUserDayController extends BaseCurlController
         $order_by_type = $this->orderByType();
         $model = $model->where('channel_type',0);
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
-        $total = $model->count();
-        $result = $model->forPage($page, $pagesize)->get();
+
         $totalPrice = [];
         $totalInstall = [];
         $totalInstallReal = [];
+
+        $result = $model->get();
+        $lists = [];
         foreach ($result as $res) {
+            $lists[] = $res;
             $install = (int)round($res->install/100);
             $totalInstall[] = $install;
             $totalInstallReal[] = $res->install_real;
@@ -166,10 +169,13 @@ class CpaUserDayController extends BaseCurlController
             'install_real' => array_sum($totalInstallReal),
             'settlement_amount' => array_sum($totalPrice)
         ];
+        $offset = ($page-1)*$pagesize;
+        $total = count($lists);
+        $currentPageData = array_slice($lists,$offset,$pagesize);
         return [
             'total' => $total,
             'totalRow' => $totalRow ?? [],
-            'result' => $result
+            'result' => $currentPageData
         ];
     }
 
