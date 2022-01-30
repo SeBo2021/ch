@@ -214,6 +214,7 @@ class TotalCpsController extends BaseCurlController
         $result = $model->where('channel_type',2)->groupBy('channel_id')->orderBy('channel_id','desc')->get();
 
         $lists = [];
+        $installReal = [];
         $install = [];
         $access = [];
         $hits = [];
@@ -225,7 +226,8 @@ class TotalCpsController extends BaseCurlController
         $total_recharge_amount = [];
         foreach ($result as $res){
             $lists[$res->channel_id] = $res;
-            $install[] = $res->install_real;
+            $installReal[] = $res->install_real;
+            $install[] = $res->install;
             $access[] = $res->access;
             $hits[] = $res->hits;
             $active_users[] = $res->active_users;
@@ -240,6 +242,7 @@ class TotalCpsController extends BaseCurlController
         $currentPageData = array_slice($lists,$offset,$pagesize);
 
         $total = count($lists);
+        $installReal = array_sum($installReal);
         $install = array_sum($install);
         $hits = array_sum($hits);
         $access = array_sum($access);
@@ -250,7 +253,8 @@ class TotalCpsController extends BaseCurlController
         $orders = array_sum($orders);
         $total_recharge_amount = array_sum($total_recharge_amount);
         $totalRow = [
-            'install_real' => $install>0 ? $install :'0',
+            'install_real' => $installReal>0 ? $installReal :'0',
+            'install' => $install>0 ? $install :'0',
             'hits' => $hits>0 ? $hits :'0',
             'access' => $access>0 ? $access :'0',
             'active_users' => $active_users>0 ? $active_users :'0',
