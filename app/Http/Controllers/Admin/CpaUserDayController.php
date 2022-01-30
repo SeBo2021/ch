@@ -145,16 +145,12 @@ class CpaUserDayController extends BaseCurlController
     {
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
-        $order_by_name = $this->orderByName();
-        $order_by_type = $this->orderByType();
-        $model = $model->where('channel_id','>',0)->where('channel_type',0);
-        $model = $this->orderBy($model, $order_by_name, $order_by_type);
+
 
         $totalPrice = [];
         $totalInstall = [];
         $totalInstallReal = [];
-
-        $result = $model->get();
+        $result = $model->where('channel_type',0)->where('channel_id','>',0)->orderBy('channel_id','desc')->get();
         $lists = [];
         foreach ($result as $res) {
             $lists[] = $res;
