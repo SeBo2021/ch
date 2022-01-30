@@ -143,31 +143,6 @@ class TotalMonthController extends BaseCurlController
 
     public function handleResultModel($model): array
     {
-        /*$page = $this->rq->input('page', 1);
-        $pagesize = $this->rq->input('limit', 30);
-        $order_by_name = $this->orderByName();
-        $order_by_type = $this->orderByType();
-        $model = $model->where('channel_type',1);
-        $model = $this->orderBy($model, $order_by_name, $order_by_type);
-        $total = $model->count();
-        $result = $model->forPage($page, $pagesize)->get();
-        $totalPrice = [];
-        foreach ($result as $res) {
-            $res->install = (int)round($res->install/100);
-            $totalPrice[] = round($res->unit_price * $res->install,2);
-        }
-        $settlement_amount = array_sum($totalPrice);
-        $totalRow = [
-            'settlement_amount' => $settlement_amount
-        ];
-
-        //获取当前页数据
-        return [
-            'total' => $total,
-            'totalRow' => $totalRow ?? [],
-            'result' => $result
-        ];*/
-
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
 
@@ -181,8 +156,8 @@ class TotalMonthController extends BaseCurlController
                 SUM(orders) as orders,
                 SUM(total_recharge_amount) as total_recharge_amount,
                 SUM(install) as install';
-        $model = $model->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
-        $result = $model->where('channel_type',1)->where('channel_id','>',0)->groupBy('channel_id')->orderBy('channel_id','desc')->get();
+        $model = $model->where('channel_type',1)->where('channel_id','>',0)->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
+        $result = $model->orderBy('channel_id','desc')->get();
         $lists = [];
         $install = [];
         $install_real = [];

@@ -161,8 +161,8 @@ class TotalCpaController extends BaseCurlController
                 SUM(orders) as orders,
                 SUM(total_recharge_amount) as total_recharge_amount,
                 SUM(install) as install';
-        $model = $model->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
-        $result = $model->where('channel_type',0)->where('channel_id','>',0)->groupBy('channel_id')->orderBy('channel_id','desc')->get();
+        $model = $model->where('channel_type',0)->where('channel_id','>',0)->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
+        $result = $model->orderBy('channel_id','desc')->get();
         $lists = [];
         $install = [];
         $install_real = [];
