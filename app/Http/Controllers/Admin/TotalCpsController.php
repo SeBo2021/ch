@@ -205,7 +205,7 @@ class TotalCpsController extends BaseCurlController
         $hits = (int) $model->sum('hits');
         $active_users = (int) $model->sum('active_users');*/
 
-        $result = $model->where('channel_type',2)->orderBy('channel_id','desc')->get();
+        $result = $model->where('channel_type',2)->groupBy('channel_id')->orderBy('channel_id','desc')->get();
 
         $lists = [];
         $install = [];

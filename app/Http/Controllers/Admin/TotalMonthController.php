@@ -143,7 +143,7 @@ class TotalMonthController extends BaseCurlController
 
     public function handleResultModel($model): array
     {
-        $page = $this->rq->input('page', 1);
+        /*$page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
@@ -162,12 +162,72 @@ class TotalMonthController extends BaseCurlController
         ];
 
         //获取当前页数据
-        /*$offset = ($page-1)*$pagesize;
-        $currentPageData = array_slice($handleLists,$offset,$pagesize);*/
         return [
             'total' => $total,
             'totalRow' => $totalRow ?? [],
             'result' => $result
+        ];*/
+
+        $page = $this->rq->input('page', 1);
+        $pagesize = $this->rq->input('limit', 30);
+
+        $fields = 'SUM(access) as access,
+                SUM(hits) as hits,
+                SUM(install_real) as install_real,
+                SUM(active_users) as active_users,
+                SUM(total_orders) as total_orders,
+                SUM(total_amount) as total_amount,
+                SUM(share_amount) as share_amount,
+                SUM(orders) as orders,
+                SUM(total_recharge_amount) as total_recharge_amount,
+                SUM(install) as install';
+        $model = $model->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
+        $result = $model->where('channel_type',1)->where('channel_id','>',0)->groupBy('channel_id')->orderBy('channel_id','desc')->get();
+        $lists = [];
+        $install = [];
+        $install_real = [];
+        $access = [];
+        $hits = [];
+        $active_users = [];
+        $total_orders = [];
+        $total_amount = [];
+
+        foreach ($result as $res){
+            $lists[$res->channel_id] = $res;
+            $installVal = round($res->install/100);
+            $install[] = $installVal;
+            $install_real[] = $res->install_real;
+            $access[] = $res->access;
+            $hits[] = $res->hits;
+            $active_users[] = $res->active_users;
+            $total_orders[] = $res->total_orders;
+            $total_amount[] = $res->total_amount;
+        }
+
+        $offset = ($page-1)*$pagesize;
+        $currentPageData = array_slice($lists,$offset,$pagesize);
+
+        $total = count($lists);
+        $install = array_sum($install);
+        $install_real = array_sum($install_real);
+        $hits = array_sum($hits);
+        $access = array_sum($access);
+        $active_users = array_sum($active_users);
+        $total_orders = array_sum($total_orders);
+        $total_amount = array_sum($total_amount);
+        $totalRow = [
+            'install' => $install>0 ? $install :'0',
+            'install_real' => $install_real>0 ? $install_real :'0',
+            'hits' => $hits>0 ? $hits :'0',
+            'access' => $access>0 ? $access :'0',
+            'active_users' => $active_users>0 ? $active_users :'0',
+            'total_orders' => $total_orders>0 ? $total_orders :'0',
+            'total_amount' => $total_amount>0 ? $total_amount :'0',
+        ];
+        return [
+            'total' => $total,
+            'totalRow' => $totalRow ?? [],
+            'result' => $currentPageData
         ];
     }
 
