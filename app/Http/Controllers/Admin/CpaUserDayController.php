@@ -70,7 +70,7 @@ class CpaUserDayController extends BaseCurlController
                 'align' => 'center',
             ],
             [
-                'field' => 'at_time',
+                'field' => 'date_at',
                 'minWidth' => 150,
                 'title' => '统计日期',
                 'align' => 'center'
@@ -89,7 +89,7 @@ class CpaUserDayController extends BaseCurlController
             $item->unit_price = '-';
             $item->settlement_amount = '-';
         }
-        $item->at_time =  date('Y-m-d',$item->at_time);
+        $item->install = round($item->install/100);
         return $item;
     }
 
@@ -144,67 +144,26 @@ class CpaUserDayController extends BaseCurlController
     public function handleResultModel($model): array
     {
         $page = $this->rq->input('page', 1);
-        $created_at = $this->rq->input('at_time',null);
         $pagesize = $this->rq->input('limit', 30);
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
+        $model = $model->where('channel_type',0);
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
-        //$total = $model->count();
-        //$result = $model->forPage($page, $pagesize)->get();
-        /*$fields = 'id,pid,channel_id,at_time,SUM(access) as access,
-                SUM(hits) as hits,
-                SUM(install) as install,
-                SUM(register) as register';
-        $result = $model->select(DB::raw($fields))->groupBy('channel_id')->get();*/
-        if($created_at!==null){
-            $dateArr = explode('~',$created_at);
-            if(isset($dateArr[0]) && isset($dateArr[1])){
-                $startTime = strtotime(trim($dateArr[0]).' 00:00:00');
-                $endTime = strtotime(trim($dateArr[1]).' 23:59:59');
-                $model = $model->where('at_time','>=',$startTime)->where('at_time','<=',$endTime);
-            }
+        $total = $model->count();
+        $result = $model->forPage($page, $pagesize)->get();
+        $totalPrice = [];
+        foreach ($result as $res) {
+            $res->install = (int)round($res->install/100);
+            $totalPrice[] = round($res->unit_price * $res->install,2);
         }
-        $result = $model->where('channel_type',0)->get();
-        $handleLists = [];
-//        $channelsModel = DB::connection('origin_mysql')->table('channels');
-        //$statisticDayModel = DB::connection('origin_mysql')->table('statistic_day');
-        foreach ($result as &$res) {
-            $info = DB::connection('origin_mysql')->table('channels')->where('id',$res->channel_id)->first();
-            if($info){
-                if ($res->channel_id > 0 && $info->type==0) {
-                    $unitPrice = $info->unit_price;
-                    $res->channel_name = $info->name;
-                    $res->channel_code = $info->number;
-                    $res->unit_price = $unitPrice;
-                    $res->install = (int)round($res->install/100);
-                    $res->settlement_amount = round($res->unit_price * $res->install,2);
-                    if(isset($handleLists[$res->channel_id])){
-                        $handleLists[$res->channel_id.'-'.$res->at_time]->install += $res->install;
-                    }else{
-                        $handleLists[$res->channel_id.'-'.$res->at_time] = $res;
-                    }
-                }
-            }
-        }
-        $settlement_amount = 0;
-        if(!empty($handleLists)){
-            $totalPrice = [];
-            foreach ($handleLists as $handleList){
-                $totalPrice[] = $handleList->settlement_amount;
-            }
-            $settlement_amount = array_sum($totalPrice);
-        }
+        $settlement_amount = array_sum($totalPrice);
         $totalRow = [
             'settlement_amount' => $settlement_amount
         ];
-        $total = count($handleLists);
-        //获取当前页数据
-        $offset = ($page-1)*$pagesize;
-        $currentPageData = array_slice($handleLists,$offset,$pagesize);
         return [
             'total' => $total,
             'totalRow' => $totalRow ?? [],
-            'result' => $currentPageData
+            'result' => $result
         ];
     }
 
