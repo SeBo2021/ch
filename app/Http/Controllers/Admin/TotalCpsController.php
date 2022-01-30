@@ -81,6 +81,12 @@ class TotalCpsController extends BaseCurlController
                 'align' => 'center',
             ],
             [
+                'field' => 'install',
+                'minWidth' => 80,
+                'title' => '扣量后安装量',
+                'align' => 'center',
+            ],
+            [
                 'field' => 'total_orders',
                 'minWidth' => 80,
                 'title' => '充值订单数',
