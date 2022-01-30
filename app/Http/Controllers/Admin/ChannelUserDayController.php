@@ -210,7 +210,7 @@ class ChannelUserDayController extends BaseCurlController
                 $installTotal = array_sum($totalInstall);
                 $totalRow = [
                     'install' => $installTotal>0 ? $installTotal : '0',
-                    'settlement_amount' => $settlement_amount>0 ? : '0'
+                    'settlement_amount' => $settlement_amount>0 ? $settlement_amount : '0'
                 ];
             }else{ //cps
                 $total_recharge_amount = 0;
