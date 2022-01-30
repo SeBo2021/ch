@@ -123,7 +123,7 @@ class CpaUserDayController extends BaseCurlController
                 'type' => 'select',
                 'name' => '渠道',
                 'default' => '',
-                'data' => $this->getTopChannels(2)
+                'data' => $this->getTopChannels(0)
             ],
             [
                 'field' => 'query_channel_number',
@@ -131,7 +131,7 @@ class CpaUserDayController extends BaseCurlController
                 'name' => '渠道码',
             ],
             [
-                'field' => 'at_time',
+                'field' => 'date_at',
                 'type' => 'date',
                 'attr' => 'data-range=~',//需要特殊分割
                 'name' => '时间范围',
