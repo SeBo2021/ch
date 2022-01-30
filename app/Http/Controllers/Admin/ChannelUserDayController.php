@@ -70,7 +70,7 @@ class ChannelUserDayController extends BaseCurlController
             [
                 'field' => 'install',
                 'minWidth' => 80,
-                'title' => '今日下载人数',
+                'title' => '安装量',
                 'align' => 'center',
             ],
             [
@@ -130,7 +130,7 @@ class ChannelUserDayController extends BaseCurlController
             [
                 'field' => 'install',
                 'minWidth' => 80,
-                'title' => '下载量',
+                'title' => '安装量',
                 'align' => 'center',
             ],
             [
