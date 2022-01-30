@@ -243,7 +243,7 @@ class TotalCpsController extends BaseCurlController
 
         $total = count($lists);
         $installReal = array_sum($installReal);
-        $install = array_sum($install);
+        $install = round(array_sum($install)/100);
         $hits = array_sum($hits);
         $access = array_sum($access);
         $active_users = array_sum($active_users);
