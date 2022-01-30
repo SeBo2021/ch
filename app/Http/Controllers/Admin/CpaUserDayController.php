@@ -147,7 +147,7 @@ class CpaUserDayController extends BaseCurlController
         $pagesize = $this->rq->input('limit', 30);
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
-        $model = $model->where('channel_type',0);
+        $model = $model->where('channel_id','>',0)->where('channel_type',0);
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
 
         $totalPrice = [];
