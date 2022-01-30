@@ -150,7 +150,7 @@ class CpaUserDayController extends BaseCurlController
         $totalPrice = [];
         $totalInstall = [];
         $totalInstallReal = [];
-        $result = $model->where('channel_type',0)->where('channel_id','>',0)->orderBy('channel_id','desc')->get();
+        $result = $model->where('channel_type',0)->where('channel_id','>',0)->orderBy('date_at','desc')->get();
         $lists = [];
         foreach ($result as $res) {
             $lists[] = $res;
