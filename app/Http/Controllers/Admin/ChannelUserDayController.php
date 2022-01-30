@@ -176,7 +176,7 @@ class ChannelUserDayController extends BaseCurlController
     {
         $type = $this->channelInfo ? $this->channelInfo->type : 2;
         return match ($type) {
-            0 => $this->getCpaIndexCols(),
+            0,1 => $this->getCpaIndexCols(),
             2 => $this->getCpsIndexCols(),
         };
 //        return $this->channelInfo->type;
