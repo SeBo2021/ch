@@ -202,7 +202,6 @@ class ChannelUserDayController extends BaseCurlController
                 foreach ($result as $res){
                     $install = (int)round($res->install/100);
                     $totalInstall[] = $install;
-                    $res->unit_price = $channelInfo->unit_price ?? 0;
                     $res->settlement_amount = round($res->unit_price * $install,2);
                     $totalPrice[] = $res->settlement_amount;
                     $handleLists[] = $res;
