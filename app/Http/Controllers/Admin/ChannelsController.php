@@ -174,6 +174,7 @@ class ChannelsController extends BaseCurlController
             $parentChannelInfo = $this->model->where('number',$parentChannelNumber)->first();
             $promotion_code = $this->rq->input('promotion_code') ?? $parentChannelInfo->promotion_code;
             $model->name = $this->rq->input('name');
+            $model->principal = $parentChannelInfo->principal;
             $model->promotion_code = $promotion_code;
             $model->pid = $parentChannelInfo->id;
             $model->number = 'S'.Str::random(6) . $model->id;
