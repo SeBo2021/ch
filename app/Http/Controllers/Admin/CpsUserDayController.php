@@ -166,9 +166,11 @@ class CpsUserDayController extends BaseCurlController
     #[ArrayShape(['total' => "mixed", 'totalRow' => "array", 'result' => "mixed"])] public function handleResultModel($model): array
     {
         $installTotal = $model->sum('install');
+        $installRealTotal = $model->sum('install_real');
         $totalRow = [
             'share_amount' =>$model->sum('share_amount'),
             'total_recharge_amount' => $model->sum('total_recharge_amount'),
+            'install_real' => $installRealTotal>0 ? $installRealTotal : '0',
             'install' => $installTotal>0 ? round($installTotal/100) : '0',
             'total_amount' => $model->sum('total_amount'),
         ];
