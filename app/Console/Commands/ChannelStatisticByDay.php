@@ -42,7 +42,7 @@ class ChannelStatisticByDay extends Command
             ->get(['id','pid','name','promotion_code','number','share_ratio']);
         $currentDate = date('Y-m-d');
         foreach ($channels as $channel) {
-            $exists = DB::table('channel_day_statistics')->where('channel_id',$channel->id)->where('date_at',$currentDate)->exists();
+            $exists = DB::connection('origin_mysql')->table('channel_day_statistics')->where('channel_id',$channel->id)->where('date_at',$currentDate)->exists();
             if(!$exists){
                 $insertData = [
                     'channel_name' => $channel->name,
