@@ -32,7 +32,7 @@
         }
     </style>
 
-    <div class="layui-card shadow panel">
+    <div class="layui-card shadow panel" style="display: none">
         <div class="layui-card-header">数据总览
             <div class="panel-action"  >
                 <a href="#" data-perform="panel-collapse"><i  title="点击可折叠" class="layui-icon layui-icon-subtraction"></i></a>
@@ -116,7 +116,7 @@
         </div>
     </div>
 
-    <div class="layui-card shadow panel" >
+    <div class="layui-card shadow panel" style="display: none">
         <div class="layui-card-header">15日下载数据统计图
             <div class="panel-action"  >
                 <a href="#" data-perform="panel-collapse"><i  title="点击可折叠" class="layui-icon layui-icon-subtraction"></i></a>
@@ -151,7 +151,7 @@
 
         //数据总览
         var dataOverview = function (){
-                $.get('/admin/home/list',ajaxParams.dataOverview,function (jsonRes) {
+                /*$.get('/admin/home/list',ajaxParams.dataOverview,function (jsonRes) {
                     if(ajaxParams.dataOverview.channel_type === 2){
                         $('#total_amount').text(jsonRes.total_amount);
                         $('#month_amount').text(jsonRes.month_amount);
@@ -164,7 +164,7 @@
                         $('#month_downloads').text(jsonRes.month_downloads);
                         $('#today_downloads').text(jsonRes.today_downloads);
                     }
-                });
+                });*/
             };
             // 15日图表
             summaryCpsOrCpa = function () {
