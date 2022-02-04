@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelCpa;
-use App\Models\ChannelCpsTotal;
 use App\Models\ChannelDayStatistic;
 use App\TraitClass\ChannelTrait;
 use Illuminate\Support\Facades\DB;
@@ -20,13 +19,6 @@ class ChannelUserDayController extends BaseCurlController
 
     public function setModel()
     {
-        /*$adminAccount = $this->getAdminAccount();
-        $this->channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',$adminAccount)->first();
-        $type = $this->channelInfo ? $this->channelInfo->type : 2;
-        return match ($type) {
-            0 => $this->model = new ChannelCpa(),
-            2 => $this->model = new ChannelCps(),
-        };*/
         return $this->model = new ChannelDayStatistic();
     }
 

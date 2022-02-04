@@ -27,7 +27,7 @@ class HomeController extends BaseCurlController
         $channelType = $request->input('channel_type',1);
         switch ($request->input('type','')){
             case 'dataOverview':
-                if($channelType==2){ //cps
+                /*if($channelType==2){ //cps
                     $queryBuild = DB::table('channel_cps')->where('channel_id',$channelId);
                     $totalAmount = $queryBuild->sum('total_recharge_amount');
                     $monthAmount = $queryBuild->whereDate('date_at','>=',date('Y-m-01'))->sum('total_recharge_amount');
@@ -53,11 +53,11 @@ class HomeController extends BaseCurlController
                         'month_downloads' => round($monthDownloads/100),
                         'today_downloads' => round($todayDownloads/100),
                     ];
-                }
+                }*/
                 break;
 
             case 'summaryCpsOrCpa':
-                if($channelType==2){ //cps
+                /*if($channelType==2){ //cps
                     $cpsData = DB::table('channel_cps')->where('channel_id',$channelId)->orderBy('date_at')->take(15)->get(['total_recharge_amount','orders','date_at']);
                     foreach ($cpsData as $item){
                         $json['x'][] = $item->date_at;
@@ -75,7 +75,7 @@ class HomeController extends BaseCurlController
                         $json['x'][] = date('Y-m-d',$item->at_time);
                         $json['y'][] = round($item->install/100);
                     }
-                }
+                }*/
 
         }
         return response()->json($json);

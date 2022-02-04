@@ -41,8 +41,9 @@ class ChannelStatisticByDay extends Command
         $channels = DB::connection('origin_mysql')->table('channels')->where('status',1)->where('type',2)
             ->get(['id','pid','name','promotion_code','number','share_ratio']);
         $currentDate = date('Y-m-d');
+        $statistic_table = 'channel_day_statistics';
         foreach ($channels as $channel) {
-            $exists = DB::connection('origin_mysql')->table('channel_day_statistics')->where('channel_id',$channel->id)->where('date_at',$currentDate)->exists();
+            $exists = DB::connection('origin_mysql')->table($statistic_table)->where('channel_id',$channel->id)->where('date_at',$currentDate)->exists();
             if(!$exists){
                 $insertData = [
                     'channel_name' => $channel->name,
@@ -59,7 +60,7 @@ class ChannelStatisticByDay extends Command
                     'share_amount' => 0,
                     'date_at' => $currentDate,
                 ];
-                DB::table('channel_cps')->insert($insertData);
+                DB::connection('origin_mysql')->table($statistic_table)->insert($insertData);
             }
         }
         $this->info('######渠道日统计初始化数据执行成功######');

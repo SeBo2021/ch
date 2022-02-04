@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\ChannelCpsTotal;
+
 use App\Models\ChannelDayStatistic;
 use App\TraitClass\ChannelTrait;
 use Illuminate\Support\Facades\DB;
