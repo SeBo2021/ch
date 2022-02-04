@@ -77,7 +77,7 @@ class TotalCpsController extends BaseCurlController
             [
                 'field' => 'active_users',
                 'minWidth' => 80,
-                'title' => '激活人数(有过观景记录的人)',
+                'title' => '活跃人数(有过观景记录的人)',
                 'align' => 'center',
             ],
             [
