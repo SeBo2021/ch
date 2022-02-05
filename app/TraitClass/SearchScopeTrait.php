@@ -123,6 +123,12 @@ trait SearchScopeTrait
                 case '!=':
                 case '<':
                 case '<=':
+                case 'mergeAndOr':
+                $query->where(function ($query) use ($k,$v){
+                    $query->where($v['k1'],$v['value'])
+                        ->orWhere($v['k2'],$v['value']);
+                });
+                    break;
                 case '=':
                     $query->where($k, $v['type'], $v['value']);
                     break;
