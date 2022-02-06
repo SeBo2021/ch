@@ -209,7 +209,7 @@ class TotalCpsController extends BaseCurlController
         $orders = [];
         $total_recharge_amount = [];
         //激活观影人数
-        $activeViews = DB::connection('origin_mysql')->table('users')->select('channel_id','SUM(IF(long_vedio_times<3,1,0)) as active_views')->groupBy('channel_id')->pluck('active_views','channel_id')->all();
+        $activeViews = DB::connection('origin_mysql')->table('users')->select('channel_id',DB::raw('SUM(IF(long_vedio_times<3,1,0)) as active_views'))->groupBy('channel_id')->pluck('active_views','channel_id')->all();
         foreach ($result as $res){
             $res->active_views = $activeViews[$res->channel_id];
             $lists[$res->channel_id] = $res;
