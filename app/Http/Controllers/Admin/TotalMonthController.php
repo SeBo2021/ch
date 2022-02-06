@@ -59,7 +59,13 @@ class TotalMonthController extends BaseCurlController
             [
                 'field' => 'active_users',
                 'minWidth' => 80,
-                'title' => '活跃人数(有过观景记录的人)',
+                'title' => '活跃人数',
+                'align' => 'center',
+            ],
+            [
+                'field' => 'active_views',
+                'minWidth' => 80,
+                'title' => '激活人数(有过观景记录的人)',
                 'align' => 'center',
             ],
             [
@@ -166,8 +172,10 @@ class TotalMonthController extends BaseCurlController
         $active_users = [];
         $total_orders = [];
         $total_amount = [];
-
+        //激活观影人数
+        $activeViews = $this->getActiveViews();
         foreach ($result as $res){
+            $res->active_views = $activeViews[$res->channel_id] ?? 0;
             $lists[$res->channel_id] = $res;
             $installVal = round($res->install/100);
             $install[] = $installVal;
