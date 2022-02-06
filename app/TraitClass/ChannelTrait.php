@@ -2,6 +2,7 @@
 
 namespace App\TraitClass;
 
+use App\Models\Users;
 use Illuminate\Support\Facades\DB;
 
 trait ChannelTrait
@@ -38,5 +39,13 @@ trait ChannelTrait
             ];
         }
         return $data;
+    }
+
+    public function getActiveViews(): array
+    {
+        return Users::query()
+            ->select('channel_id',DB::raw('SUM(IF(long_vedio_times<3,1,0)) as active_views'))
+            ->groupBy('channel_id')
+            ->pluck('active_views','channel_id')->all();
     }
 }
