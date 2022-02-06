@@ -183,6 +183,7 @@ class TotalCpsController extends BaseCurlController
     {
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
+        $date_at = $this->rq->input('query_date_at', null);
 
         $fields = 'SUM(access) as access,
                 SUM(hits) as hits,
@@ -209,7 +210,7 @@ class TotalCpsController extends BaseCurlController
         $orders = [];
         $total_recharge_amount = [];
         //激活观影人数
-        $activeViews = $this->getActiveViews();
+        $activeViews = $this->getActiveViews($date_at);
         foreach ($result as $res){
             $res->active_views = $activeViews[$res->channel_id] ?? 0;
             $lists[$res->channel_id] = $res;
