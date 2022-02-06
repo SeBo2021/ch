@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Channel;
 use App\Models\Users;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -31,9 +32,9 @@ class ChannelsController extends BaseCurlController
         ],
     ];
 
-    public function setModel(): Users
+    public function setModel(): Channel
     {
-        return $this->model = new Users();
+        return $this->model = new Channel();
     }
 
     public function indexCols(): array
