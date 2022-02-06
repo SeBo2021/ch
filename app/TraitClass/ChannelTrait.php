@@ -47,7 +47,7 @@ trait ChannelTrait
             ->select('channel_id',DB::raw('SUM(IF(long_vedio_times<3,1,0)) as active_views'));
         if($date_at!==null){
             $dateArr = explode('~',$date_at);
-            $build = $build->whereBetween('created_at',[trim($dateArr[0]),trim($dateArr[1])]);
+            $build = $build->whereBetween('created_at',[trim($dateArr[0]).' 00:00:00',trim($dateArr[1]).' 23:59:59']);
         }
         return $build->groupBy('channel_id')
             ->pluck('active_views','channel_id')->all();
