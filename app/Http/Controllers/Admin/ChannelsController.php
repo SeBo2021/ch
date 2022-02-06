@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Channel;
-use App\Models\ChannelDayStatistic;
-use App\Services\UiService;
-use Illuminate\Http\Request;
+use App\Models\Users;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ArrayShape;
-use phpDocumentor\Reflection\Types\False_;
 
 class ChannelsController extends BaseCurlController
 {
@@ -37,9 +31,9 @@ class ChannelsController extends BaseCurlController
         ],
     ];
 
-    public function setModel(): Channel
+    public function setModel(): Users
     {
-        return $this->model = new Channel();
+        return $this->model = new Users();
     }
 
     public function indexCols(): array
@@ -144,27 +138,6 @@ class ChannelsController extends BaseCurlController
             'created_at' =>$date ?? date('Y-m-d H:i:s'),
         ];
         DB::connection('origin_mysql')->table('statistic_channel_deduction')->insert($insertData);
-    }
-
-    public function beforeSaveEvent($model, $id = '')
-    {
-        /*if((!$this->rq->name) && (!$model->rq->promotion_code)){
-            return (['code' => -1, 'msg' => lang('系统错误')]);
-        }
-        $one = DB::connection('origin_mysql')->table('channels')->where('name',$this->rq->name)->first();
-        //dump($one);
-        if($one){
-            return (['code' => -1, 'msg' => lang('已有相同渠道')]);
-        }*/
-        /*$validated = Validator::make([
-            'name' => $this->rq->name
-        ],[
-            'name' => 'required|unique:name'
-        ])->validated();
-        if(!isset($validated['name'])){
-            return (['code' => -1, 'msg' => lang('名称不能为空且不能相同')]);
-        }*/
-        return $model;
     }
 
     public function afterSaveSuccessEvent($model, $id = '')

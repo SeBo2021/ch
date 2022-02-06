@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ChannelDayStatistic;
+use App\Models\Users;
 use App\TraitClass\ChannelTrait;
 use Illuminate\Support\Facades\DB;
 use JetBrains\PhpStorm\ArrayShape;
@@ -76,7 +77,13 @@ class TotalCpsController extends BaseCurlController
             [
                 'field' => 'active_users',
                 'minWidth' => 80,
-                'title' => '活跃人数(有过观景记录的人)',
+                'title' => '活跃人数',
+                'align' => 'center',
+            ],
+            [
+                'field' => 'active_views',
+                'minWidth' => 80,
+                'title' => '激活人数(有过观景记录的人)',
                 'align' => 'center',
             ],
             [
@@ -138,23 +145,6 @@ class TotalCpsController extends BaseCurlController
         $item->install = round($item->install/100);
         return $item;
     }
-
-    /*public function getCpsChannels()
-    {
-        $res = DB::connection('origin_mysql')->table('channels')
-            ->where('status',1)
-            ->where('type',2)
-            ->where('pid',0)
-            ->get(['id','name']);
-        $data = $this->uiService->allDataArr('请选择渠道(一级)');
-        foreach ($res as $item) {
-            $data[$item->id] = [
-                'id' => $item->id,
-                'name' => $item->name,
-            ];
-        }
-        return $data;
-    }*/
 
     public function setOutputSearchFormTpl($shareData)
     {
@@ -218,7 +208,10 @@ class TotalCpsController extends BaseCurlController
         $share_amount = [];
         $orders = [];
         $total_recharge_amount = [];
+        //激活观影人数
+        $activeViews = Users::query()->select('channel_id','SUM(IF(long_vedio_times<3,1,0)) as active_views')->groupBy('channel_id')->pluck('active_views','channel_id')->all();
         foreach ($result as $res){
+            $res->active_views = $activeViews[$res->channel_id];
             $lists[$res->channel_id] = $res;
             $installReal[] = $res->install_real;
             $install[] = $res->install;
