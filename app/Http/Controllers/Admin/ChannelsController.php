@@ -311,6 +311,7 @@ class ChannelsController extends BaseCurlController
 //        $item->status = UiService::switchTpl('status', $item,'');
         $status = [0=>'禁用',1=>'启用'];
         $item->status = $status[$item->status];
+        $item->type += 0;
         $item->type = $this->channelType[$item->type]['name'];
         return $item;
     }
