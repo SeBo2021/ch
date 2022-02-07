@@ -84,7 +84,7 @@ class HomeController extends BaseCurlController
     public function home(){
         $adminAccount = admin('account');
         if($adminAccount == 'root'){
-            return "首页";
+            return "";
         }
         $channelInfo = DB::connection('origin_mysql')->table('channels')->where('number',$adminAccount)->first();
         $channel_id = $channelInfo ? $channelInfo->id : 0;
