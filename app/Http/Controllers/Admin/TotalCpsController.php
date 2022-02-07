@@ -211,6 +211,7 @@ class TotalCpsController extends BaseCurlController
         $total_recharge_amount = [];
         //激活观影人数
         $activeViews = $this->getActiveViews($date_at);
+        //$getInstall =
         foreach ($result as $res){
             $res->active_views = $activeViews[$res->channel_id] ?? 0;
             $lists[$res->channel_id] = $res;
@@ -270,7 +271,8 @@ class TotalCpsController extends BaseCurlController
 
         $sql = 'replace into channel_day_statistics(channel_id,access,hits,install_real,install,date_at) select channel_id,access,hits,install_real,install,from_unixtime(at_time, '%Y-%m-%d') as date_at from statistic_day_deduction';
         $sql = 'update channel_day_statistics inner join (select channel_id,from_unixtime(at_time, '%Y-%m-%d') as date_at,count(uid) as users from users_day group by channel_id,date_at) u on channel_day_statistics.channel_id=u.channel_id and channel_day_statistics.date_at=u.date_at set active_users=u.users';
-        更新渠道类型
+    //update channel_day_statistics inner join (select channel_id,count(id) as users,date_format(created_at, '%Y-%m-%d') as date_at from users group by channel_id,date_at) u on channel_day_statistics.channel_id=u.channel_id and channel_day_statistics.date_at=u.date_at set install_real=u.users;
+    更新渠道类型
         $sql = 'update channel_day_statistics inner join (select type,id from channels) c on channel_day_statistics.channel_id=c.id set channel_day_statistics.channel_type=c.type';
         $sql = 'update channel_day_statistics inner join (select type,id,pid from channels) c on channel_day_statistics.channel_id=c.id set channel_day_statistics.channel_pid=c.pid';
     }*/
