@@ -46,8 +46,8 @@
                        data-w="400px" data-h="300px"
                        data-url="{{ nroute('admin.admin.password') }}"
                        data-post_url="{{ nroute('admin.admin.password_post') }}">修改密码</a></dd>
+                    <hr>
                 @endif
-                <hr>
                 <dd layadmin-event="logout" style="text-align: center;"><a href="{{ nroute('admin.logout') }}">退出</a></dd>
             </dl>
         </li>
