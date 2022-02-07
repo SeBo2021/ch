@@ -39,9 +39,9 @@
                 <cite>{{ admin('nickname') }}</cite>
             </a>
             <dl class="layui-nav-child">
-                <dd><a lay-href="{{ nroute('admin.log.index') }}">{{ lang('操作日志') }}</a></dd>
                 @if(admin('account')=='root')
-                <dd><a href="javascript:void(0)" ui-event="openIframePost"
+                    <dd><a lay-href="{{ nroute('admin.log.index') }}">{{ lang('操作日志') }}</a></dd>
+                    <dd><a href="javascript:void(0)" ui-event="openIframePost"
                        data-title="{{ lang('修改密码') }}"
                        data-w="400px" data-h="300px"
                        data-url="{{ nroute('admin.admin.password') }}"
