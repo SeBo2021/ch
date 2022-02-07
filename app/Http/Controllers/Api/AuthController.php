@@ -158,7 +158,9 @@ class AuthController extends Controller
             'source_info'=> $_SERVER['HTTP_USER_AGENT'],
             'device_system'=> $login_info['device_system'] ?? 0,
         ];
-        ProcessLogin::dispatchAfterResponse($login_log_data);
+//        ProcessLogin::dispatchAfterResponse($login_log_data);
+        $job = new ProcessLogin($login_log_data);
+        $this->dispatch($job);
 
         Token::query()->where('name',$login_info['account'])->delete();
         //重新分配token
