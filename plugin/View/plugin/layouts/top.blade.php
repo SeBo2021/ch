@@ -40,11 +40,11 @@
             </a>
             <dl class="layui-nav-child">
                 <dd><a lay-href="{{ nroute('admin.log.index') }}">{{ lang('操作日志') }}</a></dd>
-                <dd><a href="javascript:void(0)" ui-event="openIframePost"
+                {{--<dd><a href="javascript:void(0)" ui-event="openIframePost"
                        data-title="{{ lang('修改密码') }}"
                        data-w="400px" data-h="300px"
                        data-url="{{ nroute('admin.admin.password') }}"
-                       data-post_url="{{ nroute('admin.admin.password_post') }}">修改密码</a></dd>
+                       data-post_url="{{ nroute('admin.admin.password_post') }}">修改密码</a></dd>--}}
                 <hr>
                 <dd layadmin-event="logout" style="text-align: center;"><a href="{{ nroute('admin.logout') }}">退出</a></dd>
             </dl>
