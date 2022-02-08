@@ -183,7 +183,7 @@ class TotalMonthController extends BaseCurlController
         foreach ($result as $res){
             $res->active_views = $activeViews[$res->channel_id] ?? 0;
             $lists[$res->channel_id] = $res;
-            $installVal = round($res->install/100);
+            $installVal = (int)round($res->install/100);
             $install[] = $installVal;
             $install_real[] = $res->install_real;
             $access[] = $res->access;
