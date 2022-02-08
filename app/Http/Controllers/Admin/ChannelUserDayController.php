@@ -207,15 +207,15 @@ class ChannelUserDayController extends BaseCurlController
             }else{ //cps
                 $total_recharge_amount = 0;
                 $share_amount = 0;
-                $installTotal = 0;
+                $totalInstall = [];
                 foreach ($result as $res){
                     $handleLists[] = $res;
                     $share_amount += $res->share_amount;
                     $total_recharge_amount += $res->total_recharge_amount;
-                    $res->install_real += 0;
-                    $installTotal += $res->install_real;
+                    $install = (int)round($res->install/100);
+                    $totalInstall[] = $install;
                 }
-
+                $installTotal = array_sum($totalInstall);
                 $totalRow = [
                     'install' => $installTotal>0 ? $installTotal : '0',
                     'total_recharge_amount' => number_format($total_recharge_amount, 2, '.', ''),
