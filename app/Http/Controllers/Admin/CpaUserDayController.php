@@ -153,28 +153,29 @@ class CpaUserDayController extends BaseCurlController
         $totalPrice = [];
         $totalInstall = [];
         $totalInstallReal = [];
-        $result = $model->where('channel_status',1)->where('channel_type',0)->where('channel_id','>',0)->orderBy('date_at','desc')->get();
-        $lists = [];
+        $model = $model->where('channel_status',1)->where('channel_type',0)->where('channel_id','>',0)->orderBy('date_at','desc');
+        $total = $model->count();
+        $result = $model->forPage($page, $pagesize)->get();
         foreach ($result as $res) {
-            $lists[] = $res;
-            //$install = (int)round($res->install/100);
             $totalInstall[] =  $res->install;
             $totalInstallReal[] = $res->install_real;
             $res->settlement_amount = round($res->unit_price * $res->install/100);
             $totalPrice[] = $res->settlement_amount;
         }
+
+        $install = round(array_sum($totalInstall)/100);
+        $installReal = array_sum($totalInstallReal);
+        $settlement_amount = round(array_sum($totalPrice));
         $totalRow = [
-            'install' => round(array_sum($totalInstall)/100),
-            'install_real' => array_sum($totalInstallReal),
-            'settlement_amount' => round(array_sum($totalPrice))
+            'install' => $install>0 ? $install : '0',
+            'install_real' => $installReal>0 ? $installReal : '0',
+            'settlement_amount' => $settlement_amount>0 ? $settlement_amount : '0',
         ];
-        $offset = ($page-1)*$pagesize;
-        $total = count($lists);
-        $currentPageData = array_slice($lists,$offset,$pagesize);
+
         return [
             'total' => $total,
             'totalRow' => $totalRow ?? [],
-            'result' => $currentPageData
+            'result' => $result
         ];
     }
 

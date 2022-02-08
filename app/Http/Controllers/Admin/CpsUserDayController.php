@@ -177,15 +177,14 @@ class CpsUserDayController extends BaseCurlController
             'share_amount' =>$model->sum('share_amount'),
             'total_recharge_amount' => $model->sum('total_recharge_amount'),
             'install_real' => $installRealTotal>0 ? $installRealTotal : '0',
-            //'install' => $installTotal>0 ? '≈'.round($installTotal/100) : '0',
             'total_amount' => $model->sum('total_amount'),
         ];
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
-        $order_by_name = $this->orderByName();
-        $order_by_type = $this->orderByType();
-        $model = $model->where('channel_type',2);
-        $model = $this->orderBy($model, $order_by_name, $order_by_type);
+        //$order_by_name = $this->orderByName();
+        //$order_by_type = $this->orderByType();
+        $model = $model->where('channel_type',2)->orderBy('date_at','desc');
+        //$model = $this->orderBy($model, $order_by_name, $order_by_type);
         $total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
 
