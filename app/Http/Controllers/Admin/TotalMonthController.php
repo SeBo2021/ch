@@ -140,7 +140,7 @@ class TotalMonthController extends BaseCurlController
                 'field' => 'at_time',
                 'type' => 'date',
                 'attr' => 'data-range=~',//需要特殊分割
-                'name' => '时间范围',
+                'name' => '选择日期(默认三月内)',
             ]
         ];
         //赋值到ui数组里面必须是`search`的key值

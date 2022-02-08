@@ -167,7 +167,7 @@ class TotalCpsController extends BaseCurlController
                 'field' => 'query_date_at',
                 'type' => 'date',
                 'attr' => 'data-range=~',//需要特殊分割
-                'name' => '选择日期',
+                'name' => '选择日期(默认三月内)',
             ]
         ];
         //赋值到ui数组里面必须是`search`的key值
@@ -195,9 +195,15 @@ class TotalCpsController extends BaseCurlController
                 SUM(orders) as orders,
                 SUM(total_recharge_amount) as total_recharge_amount,
                 SUM(install) as install';
-        $model = $model->where('channel_type',2)->where('channel_status',1)->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
-        $result = $model->orderBy('channel_id','desc')->get();
 
+        if($date_at===null){
+            $defaultDate = date('Y-m-d',strtotime('-3 month'));
+            $model = $model->where('data_at','>=',$defaultDate);
+        }
+        $model = $model->where('channel_type',2)->where('channel_status',1);
+        $result = $model->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',
+            DB::raw($fields))
+            ->groupBy('channel_id')->orderBy('channel_id','desc')->get();
         $lists = [];
         $installReal = [];
         $install = [];
