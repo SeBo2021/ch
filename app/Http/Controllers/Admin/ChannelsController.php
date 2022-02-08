@@ -46,7 +46,7 @@ class ChannelsController extends BaseCurlController
             [
                 'field' => 'number',
                 'minWidth' => 80,
-                'title' => '账号',
+                'title' => '账号(渠道码)',
 //                'hide' => true,
                 'align' => 'center',
             ],
