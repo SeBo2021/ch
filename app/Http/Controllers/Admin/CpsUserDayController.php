@@ -165,6 +165,7 @@ class CpsUserDayController extends BaseCurlController
 
     #[ArrayShape(['total' => "mixed", 'totalRow' => "array", 'result' => "mixed"])] public function handleResultModel($model): array
     {
+        $model = $model->where('channel_status',1);
         $installTotal = $model->sum('install');
         $installRealTotal = $model->sum('install_real');
         $totalRow = [

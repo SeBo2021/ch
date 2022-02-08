@@ -195,7 +195,7 @@ class TotalCpsController extends BaseCurlController
                 SUM(orders) as orders,
                 SUM(total_recharge_amount) as total_recharge_amount,
                 SUM(install) as install';
-        $model = $model->where('channel_type',2)->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
+        $model = $model->where('channel_type',2)->where('channel_status',1)->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
         $result = $model->orderBy('channel_id','desc')->get();
 
         $lists = [];
