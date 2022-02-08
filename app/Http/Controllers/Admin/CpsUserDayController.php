@@ -172,7 +172,7 @@ class CpsUserDayController extends BaseCurlController
             'share_amount' =>$model->sum('share_amount'),
             'total_recharge_amount' => $model->sum('total_recharge_amount'),
             'install_real' => $installRealTotal>0 ? $installRealTotal : '0',
-            'install' => $installTotal>0 ? round($installTotal/100) : '0',
+            'install' => $installTotal>0 ? '≈'.round($installTotal/100) : '0',
             'total_amount' => $model->sum('total_amount'),
         ];
         $page = $this->rq->input('page', 1);

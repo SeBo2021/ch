@@ -214,7 +214,7 @@ class TotalCpaController extends BaseCurlController
         $orders = array_sum($orders);
         $total_recharge_amount = array_sum($total_recharge_amount);
         $totalRow = [
-            'install' => $install>0 ? $install :'0',
+            'install' => $install>0 ? '≈'.$install :'0',
             'install_real' => $install_real>0 ? $install_real :'0',
             'hits' => $hits>0 ? $hits :'0',
             'access' => $access>0 ? $access :'0',

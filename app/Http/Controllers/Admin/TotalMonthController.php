@@ -200,7 +200,7 @@ class TotalMonthController extends BaseCurlController
         $total_orders = array_sum($total_orders);
         $total_amount = array_sum($total_amount);
         $totalRow = [
-            'install' => $install>0 ? $install :'0',
+            'install' => $install>0 ? '≈'.$install :'0',
             'install_real' => $install_real>0 ? $install_real :'0',
             'hits' => $hits>0 ? $hits :'0',
             'access' => $access>0 ? $access :'0',
