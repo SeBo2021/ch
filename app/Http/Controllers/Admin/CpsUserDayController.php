@@ -166,13 +166,13 @@ class CpsUserDayController extends BaseCurlController
     #[ArrayShape(['total' => "mixed", 'totalRow' => "array", 'result' => "mixed"])] public function handleResultModel($model): array
     {
         $model = $model->where('channel_status',1);
-        $installTotal = $model->sum('install');
+        //$installTotal = $model->sum('install');
         $installRealTotal = $model->sum('install_real');
         $totalRow = [
             'share_amount' =>$model->sum('share_amount'),
             'total_recharge_amount' => $model->sum('total_recharge_amount'),
             'install_real' => $installRealTotal>0 ? $installRealTotal : '0',
-            'install' => $installTotal>0 ? '≈'.round($installTotal/100) : '0',
+            //'install' => $installTotal>0 ? '≈'.round($installTotal/100) : '0',
             'total_amount' => $model->sum('total_amount'),
         ];
         $page = $this->rq->input('page', 1);
@@ -183,6 +183,14 @@ class CpsUserDayController extends BaseCurlController
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
         $total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
+
+        $totalInstall = [];
+        foreach ($result as $res){
+            $install = (int)round($res->install/100);
+            $totalInstall[] = $install;
+        }
+        $installTotal = array_sum($totalInstall);
+        $totalRow['install'] = $installTotal>0 ? $installTotal : '0';
         return [
             'total' => $total,
             'totalRow' => $totalRow ?? [],
