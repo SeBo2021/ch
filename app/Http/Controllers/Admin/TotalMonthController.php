@@ -151,8 +151,12 @@ class TotalMonthController extends BaseCurlController
     {
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
-        $date_at = $this->rq->input('query_date_at', null);
 
+        $date_at = $this->rq->input('query_date_at', null);
+        if($date_at===null){
+            $defaultDate = date('Y-m-d',strtotime('-3 month'));
+            $model = $model->where('date_at','>=',$defaultDate);
+        }
         $fields = 'SUM(access) as access,
                 SUM(hits) as hits,
                 SUM(install_real) as install_real,
@@ -163,6 +167,7 @@ class TotalMonthController extends BaseCurlController
                 SUM(orders) as orders,
                 SUM(total_recharge_amount) as total_recharge_amount,
                 SUM(install) as install';
+
         $model = $model->where('channel_type',1)->where('channel_status',1)->where('channel_id','>',0)->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
         $result = $model->orderBy('channel_id','desc')->get();
         $lists = [];

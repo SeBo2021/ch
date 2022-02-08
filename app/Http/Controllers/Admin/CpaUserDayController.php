@@ -134,7 +134,7 @@ class CpaUserDayController extends BaseCurlController
                 'field' => 'date_at',
                 'type' => 'date',
                 'attr' => 'data-range=~',//需要特殊分割
-                'name' => '时间范围',
+                'name' => '选择日期(默认三月内)',
             ]
         ];
         //赋值到ui数组里面必须是`search`的key值
@@ -143,10 +143,13 @@ class CpaUserDayController extends BaseCurlController
 
     public function handleResultModel($model): array
     {
+        $date_at = $this->rq->input('query_date_at', null);
+        if($date_at===null){
+            $defaultDate = date('Y-m-d',strtotime('-3 month'));
+            $model = $model->where('date_at','>=',$defaultDate);
+        }
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
-
-
         $totalPrice = [];
         $totalInstall = [];
         $totalInstallReal = [];

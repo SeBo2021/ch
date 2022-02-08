@@ -156,7 +156,7 @@ class CpsUserDayController extends BaseCurlController
                 'field' => 'query_date_at',
                 'type' => 'date',
                 'attr' => 'data-range=~',//需要特殊分割
-                'name' => '时间范围',
+                'name' => '选择日期(默认三月内)',
             ]
         ];
         //赋值到ui数组里面必须是`search`的key值
@@ -165,6 +165,11 @@ class CpsUserDayController extends BaseCurlController
 
     #[ArrayShape(['total' => "mixed", 'totalRow' => "array", 'result' => "mixed"])] public function handleResultModel($model): array
     {
+        $date_at = $this->rq->input('query_date_at', null);
+        if($date_at===null){
+            $defaultDate = date('Y-m-d',strtotime('-3 month'));
+            $model = $model->where('date_at','>=',$defaultDate);
+        }
         $model = $model->where('channel_status',1);
         //$installTotal = $model->sum('install');
         $installRealTotal = $model->sum('install_real');
