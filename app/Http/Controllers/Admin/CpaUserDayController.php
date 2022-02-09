@@ -157,15 +157,16 @@ class CpaUserDayController extends BaseCurlController
         $total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
         foreach ($result as $res) {
-            $totalInstall[] = (int)round($res->install/100);
+            $installValue = (int)round($res->install/100);
+            $totalInstall[] = $installValue;
             $totalInstallReal[] = $res->install_real;
-            $res->settlement_amount = round($res->unit_price * $res->install/100);
+            $res->settlement_amount = $res->unit_price * $installValue;
             $totalPrice[] = $res->settlement_amount;
         }
 
         $install = array_sum($totalInstall);
         $installReal = array_sum($totalInstallReal);
-        $settlement_amount = round(array_sum($totalPrice));
+        $settlement_amount = array_sum($totalPrice);
         $totalRow = [
             'install' => $install>0 ? $install : '0',
             'install_real' => $installReal>0 ? $installReal : '0',
