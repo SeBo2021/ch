@@ -142,7 +142,7 @@ class TotalCpsController extends BaseCurlController
         $item->cps = 'CPS';
         $item->share_amount = number_format($item->share_amount, 2, '.', '');
         $item->share_ratio = $item->share_ratio . '%';
-        $item->install = '≈'.ceil($item->install/100);
+        $item->install = '≈'.round($item->install/100);
         return $item;
     }
 
@@ -222,7 +222,7 @@ class TotalCpsController extends BaseCurlController
             $res->active_views = $activeViews[$res->channel_id] ?? 0;
             $lists[$res->channel_id] = $res;
             $installReal[] = $res->install_real;
-            $installVal = (int)ceil($res->install/100);
+            $installVal = (int)round($res->install/100);
             $install[] = $installVal;
             $access[] = $res->access;
             $hits[] = $res->hits;
