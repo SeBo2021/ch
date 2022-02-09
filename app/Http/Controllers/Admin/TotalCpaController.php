@@ -103,8 +103,9 @@ class TotalCpaController extends BaseCurlController
     public function setListOutputItemExtend($item)
     {
         //$item->install = round($item->install/100);
-        $item->install = '≈'.ceil($item->install/100);
-        $item->share_amount = $item->unit_price * $item->install;
+        $install = (int)ceil($item->install/100);
+        $item->install = '≈'.$install;
+        $item->share_amount = $item->unit_price * $install;
         $item->level = $item->pid > 0 ? '二级' : '一级';
         if($item->channel_id ==0){
             $item->channel_name = '官方';
