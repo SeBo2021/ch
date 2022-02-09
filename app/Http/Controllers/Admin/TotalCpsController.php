@@ -142,7 +142,6 @@ class TotalCpsController extends BaseCurlController
         $item->cps = 'CPS';
         $item->share_amount = number_format($item->share_amount, 2, '.', '');
         $item->share_ratio = $item->share_ratio . '%';
-        //$item->install = '≈'.round($item->install/100);
         return $item;
     }
 
@@ -251,7 +250,7 @@ class TotalCpsController extends BaseCurlController
         $total_recharge_amount = array_sum($total_recharge_amount);
         $totalRow = [
             'install_real' => $installReal>0 ? $installReal :'0',
-            'install' => $install>0 ? '≈'.$install :'0',
+            'install' => $install>0 ? $install :'0',
             'hits' => $hits>0 ? $hits :'0',
             'access' => $access>0 ? $access :'0',
             'active_users' => $active_users>0 ? $active_users :'0',
