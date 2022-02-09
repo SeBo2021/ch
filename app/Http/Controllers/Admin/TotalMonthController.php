@@ -85,10 +85,8 @@ class TotalMonthController extends BaseCurlController
 
     public function setListOutputItemExtend($item)
     {
-        $item->install = '≈'.ceil($item->install/100);
         $item->level = $item->pid > 0 ? '二级' : '一级';
         if($item->channel_id ==0){
-            $item->install_real = round($item->install_real/100);
             $item->unit_price = '-';
         }
         $item->type = '包月';
@@ -150,7 +148,6 @@ class TotalMonthController extends BaseCurlController
     {
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
-
         $date_at = $this->rq->input('query_date_at', null);
         if($date_at===null){
             $defaultDate = date('Y-m-d',strtotime('-3 month'));
@@ -165,7 +162,7 @@ class TotalMonthController extends BaseCurlController
                 SUM(share_amount) as share_amount,
                 SUM(orders) as orders,
                 SUM(total_recharge_amount) as total_recharge_amount,
-                SUM(install) as install';
+                SUM(ROUND(install/100)) as install';
 
         $model = $model->where('channel_type',1)->where('channel_status',1)->where('channel_id','>',0)->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
         $result = $model->orderBy('channel_id','desc')->get();
@@ -182,7 +179,7 @@ class TotalMonthController extends BaseCurlController
         foreach ($result as $res){
             $res->active_views = $activeViews[$res->channel_id] ?? 0;
             $lists[$res->channel_id] = $res;
-            $installVal = (int)round($res->install/100);
+            $installVal = (int)$res->install;
             $install[] = $installVal;
             $install_real[] = $res->install_real;
             $access[] = $res->access;
@@ -204,7 +201,7 @@ class TotalMonthController extends BaseCurlController
         $total_orders = array_sum($total_orders);
         $total_amount = array_sum($total_amount);
         $totalRow = [
-            'install' => $install>0 ? '≈'.$install :'0',
+            'install' => $install>0 ? $install :'0',
             'install_real' => $install_real>0 ? $install_real :'0',
             'hits' => $hits>0 ? $hits :'0',
             'access' => $access>0 ? $access :'0',
