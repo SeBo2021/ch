@@ -142,7 +142,7 @@ class TotalCpsController extends BaseCurlController
         $item->cps = 'CPS';
         $item->share_amount = number_format($item->share_amount, 2, '.', '');
         $item->share_ratio = $item->share_ratio . '%';
-        $item->install = '≈'.round($item->install/100);
+        //$item->install = '≈'.round($item->install/100);
         return $item;
     }
 
@@ -194,7 +194,7 @@ class TotalCpsController extends BaseCurlController
                 SUM(share_amount) as share_amount,
                 SUM(orders) as orders,
                 SUM(total_recharge_amount) as total_recharge_amount,
-                SUM(install) as install';
+                SUM(ROUND(install/100)) as install';
 
         if($date_at===null){
             $defaultDate = date('Y-m-d',strtotime('-3 month'));
@@ -222,8 +222,8 @@ class TotalCpsController extends BaseCurlController
             $res->active_views = $activeViews[$res->channel_id] ?? 0;
             $lists[$res->channel_id] = $res;
             $installReal[] = $res->install_real;
-            $installVal = (int)round($res->install/100);
-            $install[] = $installVal;
+            //$installVal = (int)round($res->install/100);
+            $install[] = $res->install;
             $access[] = $res->access;
             $hits[] = $res->hits;
             $active_users[] = $res->active_users;
