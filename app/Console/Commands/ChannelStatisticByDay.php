@@ -38,7 +38,7 @@ class ChannelStatisticByDay extends Command
      */
     public function handle()
     {
-        $channels = DB::connection('origin_mysql')->table('channels')->where('status',1)->where('type',2)
+        $channels = DB::connection('origin_mysql')->table('channels')->where('status',1)
             ->get(['id','pid','name','promotion_code','number','share_ratio']);
         $currentDate = date('Y-m-d');
         $statistic_table = 'channel_day_statistics';
