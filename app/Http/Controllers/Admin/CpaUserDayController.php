@@ -143,19 +143,20 @@ class CpaUserDayController extends BaseCurlController
 
     public function handleResultModel($model): array
     {
+        $model = $model->where('channel_type',0)->where('channel_status',1)->where('channel_id','>',0);
+        $page = $this->rq->input('page', 1);
+        $pagesize = $this->rq->input('limit', 30);
+
         $date_at = $this->rq->input('query_date_at', null);
         if($date_at===null){
             $defaultDate = date('Y-m-d',strtotime('-3 month'));
             $model = $model->where('date_at','>=',$defaultDate);
         }
-        $page = $this->rq->input('page', 1);
-        $pagesize = $this->rq->input('limit', 30);
+        $total = $model->count();
+        $result = $model->orderBy('date_at','desc')->forPage($page, $pagesize)->get();
         $totalPrice = [];
         $totalInstall = [];
         $totalInstallReal = [];
-        $model = $model->where('channel_status',1)->where('channel_type',0)->where('channel_id','>',0)->orderBy('date_at','desc');
-        $total = $model->count();
-        $result = $model->forPage($page, $pagesize)->get();
         foreach ($result as $res) {
             $installValue = (int)round($res->install/100);
             $totalInstall[] = $installValue;

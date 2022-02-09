@@ -165,33 +165,38 @@ class CpsUserDayController extends BaseCurlController
 
     #[ArrayShape(['total' => "mixed", 'totalRow' => "array", 'result' => "mixed"])] public function handleResultModel($model): array
     {
+        $model = $model->where('channel_type',2)->where('channel_status',1);
         $date_at = $this->rq->input('query_date_at', null);
         if($date_at===null){
             $defaultDate = date('Y-m-d',strtotime('-3 month'));
             $model = $model->where('date_at','>=',$defaultDate);
         }
-        $model = $model->where('channel_type',2)->where('channel_status',1);
-        //$installTotal = $model->sum('install');
-        $installRealTotal = $model->sum('install_real');
-        $totalRow = [
-            'share_amount' =>$model->sum('share_amount'),
-            'total_recharge_amount' => $model->sum('total_recharge_amount'),
-            'install_real' => $installRealTotal>0 ? $installRealTotal : '0',
-            'total_amount' => $model->sum('total_amount'),
-        ];
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
-        $model = $model->orderBy('date_at','desc');
         $total = $model->count();
-        $result = $model->forPage($page, $pagesize)->get();
+        $result = $model->orderBy('date_at','desc')->forPage($page, $pagesize)->get();
 
         $totalInstall = [];
+        $totalInstallReal = [];
+        $shareAmount = [];
+        $totalAmount = [];
+        $totalRechargeAmount = [];
         foreach ($result as $res){
             $install = (int)round($res->install/100);
             $totalInstall[] = $install;
+            $totalInstallReal[] = $res->install_real;
+            $shareAmount[] = $res->share_amount;
+            $totalAmount[] = $res->total_amount;
+            $totalRechargeAmount[] = $res->total_recharge_amount;
         }
         $installTotal = array_sum($totalInstall);
+        $installReal = array_sum($totalInstallReal);
+        $shareAmount = array_sum($shareAmount);
         $totalRow['install'] = $installTotal>0 ? $installTotal : '0';
+        $totalRow['install_real'] = $installReal>0 ? $installReal : '0';
+        $totalRow['share_amount'] = $shareAmount>0 ? $shareAmount : '0';
+        $totalRow['total_amount'] = $totalAmount>0 ? $totalAmount : '0';
+        $totalRow['total_recharge_amount'] = $totalRechargeAmount>0 ? $totalRechargeAmount : '0';
         return [
             'total' => $total,
             'totalRow' => $totalRow ?? [],
