@@ -103,7 +103,7 @@ class TotalCpaController extends BaseCurlController
     public function setListOutputItemExtend($item)
     {
         //$item->install = round($item->install/100);
-        $install = (int)ceil($item->install/100);
+        $install = (int)round($item->install/100);
         $item->install = '≈'.$install;
         $item->share_amount = $item->unit_price * $install;
         $item->level = $item->pid > 0 ? '二级' : '一级';
@@ -192,7 +192,7 @@ class TotalCpaController extends BaseCurlController
         foreach ($result as $res){
             $res->active_views = $activeViews[$res->channel_id] ?? 0;
             $lists[$res->channel_id] = $res;
-            $installVal = (int)ceil($res->install/100);
+            $installVal = (int)round($res->install/100);
             $install[] = $installVal;
             $install_real[] = $res->install_real;
             $access[] = $res->access;
