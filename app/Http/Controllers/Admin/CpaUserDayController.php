@@ -131,7 +131,7 @@ class CpaUserDayController extends BaseCurlController
                 'name' => '渠道码',
             ],
             [
-                'field' => 'date_at',
+                'field' => 'query_date_at',
                 'type' => 'date',
                 'attr' => 'data-range=~',//需要特殊分割
                 'name' => '选择日期(默认三月内)',
