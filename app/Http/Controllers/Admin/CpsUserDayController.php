@@ -170,7 +170,7 @@ class CpsUserDayController extends BaseCurlController
             $defaultDate = date('Y-m-d',strtotime('-3 month'));
             $model = $model->where('date_at','>=',$defaultDate);
         }
-        $model = $model->where('channel_status',1);
+        $model = $model->where('channel_type',2)->where('channel_status',1);
         //$installTotal = $model->sum('install');
         $installRealTotal = $model->sum('install_real');
         $totalRow = [
@@ -181,10 +181,7 @@ class CpsUserDayController extends BaseCurlController
         ];
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
-        //$order_by_name = $this->orderByName();
-        //$order_by_type = $this->orderByType();
-        $model = $model->where('channel_type',2)->orderBy('date_at','desc');
-        //$model = $this->orderBy($model, $order_by_name, $order_by_type);
+        $model = $model->orderBy('date_at','desc');
         $total = $model->count();
         $result = $model->forPage($page, $pagesize)->get();
 
