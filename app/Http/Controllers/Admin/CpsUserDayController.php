@@ -192,6 +192,8 @@ class CpsUserDayController extends BaseCurlController
         $installTotal = array_sum($totalInstall);
         $installReal = array_sum($totalInstallReal);
         $shareAmount = array_sum($shareAmount);
+        $totalAmount = array_sum($totalAmount);
+        $totalRechargeAmount = array_sum($totalRechargeAmount);
         $totalRow['install'] = $installTotal>0 ? $installTotal : '0';
         $totalRow['install_real'] = $installReal>0 ? $installReal : '0';
         $totalRow['share_amount'] = $shareAmount>0 ? $shareAmount : '0';
