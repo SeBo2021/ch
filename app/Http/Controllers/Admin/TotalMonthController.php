@@ -85,15 +85,14 @@ class TotalMonthController extends BaseCurlController
 
     public function setListOutputItemExtend($item)
     {
+        $item->install = '≈'.ceil($item->install/100);
         $item->level = $item->pid > 0 ? '二级' : '一级';
         if($item->channel_id ==0){
-            $item->install = round($item->install/100);
             $item->install_real = round($item->install_real/100);
             $item->unit_price = '-';
         }
         $item->type = '包月';
         $item->at_time =  date('Y-m-d',$item->at_time);
-        $item->install = round($item->install/100);
         return $item;
     }
 

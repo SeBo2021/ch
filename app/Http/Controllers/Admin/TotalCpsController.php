@@ -222,7 +222,8 @@ class TotalCpsController extends BaseCurlController
             $res->active_views = $activeViews[$res->channel_id] ?? 0;
             $lists[$res->channel_id] = $res;
             $installReal[] = $res->install_real;
-            $install[] = $res->install;
+            $installVal = (int)ceil($res->install/100);
+            $install[] = $installVal;
             $access[] = $res->access;
             $hits[] = $res->hits;
             $active_users[] = $res->active_users;
@@ -238,7 +239,8 @@ class TotalCpsController extends BaseCurlController
 
         $total = count($lists);
         $installReal = array_sum($installReal);
-        $install = (int)round(array_sum($install)/100);
+        //$install = (int)round(array_sum($install)/100);
+        $install = array_sum($install);
         $hits = array_sum($hits);
         $access = array_sum($access);
         $active_users = array_sum($active_users);
