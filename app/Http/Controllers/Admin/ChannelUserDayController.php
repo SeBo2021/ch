@@ -194,7 +194,7 @@ class ChannelUserDayController extends BaseCurlController
                 foreach ($result as $res){
                     $install = (int)round($res->install/100);
                     $totalInstall[] = $install;
-                    $res->settlement_amount = round($res->unit_price * $install,2);
+                    $res->settlement_amount = $res->unit_price * $install;
                     $totalPrice[] = $res->settlement_amount;
                     $handleLists[] = $res;
                 }
@@ -243,7 +243,7 @@ class ChannelUserDayController extends BaseCurlController
         $item->level = $item->pid > 0 ? '二级' : '一级';
         $item->share_amount = number_format($item->share_amount, 2, '.', '');
         $item->share_ratio = $item->share_ratio . '%';
-        $item->install = round($item->install/100);
+        $item->install = (int)round($item->install/100);
         return $item;
     }
 
