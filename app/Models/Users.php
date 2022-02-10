@@ -6,5 +6,5 @@ class Users extends BaseModel
 {
     protected $connection = 'origin_mysql';
 
-    protected $table = 'Users';
+    protected $table = 'users';
 }
