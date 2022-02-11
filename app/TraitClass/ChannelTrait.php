@@ -43,13 +43,24 @@ trait ChannelTrait
 
     public function getActiveViews($date_at=null): array
     {
-        $build = Users::query()
+        /*$build = Users::query()
             ->select('channel_id',DB::raw('SUM(IF(long_vedio_times<3,1,0)) as active_views'));
         if($date_at!==null){
             $dateArr = explode('~',$date_at);
             $build = $build->whereBetween('created_at',[trim($dateArr[0]).' 00:00:00',trim($dateArr[1]).' 23:59:59']);
         }
         return $build->groupBy('channel_id')
-            ->pluck('active_views','channel_id')->all();
+            ->pluck('active_views','channel_id')->all();*/
+
+        $build = DB::connection('origin_mysql')->table('users_day')
+            ->join('users', 'users.id', '=', 'users_day.uid')
+            ->select('users_day.channel_id',DB::raw('count(users_day.uid) as active_views'));
+        if($date_at!==null){
+            $dateArr = explode('~',$date_at);
+            $build = $build->whereBetween('users.created_at',[trim($dateArr[0]).' 00:00:00',trim($dateArr[1]).' 23:59:59']);
+        }
+        return $build->groupBy('users_day.channel_id')
+            ->pluck('active_views','users_day.channel_id')->all();
+
     }
 }
