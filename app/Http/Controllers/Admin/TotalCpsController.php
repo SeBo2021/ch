@@ -81,7 +81,7 @@ class TotalCpsController extends BaseCurlController
                 'align' => 'center',
             ],
             [
-                'field' => 'active_views',
+                'field' => 'active_view_users',
                 'minWidth' => 80,
                 'title' => '激活人数(有过观影记录的人)',
                 'align' => 'center',
@@ -188,6 +188,7 @@ class TotalCpsController extends BaseCurlController
                 SUM(hits) as hits,
                 SUM(install_real) as install_real,
                 SUM(active_users) as active_users,
+                SUM(active_view_users) as active_view_users,
                 SUM(total_orders) as total_orders,
                 SUM(total_amount) as total_amount,
                 SUM(share_amount) as share_amount,
@@ -218,7 +219,6 @@ class TotalCpsController extends BaseCurlController
         //$activeViews = $this->getActiveViews($date_at);
         foreach ($result as $res){
             //$res->active_views = $activeViews[$res->channel_id] ?? 0;
-            $res->active_views = $res->active_view_users;
             $lists[$res->channel_id] = $res;
             $installReal[] = $res->install_real;
             //$installVal = (int)round($res->install/100);
