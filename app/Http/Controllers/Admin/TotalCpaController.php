@@ -186,9 +186,10 @@ class TotalCpaController extends BaseCurlController
         $orders = [];
         $total_recharge_amount = [];
         //激活观影人数
-        $activeViews = $this->getActiveViews($date_at);
+        //$activeViews = $this->getActiveViews($date_at);
         foreach ($result as $res){
-            $res->active_views = $activeViews[$res->channel_id] ?? 0;
+            //$res->active_views = $activeViews[$res->channel_id] ?? 0;
+            $res->active_views = $res->active_view_users;
             $lists[$res->channel_id] = $res;
             /*$installVal = (int)round($res->install/100);
             $install[] = $installVal;*/
