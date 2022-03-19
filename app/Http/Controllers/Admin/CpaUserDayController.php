@@ -162,8 +162,9 @@ class CpaUserDayController extends BaseCurlController
             $defaultDate = date('Y-m-d',strtotime('-3 month'));
             $model = $model->where('date_at','>=',$defaultDate);
         }
+        $model = $model->orderBy('date_at','desc');
         $total = $model->count();
-        $result = $model->orderBy('date_at','desc')->forPage($page, $pagesize)->get();
+        $result = $model->forPage($page, $pagesize)->get();
         $totalPrice = [];
         $totalInstall = [];
         $totalInstallReal = [];
