@@ -195,7 +195,7 @@ class CpaUserDayController extends BaseCurlController
         $offset = ($page-1)*$pagesize;
         $result = array_slice($lists,$offset,$pagesize);
         return [
-            'total' => count($result),
+            'total' => count($lists),
             'totalRow' => $totalRow ?? [],
             'result' => $result
         ];
