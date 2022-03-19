@@ -180,6 +180,7 @@ class CpaUserDayController extends BaseCurlController
         $install = array_sum($totalInstall);
         $installReal = array_sum($totalInstallReal);
         $settlement_amount = array_sum($totalPrice);
+        $totalAmount = array_sum($totalAmount);
         $totalRow = [
             'install' => $install>0 ? $install : '0',
             'install_real' => $installReal>0 ? $installReal : '0',
