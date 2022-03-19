@@ -163,12 +163,15 @@ class CpaUserDayController extends BaseCurlController
             $model = $model->where('date_at','>=',$defaultDate);
         }
         $model = $model->orderBy('date_at','desc');
-        $total = $model->count();
-        $result = $model->forPage($page, $pagesize)->get();
+        /*$total = $model->count();
+        $result = $model->forPage($page, $pagesize)->get();*/
+        $result = $model->get();
+
         $totalPrice = [];
         $totalInstall = [];
         $totalInstallReal = [];
         $totalAmount = [];
+        $lists = [];
         foreach ($result as $res) {
             $installValue = (int)round($res->install/100);
             $totalInstall[] = $installValue;
@@ -176,6 +179,7 @@ class CpaUserDayController extends BaseCurlController
             $totalAmount[] = (int)$res->total_amount;
             $res->settlement_amount = $res->unit_price * $installValue;
             $totalPrice[] = $res->settlement_amount;
+            $lists[] = $res;
         }
 
         $install = array_sum($totalInstall);
@@ -188,8 +192,10 @@ class CpaUserDayController extends BaseCurlController
             'settlement_amount' => $settlement_amount>0 ? $settlement_amount : '0',
             'total_amount' => $totalAmount>0 ? $totalAmount : '0',
         ];
+        $offset = ($page-1)*$pagesize;
+        $result = array_slice($lists,$offset,$pagesize);
         return [
-            'total' => $total,
+            'total' => count($result),
             'totalRow' => $totalRow ?? [],
             'result' => $result
         ];
