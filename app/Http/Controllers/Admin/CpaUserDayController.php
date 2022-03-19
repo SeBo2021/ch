@@ -43,18 +43,28 @@ class CpaUserDayController extends BaseCurlController
 //                'hide' => true,
                 'align' => 'center',
             ],
-
             [
                 'field' => 'install_real',
                 'minWidth' => 80,
                 'title' => '真实下载人数',
                 'align' => 'center',
             ],
-
             [
                 'field' => 'install',
                 'minWidth' => 80,
                 'title' => '下载人数(扣量后)',
+                'align' => 'center',
+            ],
+            [
+                'field' => 'total_orders',
+                'minWidth' => 80,
+                'title' => '订单数',
+                'align' => 'center',
+            ],
+            [
+                'field' => 'total_amount',
+                'minWidth' => 80,
+                'title' => '订单金额',
                 'align' => 'center',
             ],
             [
@@ -157,10 +167,12 @@ class CpaUserDayController extends BaseCurlController
         $totalPrice = [];
         $totalInstall = [];
         $totalInstallReal = [];
+        $totalAmount = [];
         foreach ($result as $res) {
             $installValue = (int)round($res->install/100);
             $totalInstall[] = $installValue;
             $totalInstallReal[] = $res->install_real;
+            $totalAmount[] = (int)$res->total_amount;
             $res->settlement_amount = $res->unit_price * $installValue;
             $totalPrice[] = $res->settlement_amount;
         }
@@ -172,8 +184,8 @@ class CpaUserDayController extends BaseCurlController
             'install' => $install>0 ? $install : '0',
             'install_real' => $installReal>0 ? $installReal : '0',
             'settlement_amount' => $settlement_amount>0 ? $settlement_amount : '0',
+            'total_amount' => $totalAmount>0 ? $totalAmount : '0',
         ];
-
         return [
             'total' => $total,
             'totalRow' => $totalRow ?? [],
