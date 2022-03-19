@@ -173,14 +173,15 @@ class CpsUserDayController extends BaseCurlController
         }
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
-        $total = $model->count();
-        $result = $model->orderBy('date_at','desc')->forPage($page, $pagesize)->get();
-
+        /*$total = $model->count();
+        $result = $model->orderBy('date_at','desc')->forPage($page, $pagesize)->get();*/
+        $result = $model->orderBy('date_at','desc')->get();
         $totalInstall = [];
         $totalInstallReal = [];
         $shareAmount = [];
         $totalAmount = [];
         $totalRechargeAmount = [];
+        $lists = [];
         foreach ($result as $res){
             $install = (int)round($res->install/100);
             $totalInstall[] = $install;
@@ -188,6 +189,7 @@ class CpsUserDayController extends BaseCurlController
             $shareAmount[] = $res->share_amount;
             $totalAmount[] = (int)$res->total_amount;
             $totalRechargeAmount[] = (int)$res->total_recharge_amount;
+            $lists[] = $res;
         }
         $installTotal = array_sum($totalInstall);
         $installReal = array_sum($totalInstallReal);
@@ -199,8 +201,10 @@ class CpsUserDayController extends BaseCurlController
         $totalRow['share_amount'] = $shareAmount>0 ? $shareAmount : '0';
         $totalRow['total_amount'] = $totalAmount>0 ? $totalAmount : '0';
         $totalRow['total_recharge_amount'] = $totalRechargeAmount>0 ? $totalRechargeAmount : '0';
+        $offset = ($page-1)*$pagesize;
+        $result = array_slice($lists,$offset,$pagesize);
         return [
-            'total' => $total,
+            'total' => count($lists),
             'totalRow' => $totalRow ?? [],
             'result' => $result
         ];
