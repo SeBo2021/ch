@@ -201,7 +201,8 @@ class ChannelsController extends BaseCurlController
                 'share_amount' => 0,
                 'date_at' => date('Y-m-d'),
             ];
-            DB::table('channel_day_statistics')->insert($insertData);
+            
+            DB::connection('origin_mysql')->table('channel_day_statistics')->insert($insertData);
         }
         return $model;
     }
