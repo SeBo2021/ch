@@ -149,12 +149,12 @@ class ChannelsController extends BaseCurlController
                     'attr' => !empty($show) ? 'readonly' : '',
                     'must' => 1,
                 ],
-                [
+                /* [
                     'field' => 'unit_price',
                     'type' => 'text',
                     'name' => '单价',
                     'must' => 0,
-                ],
+                ], */
             ];
         }
         
