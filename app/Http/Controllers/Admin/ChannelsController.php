@@ -238,11 +238,13 @@ class ChannelsController extends BaseCurlController
             $updateData = [
                 'unit_price' => $this->rq->input('unit_price')??$model->unit_price
             ];
+            $model->unit_price = $updateData['unit_price'];
+            $model->save();
             $res = DB::connection('origin_mysql')->table('channel_day_statistics')
                 ->where('channel_id',$model->id)
                 ->where('date_at',date('Y-m-d'))
                 ->update($updateData);
-            Log::info('==channelUpdated==',[$res]);
+            //Log::info('==channelUpdated==',[$res]);
             Cache::forget('cachedChannelById.'.$model->id);
         }
         return $model;
