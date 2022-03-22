@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Channel;
 use App\Models\Users;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ArrayShape;
@@ -112,28 +113,7 @@ class ChannelsController extends BaseCurlController
 
     public function setOutputUiCreateEditForm($show = '')
     {
-        $data = [
-            [
-                'field' => 'name',
-                'type' => 'text',
-                'name' => '渠道名称',
-                'must' => 1,
-                'default' => '',
-            ],
-            [
-                'field' => 'promotion_code',
-                'type' => 'text',
-                'name' => '推广码',
-                'must' => 1,
-            ],
-            [
-                'field' => 'unit_price',
-                'type' => 'text',
-                'name' => '单价',
-                'must' => 0,
-            ],
-        ];
-        if(!empty($show)){
+        if($show && (admin('account')==$show->number)){ //不能编辑自己
             $data = [
                 [
                     'field' => 'name',
@@ -150,14 +130,33 @@ class ChannelsController extends BaseCurlController
                     'attr' => 'readonly',
                     'must' => 1,
                 ],
+            ];
+        }else{
+            $data = [
+                [
+                    'field' => 'name',
+                    'type' => 'text',
+                    'name' => '渠道名称',
+                    'must' => 1,
+                    'attr' => !empty($show) ? 'readonly' : '',
+                    'default' => '',
+                ],
+                [
+                    'field' => 'promotion_code',
+                    'type' => 'text',
+                    'name' => '推广码',
+                    'attr' => !empty($show) ? 'readonly' : '',
+                    'must' => 1,
+                ],
                 [
                     'field' => 'unit_price',
                     'type' => 'text',
                     'name' => '单价',
                     'must' => 0,
                 ],
-            ];  
+            ];
         }
+        
         //赋值给UI数组里面,必须是form为key
         $this->uiBlade['form'] = $data;
     }
@@ -234,6 +233,8 @@ class ChannelsController extends BaseCurlController
             ];
             
             DB::connection('origin_mysql')->table('channel_day_statistics')->insert($insertData);
+        }else{
+            Cache::forget('cachedChannelById.'.$model->id);
         }
         return $model;
     }
