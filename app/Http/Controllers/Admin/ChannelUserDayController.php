@@ -240,7 +240,7 @@ class ChannelUserDayController extends BaseCurlController
 
     public function setListOutputItemExtend($item)
     {
-        $item->level = $item->pid > 0 ? '二级' : '一级';
+        $item->level = $item->channel_pid > 0 ? '二级' : '一级';
         $item->share_amount = number_format($item->share_amount, 2, '.', '');
         $item->share_ratio = $item->share_ratio . '%';
         $item->install = (int)round($item->install/100);

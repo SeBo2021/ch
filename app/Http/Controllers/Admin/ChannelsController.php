@@ -186,7 +186,7 @@ class ChannelsController extends BaseCurlController
             $model->status = $parentChannelInfo->status;
             $model->deduction = $parentChannelInfo->deduction;
             $model->is_deduction = $parentChannelInfo->is_deduction;
-            $model->unit_price = $parentChannelInfo->unit_price;
+            $model->unit_price = $this->rq->input('unit_price') ?? $parentChannelInfo->unit_price;
             $model->share_ratio = $parentChannelInfo->share_ratio;
             $model->level_one = $parentChannelInfo->level_one;
             $model->level_two = $parentChannelInfo->level_two;
@@ -215,13 +215,13 @@ class ChannelsController extends BaseCurlController
             $model->save();
 
             $this->writeChannelDeduction($model->id,$model->deduction,$model->updated_at);
-            //如果是cps
             $insertData = [
                 'channel_name' => $model->name,
                 'channel_id' => $model->id,
                 'channel_pid' => $model->pid,
                 'channel_promotion_code' => $model->promotion_code,
                 'channel_code' => $model->number,
+                'unit_price' => $model->unit_price,
                 'share_ratio' => $model->share_ratio,
                 'total_recharge_amount' => 0,
                 'total_amount' => 0,
@@ -234,7 +234,14 @@ class ChannelsController extends BaseCurlController
             
             DB::connection('origin_mysql')->table('channel_day_statistics')->insert($insertData);
         }else{
-            Cache::forget('cachedChannelById.'.$model->id);
+            $updateData = [
+                'unit_price' => $model->unit_price
+            ];
+            DB::connection('origin_mysql')->table('channel_day_statistics')
+                ->where('channel_id',$model->id)
+                ->where('date_at',date('Y-m-d'))
+                ->update($updateData);
+                Cache::forget('cachedChannelById.'.$model->id);
         }
         return $model;
     }
