@@ -6,6 +6,7 @@ use App\Models\Channel;
 use App\Models\Users;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -237,10 +238,11 @@ class ChannelsController extends BaseCurlController
             $updateData = [
                 'unit_price' => $model->unit_price
             ];
-            DB::connection('origin_mysql')->table('channel_day_statistics')
+            $res = DB::connection('origin_mysql')->table('channel_day_statistics')
                 ->where('channel_id',$model->id)
                 ->where('date_at',date('Y-m-d'))
                 ->update($updateData);
+            Log::info('==channelUpdated==',[$res]);
             Cache::forget('cachedChannelById.'.$model->id);
         }
         return $model;
