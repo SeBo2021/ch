@@ -236,7 +236,7 @@ class ChannelsController extends BaseCurlController
             DB::connection('origin_mysql')->table('channel_day_statistics')->insert($insertData);
         }else{
             $updateData = [
-                'unit_price' => $model->unit_price
+                'unit_price' => $this->rq->input('unit_price')??$model->unit_price
             ];
             $res = DB::connection('origin_mysql')->table('channel_day_statistics')
                 ->where('channel_id',$model->id)
