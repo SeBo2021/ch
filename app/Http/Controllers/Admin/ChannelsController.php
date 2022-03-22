@@ -241,7 +241,7 @@ class ChannelsController extends BaseCurlController
                 ->where('channel_id',$model->id)
                 ->where('date_at',date('Y-m-d'))
                 ->update($updateData);
-                Cache::forget('cachedChannelById.'.$model->id);
+            Cache::forget('cachedChannelById.'.$model->id);
         }
         return $model;
     }
