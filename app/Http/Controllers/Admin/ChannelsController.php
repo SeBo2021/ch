@@ -101,12 +101,12 @@ class ChannelsController extends BaseCurlController
                 'hide' => true,
                 'align' => 'center'
             ],
-            /*[
+            [
                 'field' => 'handle',
                 'minWidth' => 150,
                 'title' => '操作',
                 'align' => 'center'
-            ]*/
+            ]
         ];
     }
 
@@ -126,7 +126,38 @@ class ChannelsController extends BaseCurlController
                 'name' => '推广码',
                 'must' => 1,
             ],
+            [
+                'field' => 'unit_price',
+                'type' => 'text',
+                'name' => '单价',
+                'must' => 0,
+            ],
         ];
+        if(!empty($show)){
+            $data = [
+                [
+                    'field' => 'name',
+                    'type' => 'text',
+                    'name' => '渠道名称',
+                    'must' => 1,
+                    'attr' => 'readonly',
+                    'default' => '',
+                ],
+                [
+                    'field' => 'promotion_code',
+                    'type' => 'text',
+                    'name' => '推广码',
+                    'attr' => 'readonly',
+                    'must' => 1,
+                ],
+                [
+                    'field' => 'unit_price',
+                    'type' => 'text',
+                    'name' => '单价',
+                    'must' => 0,
+                ],
+            ];  
+        }
         //赋值给UI数组里面,必须是form为key
         $this->uiBlade['form'] = $data;
     }
