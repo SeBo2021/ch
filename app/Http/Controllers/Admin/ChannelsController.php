@@ -253,18 +253,24 @@ class ChannelsController extends BaseCurlController
     //表单验证
     #[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRule($id = ''): array
     {
-        return [
-            'name'=>'required|unique:origin_mysql.channels,name',
-            'promotion_code'=>'required|unique:origin_mysql.channels,promotion_code',
-        ];
+        if($id==''){
+            return [
+                'name'=>'required|unique:origin_mysql.channels,name',
+                'promotion_code'=>'required|unique:origin_mysql.channels,promotion_code',
+            ];
+        }
+        return [];
     }
 
     #[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRuleFieldName($id = ''): array
     {
-        return [
-            'name'=>'渠道名称',
-            'promotion_code'=>'推广码',
-        ];
+        if($id==''){
+            return [
+                'name'=>'渠道名称',
+                'promotion_code'=>'推广码',
+            ];
+        }
+        return [];
     }
     //弹窗大小
     /*public function layuiOpenWidth(): string
