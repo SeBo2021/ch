@@ -8,10 +8,9 @@
   ],
   "license": "MIT",
   "require": {
-    "league/flysystem-aws-s3-v3": "~1.0",
-    "league/flysystem-cached-adapter": "~1.0",
-    "league/flysystem-sftp": "~1.0",
     "php": "^8.0",
+    "ext-pdo": "*",
+    "ext-simplexml": "*",
     "algolia/algoliasearch-client-php": "^2.2",
     "barryvdh/laravel-debugbar": "^3.3",
     "elasticsearch/elasticsearch": "^7.13",
@@ -25,8 +24,12 @@
     "laravel/framework": "^8.0",
     "laravel/passport": "^10.1",
     "laravel/scout": "^9.2",
+    "laravel/telescope": "^4.8",
     "laravel/tinker": "^2.0",
     "laravel/ui": "^3.0",
+    "league/flysystem-aws-s3-v3": "~1.0",
+    "league/flysystem-cached-adapter": "~1.0",
+    "league/flysystem-sftp": "~1.0",
     "matchish/laravel-scout-elasticsearch": "^5.0",
     "mews/captcha": "^3.1",
     "mews/purifier": "~3.0",
@@ -36,9 +39,7 @@
     "phpoffice/phpspreadsheet": "^1.12",
     "spatie/laravel-permission": "^3.11",
     "zgldh/qiniu-laravel-storage": "^0.10.3",
-    "zhuzhichao/ip-location-zh": "^2.4",
-    "ext-simplexml": "*",
-    "ext-pdo": "*"
+    "zhuzhichao/ip-location-zh": "^2.4"
   },
   "require-dev": {
     "facade/ignition": "^2.3.6",
@@ -54,7 +55,9 @@
   },
   "extra": {
     "laravel": {
-      "dont-discover": []
+      "dont-discover": [
+        "laravel/telescope"
+      ]
     }
   },
   "autoload": {

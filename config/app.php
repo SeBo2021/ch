@@ -174,6 +174,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
         App\Providers\BladeServiceProvider::class,//注册自定义blade指令
         App\Providers\FacadesServiceProvider::class,//注册自定义门面,
         AetherUpload\AetherUploadServiceProvider::class,
