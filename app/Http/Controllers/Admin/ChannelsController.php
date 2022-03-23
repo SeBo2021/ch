@@ -149,12 +149,12 @@ class ChannelsController extends BaseCurlController
                     'attr' => !empty($show) ? 'readonly' : '',
                     'must' => 1,
                 ],
-                /* [
-                    'field' => 'unit_price',
+                [
+                    'field' => 'agent_unit_price',
                     'type' => 'text',
                     'name' => '单价',
                     'must' => 0,
-                ], */
+                ],
             ];
         }
         
@@ -251,18 +251,6 @@ class ChannelsController extends BaseCurlController
         return $model;
     }
 
-    /*public function checkRuleData($request)
-    {
-        $params = $request->all();
-        $name = $params['name'] ?? '';
-        $one = DB::connection('origin_mysql')->table('channels')->where('name',$name)->first();
-        if($one){
-            //return (['code' => 1, 'msg' => lang('已有相同渠道')]);
-            return (['msg' => '已有相同渠道', 'data' => [], 'code' => 1]);
-        }
-        return $params;
-    }*/
-
     //表单验证
     #[ArrayShape(['name' => "string", 'promotion_code' => "string"])] public function checkRule($id = ''): array
     {
@@ -341,6 +329,9 @@ class ChannelsController extends BaseCurlController
             $resultAll = $model->get();
             foreach ($resultAll as &$res){
                 if($res->id==$parentChannelInfo->id || $res->pid==$parentChannelInfo->id){
+                    if($parentChannelInfo->pid>0){
+                        $res->unit_price = $res->agent_unit_price;
+                    }
                     $agentList[] = $res;
                 }
             }

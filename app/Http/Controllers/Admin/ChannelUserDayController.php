@@ -252,7 +252,7 @@ class ChannelUserDayController extends BaseCurlController
                 $totalRow = [
                     'install' => $installTotal>0 ? $installTotal : '0',
                 ];
-                if($this->channelInfo->pid=0){
+                if($this->channelInfo->pid == 0){
                     $totalRow['settlement_amount'] =  $settlement_amount>0 ? $settlement_amount : '0';
                 }
                 $totalRow['agent_settlement_amount'] = $agent_settlement_amount>0 ? $agent_settlement_amount : '0';
