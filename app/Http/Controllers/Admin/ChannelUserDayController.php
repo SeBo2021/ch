@@ -192,8 +192,11 @@ class ChannelUserDayController extends BaseCurlController
         if($date_at===null){
             $defaultDate = date('Y-m-d',strtotime('-3 month'));
             $model = $model->where('date_at','>=',$defaultDate);
+        }else{
+            $dateArr = explode('~',$date_at);
+            $model = $model->whereBetween('date_at',[trim($dateArr[0]),trim($dateArr[1])]);
         }
-        
+
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
         //$total = $model->count();
         //$result = $model->get();
