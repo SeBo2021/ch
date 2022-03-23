@@ -187,7 +187,8 @@ class ChannelsController extends BaseCurlController
             $model->status = $parentChannelInfo->status;
             $model->deduction = $parentChannelInfo->deduction;
             $model->is_deduction = $parentChannelInfo->is_deduction;
-            $model->unit_price = $this->rq->input('unit_price') ?? $parentChannelInfo->unit_price;
+            $model->unit_price = $parentChannelInfo->unit_price;
+            $model->agent_unit_price = $this->rq->input('agent_unit_price') ?? $parentChannelInfo->unit_price;
             $model->share_ratio = $parentChannelInfo->share_ratio;
             $model->level_one = $parentChannelInfo->level_one;
             $model->level_two = $parentChannelInfo->level_two;
