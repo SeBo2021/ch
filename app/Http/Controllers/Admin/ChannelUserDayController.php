@@ -205,7 +205,7 @@ class ChannelUserDayController extends BaseCurlController
             $result = $model->where(function ($model) use ($channelInfoId){
                 $model->where('channel_id',$channelInfoId)
                     ->orWhere('channel_pid',$channelInfoId);
-            });
+            })->get();
             if($this->channelInfo->type == 0){ //cpa
                 $totalPrice = [];
                 $totalInstall = [];
