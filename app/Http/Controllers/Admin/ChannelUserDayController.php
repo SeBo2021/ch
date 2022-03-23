@@ -67,49 +67,45 @@ class ChannelUserDayController extends BaseCurlController
             
         ];
         if($this->channelInfo->pid>0){
-            $data += [
-                [
-                    'field' => 'agent_unit_price',
-                    'minWidth' => 80,
-                    'title' => '客单价',
-                    'align' => 'center',
-                ],
-                [
-                    'field' => 'agent_settlement_amount',
-                    'minWidth' => 80,
-                    'title' => '结算金额(¥)',
-                    'align' => 'center',
-                ],
+            $data[] = [
+                'field' => 'agent_unit_price',
+                'minWidth' => 80,
+                'title' => '客单价',
+                'align' => 'center',
+            ];
+            $data[] = [
+                'field' => 'agent_settlement_amount',
+                'minWidth' => 80,
+                'title' => '结算金额(¥)',
+                'align' => 'center',
             ];
         }else{
-            $data += [
-                [
-                    'field' => 'unit_price',
-                    'minWidth' => 80,
-                    'title' => '单价(¥)',
-                    'align' => 'center',
-                ],
-                [
-                    'field' => 'settlement_amount',
-                    'minWidth' => 80,
-                    'title' => '结算金额(¥)',
-                    'align' => 'center',
-                ],
-                [
-                    'field' => 'agent_unit_price',
-                    'minWidth' => 80,
-                    'title' => '代理单价(¥)',
-                    'align' => 'center',
-                ],
-                [
-                    'field' => 'agent_settlement_amount',
-                    'minWidth' => 80,
-                    'title' => '代理结算金额(¥)',
-                    'align' => 'center',
-                ],
+            $data[] = [
+                'field' => 'unit_price',
+                'minWidth' => 80,
+                'title' => '单价(¥)',
+                'align' => 'center',
+            ];
+            $data[] = [
+                'field' => 'settlement_amount',
+                'minWidth' => 80,
+                'title' => '结算金额(¥)',
+                'align' => 'center',
+            ];
+            $data[] = [
+                'field' => 'agent_unit_price',
+                'minWidth' => 80,
+                'title' => '代理单价(¥)',
+                'align' => 'center',
+            ];
+            $data[] = [
+                'field' => 'agent_settlement_amount',
+                'minWidth' => 80,
+                'title' => '代理结算金额(¥)',
+                'align' => 'center',
             ];
         }
-        $data[]= [
+        $data[] = [
             'field' => 'date_at',
             'minWidth' => 150,
             'title' => '统计日期',
