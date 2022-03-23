@@ -329,7 +329,7 @@ class ChannelsController extends BaseCurlController
             $resultAll = $model->get();
             foreach ($resultAll as &$res){
                 if($res->id==$parentChannelInfo->id || $res->pid==$parentChannelInfo->id){
-                    if($parentChannelInfo->pid>0){
+                    if($res->pid>0){
                         $res->unit_price = $res->agent_unit_price;
                     }
                     $agentList[] = $res;
