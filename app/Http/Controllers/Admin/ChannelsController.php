@@ -237,7 +237,7 @@ class ChannelsController extends BaseCurlController
             DB::connection('origin_mysql')->table('channel_day_statistics')->insert($insertData);
         }else{
             $updateData = [
-                'agent_unit_price' => $this->rq->input('agent_unit_price')??$model->agent_unit_price
+                'agent_unit_price' => $this->rq->input('agent_unit_price') ?? $model->agent_unit_price
             ];
             $model->agent_unit_price = $updateData['agent_unit_price'];
             $model->save();
@@ -245,7 +245,7 @@ class ChannelsController extends BaseCurlController
                 ->where('channel_id',$model->id)
                 ->where('date_at',date('Y-m-d'))
                 ->update($updateData);
-            //Log::info('==channelUpdated==',[$res]);
+            Log::info('==channelUpdated==',[$res,$updateData,$model->agent_unit_price]);
             Cache::forget('cachedChannelById.'.$model->id);
         }
         return $model;
