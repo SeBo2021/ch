@@ -239,7 +239,7 @@ class ChannelsController extends BaseCurlController
             $updateData = [
                 'agent_unit_price' => $this->rq->input('agent_unit_price')??$model->agent_unit_price
             ];
-            $model->unit_price = $updateData['agent_unit_price'];
+            $model->agent_unit_price = $updateData['agent_unit_price'];
             $model->save();
             $res = DB::connection('origin_mysql')->table('channel_day_statistics')
                 ->where('channel_id',$model->id)
