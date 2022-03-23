@@ -71,7 +71,7 @@ class ChannelUserDayController extends BaseCurlController
                 [
                     'field' => 'agent_unit_price',
                     'minWidth' => 80,
-                    'title' => '单价(¥)',
+                    'title' => '客单价',
                     'align' => 'center',
                 ],
                 [
