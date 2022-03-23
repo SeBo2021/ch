@@ -224,7 +224,7 @@ class ChannelsController extends BaseCurlController
                 'channel_promotion_code' => $model->promotion_code,
                 'channel_code' => $model->number,
                 'unit_price' => $model->unit_price,
-                'agent_unit_price' => $model->unit_price,
+                'agent_unit_price' => $model->agent_unit_price,
                 'share_ratio' => $model->share_ratio,
                 'total_recharge_amount' => 0,
                 'total_amount' => 0,
