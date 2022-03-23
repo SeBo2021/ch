@@ -149,12 +149,18 @@ class ChannelUserDayController extends BaseCurlController
                 'title' => '分成金额',
                 'align' => 'center',
             ],
-            [
+            /* [
                 'field' => 'date_at',
                 'minWidth' => 150,
                 'title' => '统计日期',
                 'align' => 'center'
-            ],
+            ], */
+            [
+                'field' => 'query_date_at',
+                'type' => 'date',
+                'attr' => 'data-range=~',//需要特殊分割
+                'name' => '选择日期(默认三月内)',
+            ]
             /*[
                 'field' => 'handle',
                 'minWidth' => 150,
@@ -181,6 +187,13 @@ class ChannelUserDayController extends BaseCurlController
         $pagesize = $this->rq->input('limit', 30);
         $order_by_name = $this->orderByName();
         $order_by_type = $this->orderByType();
+
+        $date_at = $this->rq->input('query_date_at', null);
+        if($date_at===null){
+            $defaultDate = date('Y-m-d',strtotime('-3 month'));
+            $model = $model->where('date_at','>=',$defaultDate);
+        }
+        
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
         //$total = $model->count();
         //$result = $model->get();
@@ -194,11 +207,11 @@ class ChannelUserDayController extends BaseCurlController
                 foreach ($result as $res){
                     $install = (int)round($res->install/100);
                     $totalInstall[] = $install;
-                    $res->settlement_amount = $res->unit_price * $install;
+                    $res->settlement_amount = round($res->unit_price * $install,2);
                     $totalPrice[] = $res->settlement_amount;
                     $handleLists[] = $res;
                 }
-                $settlement_amount = array_sum($totalPrice);
+                $settlement_amount = round(array_sum($totalPrice),2);
                 $installTotal = array_sum($totalInstall);
                 $totalRow = [
                     'install' => $installTotal>0 ? $installTotal : '0',
