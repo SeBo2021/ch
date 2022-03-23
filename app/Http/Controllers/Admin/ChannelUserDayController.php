@@ -34,7 +34,7 @@ class ChannelUserDayController extends BaseCurlController
 
     public function getCpaIndexCols(): array
     {
-        return [
+        $data = [
             [
                 'type' => 'checkbox',
                 'totalRowText' => '合计',
@@ -58,32 +58,64 @@ class ChannelUserDayController extends BaseCurlController
 //                'hide' => true,
                 'align' => 'center',
             ],
-
             [
                 'field' => 'install',
                 'minWidth' => 80,
                 'title' => '安装量',
                 'align' => 'center',
             ],
-            [
-                'field' => 'unit_price',
-                'minWidth' => 80,
-                'title' => '单价(¥)',
-                'align' => 'center',
-            ],
-            [
-                'field' => 'settlement_amount',
-                'minWidth' => 80,
-                'title' => '结算金额(¥)',
-                'align' => 'center',
-            ],
-            [
-                'field' => 'date_at',
-                'minWidth' => 150,
-                'title' => '统计日期',
-                'align' => 'center'
-            ],
+            
         ];
+        if($this->channelInfo->pid>0){
+            $data += [
+                [
+                    'field' => 'agent_unit_price',
+                    'minWidth' => 80,
+                    'title' => '单价(¥)',
+                    'align' => 'center',
+                ],
+                [
+                    'field' => 'agent_settlement_amount',
+                    'minWidth' => 80,
+                    'title' => '结算金额(¥)',
+                    'align' => 'center',
+                ],
+            ];
+        }else{
+            $data += [
+                [
+                    'field' => 'unit_price',
+                    'minWidth' => 80,
+                    'title' => '单价(¥)',
+                    'align' => 'center',
+                ],
+                [
+                    'field' => 'settlement_amount',
+                    'minWidth' => 80,
+                    'title' => '结算金额(¥)',
+                    'align' => 'center',
+                ],
+                [
+                    'field' => 'agent_unit_price',
+                    'minWidth' => 80,
+                    'title' => '代理单价(¥)',
+                    'align' => 'center',
+                ],
+                [
+                    'field' => 'agent_settlement_amount',
+                    'minWidth' => 80,
+                    'title' => '代理结算金额(¥)',
+                    'align' => 'center',
+                ],
+            ];
+        }
+        $data[]= [
+            'field' => 'date_at',
+            'minWidth' => 150,
+            'title' => '统计日期',
+            'align' => 'center'
+        ];
+        return $data;
     }
 
     public function getCpsIndexCols(): array
@@ -200,7 +232,6 @@ class ChannelUserDayController extends BaseCurlController
         if($parentChannelNumber!='root' && $this->channelInfo){
             $handleLists = [];
 //            $channelBuild = DB::connection('origin_mysql')->table('channels')->where();
-            // $result = $model->where('channel_id',$this->channelInfo->id)->orWhere('channel_pid',$this->channelInfo->id)->get();
             $channelInfoId = $this->channelInfo->id;
             $result = $model->where(function ($model) use ($channelInfoId){
                 $model->where('channel_id',$channelInfoId)
@@ -208,20 +239,27 @@ class ChannelUserDayController extends BaseCurlController
             })->get();
             if($this->channelInfo->type == 0){ //cpa
                 $totalPrice = [];
+                $totalAgetnPrice = [];
                 $totalInstall = [];
                 foreach ($result as $res){
                     $install = (int)round($res->install/100);
                     $totalInstall[] = $install;
                     $res->settlement_amount = round($res->unit_price * $install,2);
+                    $res->agent_settlement_amount = $res->channel_pid>0 ? round($res->agent_unit_price * $install,2) : '';
                     $totalPrice[] = $res->settlement_amount;
+                    $totalAgetnPrice[] = $res->agent_settlement_amount;
                     $handleLists[] = $res;
                 }
                 $settlement_amount = round(array_sum($totalPrice),2);
+                $agent_settlement_amount = round(array_sum($totalAgetnPrice),2);
                 $installTotal = array_sum($totalInstall);
                 $totalRow = [
                     'install' => $installTotal>0 ? $installTotal : '0',
-                    'settlement_amount' => $settlement_amount>0 ? $settlement_amount : '0'
                 ];
+                if($this->channelInfo->pid=0){
+                    $totalRow['settlement_amount'] =  $settlement_amount>0 ? $settlement_amount : '0';
+                }
+                $totalRow['agent_settlement_amount'] = $agent_settlement_amount>0 ? $agent_settlement_amount : '0';
             }else{ //cps
                 $total_recharge_amount = 0;
                 $share_amount = 0;

@@ -223,6 +223,7 @@ class ChannelsController extends BaseCurlController
                 'channel_promotion_code' => $model->promotion_code,
                 'channel_code' => $model->number,
                 'unit_price' => $model->unit_price,
+                'agent_unit_price' => $model->unit_price,
                 'share_ratio' => $model->share_ratio,
                 'total_recharge_amount' => 0,
                 'total_amount' => 0,
@@ -236,9 +237,9 @@ class ChannelsController extends BaseCurlController
             DB::connection('origin_mysql')->table('channel_day_statistics')->insert($insertData);
         }else{
             $updateData = [
-                'unit_price' => $this->rq->input('unit_price')??$model->unit_price
+                'agent_unit_price' => $this->rq->input('agent_unit_price')??$model->agent_unit_price
             ];
-            $model->unit_price = $updateData['unit_price'];
+            $model->unit_price = $updateData['agent_unit_price'];
             $model->save();
             $res = DB::connection('origin_mysql')->table('channel_day_statistics')
                 ->where('channel_id',$model->id)
