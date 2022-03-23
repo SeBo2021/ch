@@ -192,9 +192,6 @@ class ChannelUserDayController extends BaseCurlController
         if($date_at===null){
             $defaultDate = date('Y-m-d',strtotime('-3 month'));
             $model = $model->where('date_at','>=',$defaultDate);
-        }else{
-            $dateArr = explode('~',$date_at);
-            $model = $model->whereBetween('date_at',[trim($dateArr[0]),trim($dateArr[1])]);
         }
 
         $model = $this->orderBy($model, $order_by_name, $order_by_type);
@@ -203,7 +200,12 @@ class ChannelUserDayController extends BaseCurlController
         if($parentChannelNumber!='root' && $this->channelInfo){
             $handleLists = [];
 //            $channelBuild = DB::connection('origin_mysql')->table('channels')->where();
-            $result = $model->where('channel_id',$this->channelInfo->id)->orWhere('channel_pid',$this->channelInfo->id)->get();
+            // $result = $model->where('channel_id',$this->channelInfo->id)->orWhere('channel_pid',$this->channelInfo->id)->get();
+            $channelInfoId = $this->channelInfo->id;
+            $result = $model->where(function ($query) use ($channelInfoId){
+                $query->where('channel_id',$channelInfoId)
+                    ->orWhere('channel_pid',$channelInfoId);
+            });
             if($this->channelInfo->type == 0){ //cpa
                 $totalPrice = [];
                 $totalInstall = [];
