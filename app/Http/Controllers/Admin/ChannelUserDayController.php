@@ -202,8 +202,8 @@ class ChannelUserDayController extends BaseCurlController
 //            $channelBuild = DB::connection('origin_mysql')->table('channels')->where();
             // $result = $model->where('channel_id',$this->channelInfo->id)->orWhere('channel_pid',$this->channelInfo->id)->get();
             $channelInfoId = $this->channelInfo->id;
-            $result = $model->where(function ($query) use ($channelInfoId){
-                $query->where('channel_id',$channelInfoId)
+            $result = $model->where(function ($model) use ($channelInfoId){
+                $model->where('channel_id',$channelInfoId)
                     ->orWhere('channel_pid',$channelInfoId);
             });
             if($this->channelInfo->type == 0){ //cpa
