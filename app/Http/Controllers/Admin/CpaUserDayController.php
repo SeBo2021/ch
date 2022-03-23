@@ -177,7 +177,7 @@ class CpaUserDayController extends BaseCurlController
             $totalInstall[] = $installValue;
             $totalInstallReal[] = $res->install_real;
             $totalAmount[] = (int)$res->total_amount;
-            $res->settlement_amount = $res->unit_price * $installValue;
+            $res->settlement_amount = round($res->unit_price * $installValue,2);
             $totalPrice[] = $res->settlement_amount;
             $lists[] = $res;
         }
