@@ -149,6 +149,11 @@ class TotalMonthController extends BaseCurlController
         $page = $this->rq->input('page', 1);
         $pagesize = $this->rq->input('limit', 30);
         $date_at = $this->rq->input('query_date_at', null);
+        $channel_id = $this->rq->input('query_channel_id', null);
+        $channel_id_tree = $this->rq->input('query_channel_id_tree', null);
+        if(!$channel_id && !$channel_id_tree){
+            $model = $model->where('channel_id','>',0);
+        }
         if($date_at===null){
             $defaultDate = date('Y-m-d',strtotime('-3 month'));
             $model = $model->where('date_at','>=',$defaultDate);
@@ -164,7 +169,7 @@ class TotalMonthController extends BaseCurlController
                 SUM(total_recharge_amount) as total_recharge_amount,
                 SUM(ROUND(install/100)) as install';
 
-        $model = $model->where('channel_type',1)->where('channel_status',1)->where('channel_id','>',0)->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
+        $model = $model->where('channel_type',1)->where('channel_status',1)->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
         $result = $model->orderBy('channel_id','desc')->get();
         $lists = [];
         $install = [];
