@@ -202,7 +202,7 @@ class TotalCpaController extends BaseCurlController
             $active_users[] = $res->active_users;
             $total_orders[] = $res->total_orders;
             $total_amount[] = $res->total_amount;
-            $share_amount[] = $res->unit_price * $installVal;
+            $share_amount[] = round($res->unit_price * $installVal,2);
             $orders[] = $res->orders;
             $total_recharge_amount[] = $res->total_recharge_amount;
         }
@@ -229,7 +229,7 @@ class TotalCpaController extends BaseCurlController
             'active_users' => $active_users>0 ? $active_users :'0',
             'total_orders' => $total_orders>0 ? $total_orders :'0',
             'total_amount' => $total_amount>0 ? $total_amount :'0',
-            'share_amount' => $share_amount>0 ? $share_amount :'0',
+            'share_amount' => $share_amount>0 ? round($share_amount,2) :'0',
             'orders' => $orders>0 ? $orders :'0',
             'total_recharge_amount' => $total_recharge_amount>0 ? $total_recharge_amount :'0',
         ];
