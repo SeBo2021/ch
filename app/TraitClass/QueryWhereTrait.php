@@ -186,6 +186,17 @@ trait QueryWhereTrait
         $this->addWhere($data);
     }
 
+    public function whereByQueryLikeChannelPrincipal($value)
+    {
+        $data = [
+            'principal' => [
+                'type' => 'like',//搜索条件类型
+                'value' => $value //搜索值
+            ]
+        ];
+        $this->addWhere($data);
+    }
+
     public function whereByID($value)
     {
         $data = [

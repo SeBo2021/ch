@@ -35,6 +35,12 @@ class CpsUserDayController extends BaseCurlController
                 'align' => 'center'
             ],
             [
+                'field' => 'principal',
+                'minWidth' => 100,
+                'title' => '负责人',
+                'align' => 'center'
+            ],
+            [
                 'field' => 'level',
                 'minWidth' => 100,
                 'title' => '级数',
@@ -151,6 +157,11 @@ class CpsUserDayController extends BaseCurlController
                 'field' => 'query_like_channel_code',
                 'type' => 'text',
                 'name' => '渠道码',
+            ],
+            [
+                'field' => 'query_like_channel_principal',
+                'type' => 'text',
+                'name' => '负责人',
             ],
             [
                 'field' => 'query_date_at',
