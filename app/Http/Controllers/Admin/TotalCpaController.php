@@ -184,7 +184,7 @@ class TotalCpaController extends BaseCurlController
             $defaultDate = date('Y-m-d',strtotime('-3 month'));
             $model = $model->where('date_at','>=',$defaultDate);
         }
-        $model = $model->where('channel_type',0)->where('channel_status',1)->where('channel_id','>',0)->select('id','channel_id','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
+        $model = $model->where('channel_type',0)->where('channel_status',1)->where('channel_id','>',0)->select('id','channel_id','principal','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
         $result = $model->orderBy('channel_id','desc')->get();
         $lists = [];
         $install = [];
