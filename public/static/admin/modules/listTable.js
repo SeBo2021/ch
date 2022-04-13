@@ -111,7 +111,7 @@ layui.define(['utable', 'uform', 'request', 'laypage', 'layer', 'custormEvent'],
     tableNameId = tableNameId || 'LAY-list-table';
     config = config || {};
 
-    var defatul_config = {
+    var default_config = {
       elem: '#' + tableNameId,
       page: true,
       toolbar: true,
@@ -139,7 +139,8 @@ layui.define(['utable', 'uform', 'request', 'laypage', 'layer', 'custormEvent'],
       }
 
     };
-    var render_config = $.extend({}, defatul_config, config);
+    default_config.height = '700px';
+    var render_config = $.extend({}, default_config, config);
 
     render_config.where._token = $('[name="csrf-token"]').attr('content');
     reloadConfig = render_config;
