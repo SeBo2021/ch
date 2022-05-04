@@ -53,6 +53,7 @@ class TotalMonthController extends BaseCurlController
                 'field' => 'hits',
                 'minWidth' => 80,
                 'title' => '点击量',
+                'sort' => 1,
 //                'hide' => true,
                 'align' => 'center',
             ],
@@ -60,6 +61,7 @@ class TotalMonthController extends BaseCurlController
                 'field' => 'install_real',
                 'minWidth' => 80,
                 'title' => '安装量',
+                'sort' => 1,
                 'align' => 'center',
             ],
             [
