@@ -64,6 +64,7 @@ class CpsUserDayController extends BaseCurlController
                 'field' => 'install_real',
                 'minWidth' => 80,
                 'title' => '真实下载人数',
+                'sort' => 1,
                 'align' => 'center',
             ],
             [
