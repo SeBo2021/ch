@@ -215,7 +215,7 @@ class TotalCpsController extends BaseCurlController
         $model = $model->where('channel_type',2)->where('channel_status',1);
         $result = $model->select('id','channel_id','principal','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',
             DB::raw($fields))
-            ->groupBy('channel_id')->orderBy('channel_id','desc')->get();
+            ->groupBy('channel_id')->orderBy('install_real','desc')->get();
         $lists = [];
         $installReal = [];
         $install = [];
@@ -278,23 +278,6 @@ class TotalCpsController extends BaseCurlController
             'result' => $currentPageData
         ];
     }
-
-    /*public function insertIntoCpsData()
-    {
-        $sql = 'insert into channel_day_statistics(
-    channel_id,channel_name,channel_promotion_code,channel_code,channel_pid,total_recharge_amount,share_ratio,share_amount,date_at,orders,total_orders) select
-    channel_id,name,promotion_code,channel_code,pid,total_recharge_amount,share_ratio,share_amount,date_at,orders,total_orders from channel_cps;';
-        $sql = 'replace into channel_day_statistics(
-    channel_id,channel_name,channel_promotion_code,channel_code,channel_pid,total_recharge_amount,share_ratio,share_amount,date_at,orders,total_orders) select
-    channel_id,name,promotion_code,channel_code,pid,total_recharge_amount,share_ratio,share_amount,date_at,orders,total_orders from channel_cps;';
-
-        $sql = 'replace into channel_day_statistics(channel_id,access,hits,install_real,install,date_at) select channel_id,access,hits,install_real,install,from_unixtime(at_time, '%Y-%m-%d') as date_at from statistic_day_deduction';
-        $sql = 'update channel_day_statistics inner join (select channel_id,from_unixtime(at_time, '%Y-%m-%d') as date_at,count(uid) as users from users_day group by channel_id,date_at) u on channel_day_statistics.channel_id=u.channel_id and channel_day_statistics.date_at=u.date_at set active_users=u.users';
-    //update channel_day_statistics inner join (select channel_id,count(id) as users,date_format(created_at, '%Y-%m-%d') as date_at from users group by channel_id,date_at) u on channel_day_statistics.channel_id=u.channel_id and channel_day_statistics.date_at=u.date_at set install_real=u.users;
-    更新渠道类型
-        $sql = 'update channel_day_statistics inner join (select type,id from channels) c on channel_day_statistics.channel_id=c.id set channel_day_statistics.channel_type=c.type';
-        $sql = 'update channel_day_statistics inner join (select type,id,pid from channels) c on channel_day_statistics.channel_id=c.id set channel_day_statistics.channel_pid=c.pid';
-    }*/
 
     //首页共享数据
     public function indexShareData()

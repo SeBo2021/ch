@@ -183,7 +183,7 @@ class TotalMonthController extends BaseCurlController
                 SUM(ROUND(install/100)) as install';
 
         $model = $model->where('channel_type',1)->where('channel_status',1)->select('id','channel_id','principal','channel_name','channel_promotion_code','channel_code','channel_pid','channel_type','share_ratio','unit_price',DB::raw($fields))->groupBy('channel_id');
-        $result = $model->orderBy('channel_id','desc')->get();
+        $result = $model->orderBy('install_real','desc')->get();
         $lists = [];
         $install = [];
         $install_real = [];
