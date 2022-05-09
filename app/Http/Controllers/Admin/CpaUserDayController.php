@@ -138,9 +138,16 @@ class CpaUserDayController extends BaseCurlController
             [
                 'field' => 'query_channel_id_tree',
                 'type' => 'select',
-                'name' => '渠道',
+                'name' => '顶级渠道',
                 'default' => '',
                 'data' => $this->getTopChannels(0)
+            ],
+            [
+                'field' => 'query_channel_id',
+                'type' => 'select',
+                'name' => '所有渠道',
+                'default' => '',
+                'data' => $this->getAllChannels(0)
             ],
             [
                 'field' => 'query_channel_number',
